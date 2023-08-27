@@ -1,0 +1,6 @@
+export const REQ_STATUS = {
+  INITIAL: "INITIAL",
+  LOADING: "LOADING",
+  SUCCESS: "SUCCESS",
+  FAILED: "FAILED",
+};
