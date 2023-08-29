@@ -167,7 +167,7 @@ const CartsPage = () => {
                 <div className="my-4 flex justify-between">
                   <Text>Subtotal</Text>
                   <Text>
-                    Rp. {state.carts?.reduce((a: any, b:any) => (a.price * a.qty) + (b.price * b.qty))?.toLocaleString()}
+                    Rp. {state.carts?.length < 1 ? 0 : state.carts?.reduce((a: any, b:any) => (a.price * a.qty) + (b.price * b.qty), 0)?.toLocaleString()}
                   </Text>
                 </div>
                 <Divider />
