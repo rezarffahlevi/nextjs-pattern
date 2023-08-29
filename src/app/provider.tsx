@@ -2,6 +2,7 @@
 
 import { CacheProvider } from "@chakra-ui/next-js";
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
+import { createContext, useContext, useReducer } from "react";
 
 const colors = {
   brand: {
@@ -13,10 +14,24 @@ const colors = {
 
 export const theme = extendTheme({ colors });
 
+const initialState = {
+  carts: [],
+};
+const AppContext = createContext<any>(null);
+const reducer = (current: any, update: any) => ({ ...current, ...update });
+
 export function Providers({ children }: { children: React.ReactNode }) {
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const value = { state, dispatch };
   return (
-    <CacheProvider>
-      <ChakraProvider theme={theme}>{children}</ChakraProvider>
-    </CacheProvider>
+    <AppContext.Provider value={value}>
+      <CacheProvider>
+        <ChakraProvider theme={theme}>{children}</ChakraProvider>
+      </CacheProvider>
+    </AppContext.Provider>
   );
+}
+
+export function useAppContext() {
+  return useContext(AppContext);
 }

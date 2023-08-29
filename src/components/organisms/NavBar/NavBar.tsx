@@ -23,6 +23,7 @@ import {
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FilterSection } from "@/components/pages/home/sections/FilterSection";
+import { useAppContext } from "@/app/provider";
 
 export const navOptions: { name: string; link?: string }[] = [
   {
@@ -61,6 +62,7 @@ const topRow = () => {
 const NavBar = () => {
   const pathname = usePathname();
   const [showBottomSheet, setShowBottomSheet] = useState(false);
+  const {state, dispatch} = useAppContext();
 
   return (
     <div className="sticky max-md:top-[0rem] top-[-2.4rem] z-30 w-full justify-center">
@@ -124,7 +126,7 @@ const NavBar = () => {
               <BsBag size={18} className="flex md2:hidden " />
               <div className="relative top-[-10px] left-[-12px] bg-orange-400 h-5 w-5 flex text-center items-center justify-center rounded-full">
                 <Text as={"b"} className="text-white mt-[1px] font-body">
-                  0
+                  {state.carts?.length ?? 0}
                 </Text>
               </div>
             </div>
