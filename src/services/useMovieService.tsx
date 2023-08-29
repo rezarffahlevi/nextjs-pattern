@@ -27,7 +27,7 @@ export const useListMovie = () => {
   return {
     fetchListMovie: ({ header, option, queryParams }: IFetchData) =>
       fetchData({
-        urlPath: "v3/3de4db25-fa47-4f62-8ee3-eee7aefa3787",
+        urlPath: "v3/cf80c915-840a-432a-b9f3-ba54cdd3c9a4",
         header: header,
         option: option,
         queryParams: queryParams,

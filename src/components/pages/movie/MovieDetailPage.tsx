@@ -65,7 +65,7 @@ const MovieDetailPage = ({ slug }: { slug: string }) => {
     <main className="flex min-h-screen flex-col items-center">
       <SectionBuilder
         loading={<MovieDetailLoading />}
-        isLoading={(listMovieLoading && detail == null)}
+        isLoading={listMovieLoading && detail == null}
         isError={listMovieIsError}
       >
         <div className="w-full items-center justify-between">
@@ -89,7 +89,7 @@ const MovieDetailPage = ({ slug }: { slug: string }) => {
               <Text className="font-body my-1">{detail?.title}</Text>
               <Divider />
               <Text className="font-body my-4 font-semibold text-xl">
-                Rp. 100.000
+                Rp. {detail?.price?.toLocaleString()}
               </Text>
 
               <div className="flex">
@@ -185,7 +185,7 @@ const ModalCart = ({ onClose, isOpen, data }: ModalProps) => {
                   {data?.qty ?? 0} x
                 </Text>
                 <Text className="font-body font-semibold text-xl">
-                  Rp. 100.000
+                  Rp. {data?.price?.toLocaleString()}
                 </Text>
               </div>
             </div>
