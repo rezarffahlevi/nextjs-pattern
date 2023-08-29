@@ -1,16 +1,45 @@
 "use client";
 
+import { useAppContext } from "@/app/provider";
 import Image from "@/components/molecules/Loader";
 import { SectionBuilder } from "@/components/templates/Container/SectionBuilder";
 import { useListMovie } from "@/services/useMovieService";
 import { textToSlug } from "@/utils/utils";
-import { Divider, Text } from "@chakra-ui/react";
+import {
+  Button,
+  Divider,
+  HStack,
+  Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Text,
+  useNumberInput,
+} from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
 const MovieDetailPage = ({ slug }: { slug: string }) => {
   const { fetchListMovie, listMovie, listMovieLoading, listMovieIsError } =
     useListMovie();
   const [detail, setDetail] = useState<any>(null);
+  const [showModalCart, setShowModalCart] = useState<boolean>(false);
+  const { state, dispatch } = useAppContext();
+
+  const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
+    useNumberInput({
+      step: 1,
+      defaultValue: 1,
+      min: 1,
+      max: 996,
+    });
+
+  const inc = getIncrementButtonProps();
+  const dec = getDecrementButtonProps();
+  const input = getInputProps();
 
   let init = true;
 
@@ -59,6 +88,38 @@ const MovieDetailPage = ({ slug }: { slug: string }) => {
                 Rp. 100.000
               </Text>
 
+              <div className="flex">
+                <HStack maxW="140px" borderWidth={1} className="mb-2">
+                  <Button {...dec}>-</Button>
+                  <Input
+                    {...input}
+                    className="border-none px-1 text-center"
+                    focusBorderColor="transparent"
+                  />
+                  <Button {...inc}>+</Button>
+                </HStack>
+                <Button
+                  className="bg-neutral-600 hover:bg-neutral-800 chakra-button rounded-none text-white font-body ml-2 w-full"
+                  onClick={() => {
+                    let carts = [...state.carts];
+                    let index = carts.findIndex((e) => e.id == detail?.id);
+                    if (index >= 0) {
+                      carts[index] = { ...detail, qty: input?.value };
+                    } else {
+                      carts.push({ ...detail, qty: input?.value });
+                    }
+                    dispatch({ carts: carts });
+                    setShowModalCart(true);
+                  }}
+                >
+                  ADD TO CART
+                </Button>
+                <ModalCart
+                  onClose={() => setShowModalCart(false)}
+                  isOpen={showModalCart}
+                  data={{ ...detail, qty: input?.value }}
+                />
+              </div>
               <Divider />
 
               <span className="font-body font-semibold my-2 flex">
@@ -69,7 +130,9 @@ const MovieDetailPage = ({ slug }: { slug: string }) => {
               <span className="font-body font-semibold my-3 flex">
                 SINOPSIS FILM:
               </span>
-              <p className="font-normal text-sm text-justify">{detail?.description}</p>
+              <p className="font-normal text-sm text-justify">
+                {detail?.description}
+              </p>
             </div>
           </div>
         </div>
@@ -79,3 +142,60 @@ const MovieDetailPage = ({ slug }: { slug: string }) => {
 };
 
 export default MovieDetailPage;
+
+type ModalProps = {
+  onClose: any;
+  isOpen: boolean;
+  data: any;
+};
+const ModalCart = ({ onClose, isOpen, data }: ModalProps) => {
+  return (
+    <Modal onClose={onClose} size={"sm"} isOpen={isOpen}>
+      <ModalOverlay />
+      <ModalContent className="rounded-none">
+        <ModalHeader className="text-center font-body">
+          Berhasil Ditambahkan
+        </ModalHeader>
+        {/* <ModalCloseButton /> */}
+        <ModalBody>
+          <div className="flex mx-2">
+            <div className="basis-4/12">
+              {data != null && (
+                <Image
+                  src={data?.image}
+                  alt={data?.title}
+                  width={0}
+                  height={0}
+                  sizes="100vw"
+                  style={{ width: "100%", height: "auto" }}
+                  className={"mb-4"}
+                />
+              )}
+            </div>
+            <div className="basis-8/12 justify-center pl-3">
+              <Text className="font-body my-1">{data?.title}</Text>
+              <div className="flex my-4">
+                <Text className="font-body font-light mr-2 text-xl">
+                  {data?.qty ?? 0} x
+                </Text>
+                <Text className="font-body font-semibold text-xl">
+                  Rp. 100.000
+                </Text>
+              </div>
+            </div>
+          </div>
+        </ModalBody>
+        <ModalFooter>
+          <Button
+            className="bg-orange-400 hover:bg-neutral-800 chakra-button rounded-none text-white font-body ml-2 w-full"
+            onClick={() => {
+              onClose();
+            }}
+          >
+            CHECK OUT
+          </Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
+  );
+};
