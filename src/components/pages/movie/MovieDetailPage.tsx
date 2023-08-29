@@ -6,6 +6,7 @@ import { SectionBuilder } from "@/components/templates/Container/SectionBuilder"
 import { useListMovie } from "@/services/useMovieService";
 import { textToSlug } from "@/utils/utils";
 import {
+  Box,
   Button,
   Divider,
   HStack,
@@ -17,9 +18,12 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Skeleton,
+  SkeletonText,
   Text,
   useNumberInput,
 } from "@chakra-ui/react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const MovieDetailPage = ({ slug }: { slug: string }) => {
@@ -60,8 +64,8 @@ const MovieDetailPage = ({ slug }: { slug: string }) => {
   return (
     <main className="flex min-h-screen flex-col items-center">
       <SectionBuilder
-        loading={<>loading</>}
-        isLoading={listMovieLoading && detail == null}
+        loading={<MovieDetailLoading />}
+        isLoading={(listMovieLoading && detail == null)}
         isError={listMovieIsError}
       >
         <div className="w-full items-center justify-between">
@@ -149,6 +153,8 @@ type ModalProps = {
   data: any;
 };
 const ModalCart = ({ onClose, isOpen, data }: ModalProps) => {
+  const router = useRouter();
+
   return (
     <Modal onClose={onClose} size={"sm"} isOpen={isOpen}>
       <ModalOverlay />
@@ -189,6 +195,7 @@ const ModalCart = ({ onClose, isOpen, data }: ModalProps) => {
           <Button
             className="bg-orange-400 hover:bg-neutral-800 chakra-button rounded-none text-white font-body ml-2 w-full"
             onClick={() => {
+              router.push("/carts", { scroll: false });
               onClose();
             }}
           >
@@ -197,5 +204,25 @@ const ModalCart = ({ onClose, isOpen, data }: ModalProps) => {
         </ModalFooter>
       </ModalContent>
     </Modal>
+  );
+};
+
+const MovieDetailLoading = () => {
+  return (
+    <Box className="w-full items-center justify-between">
+      <div className="md:px-4 md:py-4 md:flex">
+        <Skeleton className="m-2 sm:basis-6/12 md:basis-7/12 h-72" />
+        <div className="m-2 basis-12/12 md:basis-5/12">
+          <Skeleton className="h-8" />
+          <Skeleton className="my-2 h-1" />
+          <Skeleton className="w-6/12 h-8" />
+          <div className="my-2 flex">
+            <Skeleton className="w-4/12 h-8 mr-2" />
+            <Skeleton className="w-8/12 h-8" />
+          </div>
+          <SkeletonText mt="4" noOfLines={7} spacing="4" skeletonHeight="2" />
+        </div>
+      </div>
+    </Box>
   );
 };
