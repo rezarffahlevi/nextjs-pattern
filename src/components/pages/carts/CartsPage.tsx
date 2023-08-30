@@ -12,9 +12,13 @@ import {
   AccordionPanel,
   Box,
   Button,
+  Card,
+  CardBody,
+  Checkbox,
   CloseButton,
   Divider,
   HStack,
+  Heading,
   IconButton,
   Input,
   Select,
@@ -56,21 +60,25 @@ const CartsPage = () => {
     dispatch({ carts: carts });
   };
 
+  const subTotal = state.carts?.reduce((a: any, b: any) => {
+    return a + b.price * b.qty;
+  }, 0);
+
   return (
     <main className="flex min-h-screen flex-col items-center">
       <SectionBuilder loading={<>loading</>} isLoading={false} isError={false}>
         <div className="w-full md:flex">
           <div className="basis-8/12 items-center justify-between">
-            {state.carts?.map((dt: any, i: any) => {
+            {state.carts?.map((item: any, i: any) => {
               return (
-                <div className="m-4" key={"cart" + i}>
+                <div className="m-4 mb-14" key={"cart" + i}>
                   <div className="md:flex items-center basis-6/12 justify-between">
                     <div className="flex max-sm:basis-12/12 basis-7/12 justify-between items-center">
                       <div className="basis-4/12 md:basis-2/12">
-                        {dt != null && (
+                        {item != null && (
                           <Image
-                            src={dt?.image}
-                            alt={dt?.title}
+                            src={item?.image}
+                            alt={item?.title}
                             width={0}
                             height={0}
                             sizes="100vw"
@@ -79,9 +87,9 @@ const CartsPage = () => {
                         )}
                       </div>
                       <div className="md:flex basis-8/12 mx-8 md:basis-10/12 justify-between">
-                        <Text className="font-body my-1">{dt?.title}</Text>
+                        <Text className="font-body my-1">{item?.title}</Text>
                         <Text className="font-body font-semibold text-xl ml-4">
-                          Rp. {dt?.price?.toLocaleString()}
+                          Rp. {item?.price?.toLocaleString()}
                         </Text>
                       </div>
                     </div>
@@ -90,39 +98,43 @@ const CartsPage = () => {
                         <HStack maxW="140px" borderWidth={1} className="h-10">
                           <Button
                             onClick={() =>
-                              updateCarts(dt, { qty: dt?.qty - 1 })
+                              updateCarts(item, { qty: item?.qty - 1 })
                             }
-                            isDisabled={dt?.qty <= 1}
+                            isDisabled={item?.qty <= 1}
                           >
                             -
                           </Button>
                           <Input
-                            value={dt?.qty}
+                            value={item?.qty}
                             onChange={(e) => {
                               let val = parseInt(e.target.value);
                               // console.log(val);
                               if (typeof val == "number")
-                                updateCarts(dt, { qty: val });
+                                updateCarts(item, { qty: val });
                             }}
                             step={1}
                             min={1}
-                            max={dt?.stock}
+                            max={item?.stock}
                             className="border-none px-1 text-center"
                             focusBorderColor="transparent"
                           />
                           <Button
                             onClick={() =>
-                              updateCarts(dt, { qty: parseInt(dt?.qty) + 1 })
+                              updateCarts(item, {
+                                qty: parseInt(item?.qty) + 1,
+                              })
                             }
-                            isDisabled={dt?.qty >= dt?.stock}
+                            isDisabled={item?.qty >= item?.stock}
                           >
                             +
                           </Button>
                         </HStack>
-                        <Text className="self-start">*Stok = {dt?.stock}</Text>
+                        <Text className="self-start text-sm">
+                          *Stok = {item?.stock}
+                        </Text>
                       </VStack>
                       <Text className="font-body mx-2 font-semibold text-xl">
-                        Rp. {(dt?.qty * dt?.price)?.toLocaleString()}
+                        Rp. {(item?.qty * item?.price)?.toLocaleString()}
                       </Text>
                       <CloseButton
                         variant="outline"
@@ -131,7 +143,7 @@ const CartsPage = () => {
                         fontSize="20px"
                         onClick={() => {
                           let carts = [...state.carts];
-                          let index = carts.findIndex((e) => e.id == dt?.id);
+                          let index = carts.findIndex((e) => e.id == item?.id);
                           if (index >= 0) {
                             carts.splice(index, 1);
                           }
@@ -140,9 +152,163 @@ const CartsPage = () => {
                       />
                     </div>
                   </div>
-                  <Text className="mt-2 text-xs">
+                  <Text className="mt-6 mb-4 text-sm font-bold text-gray-600">
                     Time Remaining to complete booking - 09.51
                   </Text>
+                  <Card>
+                    <CardBody className="flex justify-between overflow-auto">
+                      <span className="self-center font-bold mr-4 text-sm">
+                        Tickets
+                      </span>
+                      <div className="max-md:px-6 max-md:min-w-[10rem]">
+                        <p className="text-xs">Movie</p>
+                        <span className="font-bold text-sm">{item?.title}</span>
+                      </div>
+                      <div className="max-md:px-6 max-md:min-w-[10rem]">
+                        <p className="text-xs">When</p>
+                        <span className="font-bold text-sm">
+                          {new Date().toDateString()}
+                        </span>
+                      </div>
+                      <div className="max-md:px-6 max-md:min-w-[10rem]">
+                        <p className="text-xs">Location</p>
+                        <span className="font-bold text-sm">
+                          FLIX - PIK AVENUE
+                        </span>
+                      </div>
+                      <div className="max-md:px-6 max-md:min-w-[10rem]">
+                        <p className="text-xs">Ticket Amount</p>
+                        <span className="font-bold text-sm">{item?.qty}</span>
+                      </div>
+                      <div className="max-md:px-6 max-md:min-w-[10rem]">
+                        <p className="text-xs">Class</p>
+                        <span className="font-bold text-sm">PLATINUM S</span>
+                      </div>
+                      <div className="max-md:px-6 max-md:min-w-[14rem]">
+                        <span className="text-xs">
+                          Ticket Total : <span className="font-bold">Rp. {subTotal?.toLocaleString()}</span>
+                        </span>
+                        <p className="font-bold text-yellow-500 text-sm">
+                          Ticket Summary
+                        </p>
+                      </div>
+                    </CardBody>
+                  </Card>
+                  <Card className="bg-gray-500 my-4">
+                    <CardBody className="flex">
+                      <span className="text-md mr-4 font-bold text-white">
+                        SEAT
+                      </span>
+                      <span className="text-md font-bold text-white">
+                        Please Select Seat
+                      </span>
+                    </CardBody>
+                  </Card>
+                  <div className="md:flex w-full">
+                    <Card className="basis-12/12 md:basis-5/12">
+                      <CardBody>
+                        <div className="flex justify-between">
+                          <span className="text-sm font-semibold text-gray-600">
+                            Your Seat
+                          </span>
+                          <Checkbox
+                            size={"lg"}
+                            className="mr-12"
+                            borderColor={"black"}
+                            bgColor={"yellow.400"}
+                            readOnly
+                          ></Checkbox>
+                        </div>
+
+                        <div className="mt-6 flex justify-between">
+                          <span className="text-sm font-semibold text-gray-600">
+                            Available Seats
+                          </span>
+                          <Checkbox
+                            size={"lg"}
+                            className="mr-12"
+                            borderColor={"black"}
+                            readOnly
+                          ></Checkbox>
+                        </div>
+
+                        <div className="mt-6 flex justify-between">
+                          <span className="text-sm font-semibold text-gray-600">
+                            Taken Seats
+                          </span>
+                          <Checkbox
+                            size={"lg"}
+                            className="mr-12"
+                            borderColor={"silver"}
+                            bgColor={"silver"}
+                            readOnly
+                          ></Checkbox>
+                        </div>
+
+                        <div className="mt-6 flex justify-between">
+                          <span className="text-sm font-semibold text-gray-600">
+                            Wheel Chair
+                          </span>
+                          <Checkbox
+                            size={"lg"}
+                            className="mr-12"
+                            borderColor={"yellow.300"}
+                            readOnly
+                          ></Checkbox>
+                        </div>
+
+                        <div className="mt-6 flex justify-between">
+                          <span className="text-sm font-semibold text-gray-600">
+                            Companion
+                          </span>
+                          <Checkbox
+                            size={"lg"}
+                            className="mr-12"
+                            borderColor={"blue.400"}
+                            readOnly
+                          ></Checkbox>
+                        </div>
+
+                        <div className="mt-6 flex justify-between">
+                          <span className="text-sm font-semibold text-gray-600">
+                            Housed
+                          </span>
+                          <Checkbox
+                            size={"lg"}
+                            className="mr-12"
+                            borderColor={"green"}
+                            bgColor={"green"}
+                            readOnly
+                          ></Checkbox>
+                        </div>
+                      </CardBody>
+                    </Card>
+                    <div className="md:flex basis-7/12 max-md:mt-6 max-md:mb-10">
+                      <div className="basis-5/12 mx-6">
+                        {["A", "B", "C", "D"].map((col, i) => {
+                          return (
+                            <div
+                              key={"st" + i}
+                              className="flex basis-12/12 justify-between"
+                            >
+                              {renderSeat(col)}
+                            </div>
+                          );
+                        })}
+                        <div className="mx-3 mt-6 py-1 rounded-md text-sm text-center bg-gray-500 text-white font-body font-bold">
+                          SCREEN
+                        </div>
+                      </div>
+                      <div className="basis-7/12 relative max-md:pt-8 max-md:pb-8">
+                        <Button
+                          variant={"solid"}
+                          className="bg-yellow-300 hover:bg-neutral-800 h-10 chakra-button rounded-none text-white font-body text-bold absolute bottom-0 right-0"
+                        >
+                          NEXT
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               );
             })}
@@ -166,9 +332,7 @@ const CartsPage = () => {
                 <Divider />
                 <div className="my-4 flex justify-between">
                   <Text>Subtotal</Text>
-                  <Text>
-                    Rp. {state.carts?.length < 1 ? 0 : state.carts?.reduce((a: any, b:any) => (a.price * a.qty) + (b.price * b.qty), 0)?.toLocaleString()}
-                  </Text>
+                  <Text>Rp. {subTotal?.toLocaleString()}</Text>
                 </div>
                 <Divider />
                 <Text className="mt-4">Lokasi Teater *</Text>
@@ -195,6 +359,24 @@ const CartsPage = () => {
       </SectionBuilder>
     </main>
   );
+};
+
+const renderSeat = (col: string) => {
+  let element = [];
+  element.push(<span className="mx-2 text-gray-500">{col}</span>);
+  for (let index = 0; index < 6; index++) {
+    let seatDivider = index % 2 == 1;
+    let mr = seatDivider ? " mr-6" : "";
+    element.push(
+      <Checkbox
+        size={"lg"}
+        borderColor={"black"}
+        className={"mx-[1px]" + mr}
+      ></Checkbox>
+    );
+  }
+  element.push(<span className="mx-2 ml-[-0.8rem] text-gray-500">{col}</span>);
+  return element;
 };
 
 export default CartsPage;

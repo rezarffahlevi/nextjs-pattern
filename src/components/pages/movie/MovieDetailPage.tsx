@@ -36,9 +36,9 @@ const MovieDetailPage = ({ slug }: { slug: string }) => {
   const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
     useNumberInput({
       step: 1,
-      defaultValue: 1,
+      defaultValue: detail?.qty ?? 1,
       min: 1,
-      max: 996,
+      max: detail?.stock ?? 1,
     });
 
   const inc = getIncrementButtonProps();

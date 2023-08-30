@@ -179,7 +179,7 @@ const MyDrawer = ({
                 <div className="my-4" key={"nav-xs-" + i}>
                   <Link
                     href={dt.link ?? "/"}
-                    // onClick={() => onClose() + onCloseDrawer()}
+                    onClick={() => onClose() + onCloseDrawer()}
                     className="px-1 py-1 text-sm"
                     style={
                       dt.link == pathname
