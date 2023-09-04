@@ -23,7 +23,7 @@ export const SectionBuilder = ({
 
 export const ErrorBuilder = () => {
   return (
-    <div className="m-2">
+    <div className="m-2 my-4">
       <Alert status="error" className="font-body">
         <AlertIcon />
         There was an error processing your request

@@ -1,19 +1,26 @@
 import { REQ_STATUS } from "@/constants/constants";
 import { IFetchData, useGetData } from "@/hooks/useGetData";
+import usePostData from "@/hooks/usePostData";
 import { useState } from "react";
 
 export const useCategories = () => {
-  const { fetchData, data, loading, status, error, isError } = useGetData();
+  const { postData, data, loading, status, error, isError } = usePostData();
 
   return {
     fetchCategories: ({ header, option, queryParams }: IFetchData) =>
-      fetchData({
-        urlPath: "v3/e05f5d45-37b9-45ab-8611-8a9f2ffa6ee2",
+      postData({
+        urlPath: "api/v1/flix/Movies/GetGenre",
         header: header,
         option: option,
         queryParams: queryParams,
+        body: {
+          actionby: process.env.NEXT_PUBLIC_ACTION_BY,
+          ipaddress: "192:1.1.1",
+          apikey: process.env.NEXT_PUBLIC_API_KEY,
+          signature: process.env.NEXT_PUBLIC_SIGNATURE,
+        },
       }),
-    categories: data,
+    categories: data?.genrelist,
     categoriesLoading: loading,
     categoriesStatus: status,
     categoriesError: error,
@@ -21,16 +28,23 @@ export const useCategories = () => {
   };
 };
 
-export const useListMovie = () => {
-  const { fetchData, data, loading, status, error, isError } = useGetData();
+export const useListNowPlaying = () => {
+  const { postData, data, loading, status, error, isError } = usePostData();
 
   return {
-    fetchListMovie: ({ header, option, queryParams }: IFetchData) =>
-      fetchData({
-        urlPath: "v3/cf80c915-840a-432a-b9f3-ba54cdd3c9a4",
+    fetchListNowPlaying: ({ header, option, queryParams }: IFetchData) =>
+      postData({
+        urlPath: "api/v1/flix/Movies/GetNowPlayingList",
         header: header,
         option: option,
         queryParams: queryParams,
+        body: {
+          actionby: process.env.NEXT_PUBLIC_ACTION_BY,
+          ipaddress: "192:1.1.1",
+          apikey: process.env.NEXT_PUBLIC_API_KEY,
+          signature: process.env.NEXT_PUBLIC_SIGNATURE,
+          cinemaid: "0000000001",
+        },
       }),
     listMovie: data,
     listMovieLoading: loading,

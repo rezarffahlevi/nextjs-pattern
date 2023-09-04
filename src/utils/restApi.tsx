@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL: `https://run.mocky.io/`,
+  baseURL: `${process.env.NEXT_PUBLIC_BASE_URL}`,
   timeout: 10000,
   validateStatus: function validateStatus(status) {
     return true;

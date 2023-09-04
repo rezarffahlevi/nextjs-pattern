@@ -1,4 +1,5 @@
 import NavBar from "@/components/organisms/NavBar/NavBar";
+import "@assets/css/style.min.css";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -19,16 +20,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <head>
-        <link
-          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro"
-          rel="stylesheet"
-        />
-      </head>
       <body className={inter.className}>
         <Providers>
-          <NavBar />
-          {children}
+          <div className="page-wrapper">
+            <NavBar />
+            {children}
+          </div>
         </Providers>
       </body>
     </html>

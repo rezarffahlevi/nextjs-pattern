@@ -1,14 +1,14 @@
 import { RESTAPI } from "@/utils/restApi";
-import { IFetchData } from "./useGetData";
+import { IFetchData, IGetData } from "./useGetData";
 import { REQ_STATUS } from "@/constants/constants";
 import { useState } from "react";
 
-interface IPostData extends IFetchData {
+interface IPostData extends IGetData, IFetchData {
   body?: object;
 }
 
 const usePostData = () => {
-  const [result, setResult] = useState({
+  const [result, setResult] = useState<IPostData>({
     loading: true,
     data: null,
     error: null,
@@ -36,9 +36,10 @@ const usePostData = () => {
       body: body,
       urlPath: urlPath,
       header: header,
+      queryParams: queryParams,
     })
       .then((result) => {
-        const value = result?.data?.data?.data;
+        const value = result?.data?.data;
         setResult((prevData) => {
           return {
             ...prevData,

@@ -30,51 +30,76 @@ const FilterSection = () => {
   }, []);
 
   return (
-    <SectionBuilder
-      isError={categoriesIsError}
-      isLoading={categoriesLoading}
-      loading={<FilterLoading />}
-    >
-      <Accordion defaultIndex={[0]} allowMultiple>
-        <AccordionItem borderWidth={0} id="accordion-1">
-          <h2>
-            <AccordionButton className="relative">
-              <Box as="span" flex="1" textAlign="left" className="font-body">
-                Filter Harga
-              </Box>
-              <AccordionIcon />
-              <div className="absolute bottom-[-10px] h-1 left-4 right-4 bg-gray-300">
-                <div className="h-1 w-3/12 bg-yellow-400" />
+    <aside className="col-lg-3 sidebar widget-sidebar sidebar-fixed sidebar-toggle-remain shop-sidebar sticky-sidebar-wrapper">
+      <SectionBuilder
+        isError={categoriesIsError}
+        isLoading={categoriesLoading}
+        loading={<FilterLoading />}
+      >
+        <div className="sidebar-overlay"></div>
+        <a className="sidebar-close" href="#">
+          <i className="p-icon-times"></i>
+        </a>
+        <div className="sidebar-content">
+          <div
+            className="sticky-sidebar pt-7"
+            data-sticky-options="{'top': 10}"
+          >
+            <div className="widget widget-collapsible">
+              <h3 className="widget-title title-underline">
+                <span className="title-text">Filter by Price</span>
+              </h3>
+              <div className="widget-body">
+                <form action="#" method="get">
+                  <div className="row">
+                    <div className="col-md-6 mb-4">
+                      <input
+                        type="text"
+                        className="money-format"
+                        id="min_price"
+                        name="min_price"
+                        placeholder="Harga Minimum"
+                        required={true}
+                      />
+                    </div>
+                    <div className="col-md-6 mb-4">
+                      <input
+                        type="text"
+                        className="money-format"
+                        id="max_price"
+                        name="max_price"
+                        placeholder="Harga Maximum"
+                        required={true}
+                      />
+                    </div>
+                  </div>
+                  <div className="filter-actions">
+                    <button
+                      type="button"
+                      className="btn btn-dim btn-filter filter-sidebar active:btn-filter"
+                    >
+                      Filter
+                    </button>
+                  </div>
+                </form>
               </div>
-            </AccordionButton>
-          </h2>
-          <AccordionPanel pb={4} className="pt-8">
-            <div className="flex flex-row">
-              <Input
-                placeholder="Harga Minimum"
-                size="md"
-                className="rounded-none mr-2 font-body"
-              />
-              <Input
-                placeholder="Harga Maximum"
-                size="md"
-                className="rounded-none ml-2 font-body"
-              />
             </div>
-            <button className="bg-black chakra-button text-white mt-4 h-8 w-24 rounded-none font-body">
-              Filter
-            </button>
-            <Stack spacing={[1, 5]} direction={["column"]} className="mt-8">
-              {categories?.map((dt: any, i: number) => (
-                <Checkbox key={"cbx" + i} size="md" colorScheme="yellow" className="font-body">
-                  {dt?.title}
-                </Checkbox>
-              ))}
-            </Stack>
-          </AccordionPanel>
-        </AccordionItem>
-      </Accordion>
-    </SectionBuilder>
+            <div className="widget widget-collapsible">
+              {/* <h3 className="widget-title title-underline">
+                <span className="title-text">Nutrition</span>
+              </h3> */}
+              <ul className="widget-body filter-items">
+                {(categories ?? []).map((dt: any, i: any) => (
+                  <li key={"flter" + i}>
+                    <a href="#">{dt?.name}</a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </SectionBuilder>
+    </aside>
   );
 };
 

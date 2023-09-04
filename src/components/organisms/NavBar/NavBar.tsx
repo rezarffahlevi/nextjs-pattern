@@ -1,13 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { IconType, IconBase } from "react-icons";
-import { AiOutlineSearch, AiFillApple } from "react-icons/ai";
-import { BsBag, BsFillTelephoneFill } from "react-icons/bs";
-import { HiOutlineMenuAlt4 } from "react-icons/hi";
-import { MdLocationOn, MdList } from "react-icons/md";
-import { PiCaretDownThin } from "react-icons/pi";
-import { CImages } from "@/constants/CImages";
 import Link from "next/link";
 import {
   Button,
@@ -24,6 +17,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FilterSection } from "@/components/pages/home/sections/FilterSection";
 import { useAppContext } from "@/app/provider";
+import "@assets/js/main";
 
 export const navOptions: { name: string; link?: string }[] = [
   {
@@ -42,18 +36,93 @@ export const navOptions: { name: string; link?: string }[] = [
 
 const topRow = () => {
   return (
-    <div className="hidden md:block w-full border-b-[1px] border-slate-300">
-      <div className="flex sm2:hidden w-full justify-center items-center gap-1 px-4">
-        <BsFillTelephoneFill
-          size={16}
-          className="cursor-pointer m-2 text-slate-500"
-        />
-        <Text className="text-xs text-slate-500 font-body">083891292322</Text>
-        <MdLocationOn size={16} className="cursor-pointer m-2 text-slate-500" />
-        <Text className="text-xs text-slate-500 font-body">
-          Agung Sedayu Group. We are at PIK Avenue, Grand Galaxy Park, Mall of
-          Indonesia and Ashta District 8.
-        </Text>
+    <div className="header-top">
+      <div className="container">
+        <div className="header-left">
+          <a href="tel:#" className="call">
+            <i className="p-icon-phone-solid"></i>
+            <span>+456 789 000</span>
+          </a>
+          <span className="divider"></span>
+          <a href="contact.html" className="contact">
+            <i className="p-icon-map"></i>
+            <span>Jl. Pantai Indah Kapuk Boulevard</span>
+          </a>
+        </div>
+        <div className="header-right">
+          {/* <div className="dropdown switcher">
+            <a href="#currency">USD</a>
+            <ul className="dropdown-box">
+              <li>
+                <a href="#USD">USD</a>
+              </li>
+              <li>
+                <a href="#EUR">EUR</a>
+              </li>
+            </ul>
+          </div> */}
+          {/* <div className="dropdown switcher">
+            <a href="#language">
+              <img
+                src="assets//images/flagus.jpg"
+                width="14"
+                height="10"
+                className="mr-1"
+                alt="flagus"
+              />
+              ENG
+            </a>
+            <ul className="dropdown-box">
+              <li>
+                <a href="#USD">
+                  <img
+                    src="assets//images/flagus.jpg"
+                    width="14"
+                    height="10"
+                    className="mr-1"
+                    alt="flagus"
+                  />
+                  ENG
+                </a>
+              </li>
+              <li>
+                <a href="#EUR">
+                  <img
+                    src="assets//images/flagfr.jpg"
+                    width="14"
+                    height="10"
+                    className="mr-1"
+                    alt="flagfr"
+                  />
+                  FRH
+                </a>
+              </li>
+            </ul>
+          </div> */}
+          <span className="divider"></span>
+          {/* <div className="social-links">
+            <a
+              href="#"
+              className="social-link fab fa-facebook-f"
+              title="Facebook"
+            ></a>
+            <a
+              href="#"
+              className="social-link fab fa-twitter"
+              title="Twitter"
+            ></a>
+            <a
+              href="#"
+              className="social-link fab fa-pinterest"
+              title="Pinterest"
+            ></a>
+            <a
+              href="#"
+              className="social-link fab fa-linkedin-in"
+              title="Linkedin"
+            ></a>
+          </div> */}
+        </div>
       </div>
     </div>
   );
@@ -65,77 +134,139 @@ const NavBar = () => {
   const { state, dispatch } = useAppContext();
 
   return (
-    <div className="sticky max-md:top-[0rem] top-[-2.4rem] z-30 w-full justify-center">
-      {/* <div className="sticky top-[0] z-30 h-24"> */}
+    <header className="header">
       {topRow()}
-      <div
-        className="flex min-h-min py-6 px-4 z-30 w-full justify-center
-                    border-b-[1px] border-slate-300
-                    text-[.74rem] bg-white"
-      >
-        {/* <div className="flex flex-col h-full w-full max-w-[1050px]"> */}
-        <div className="flex flex-col h-full w-full">
-          <div className="flex-[0.5] flex items-center px-5 justify-between">
-            {/* <div className="mt-[-10px]"> */}
-            <div className="flex">
-              <Button
-                variant={"unstyled"}
-                className="hidden max-md:block rounded-none mr-2 ml-[-1.2rem]"
-                onClick={() => setShowBottomSheet(true)}
-              >
-                <MdList size={24} />
-              </Button>
-              <MyDrawer
-                show={showBottomSheet}
-                onClose={() => setShowBottomSheet(false)}
+      <div className="header-middle has-center sticky-header fix-top sticky-content">
+        <div className="container">
+          <div className="header-left">
+            <a href="#" className="mobile-menu-toggle" title="Mobile Menu">
+              <i className="p-icon-bars-solid"></i>
+            </a>
+            <a href="#" className="logo">
+              <img
+                src="assets/images/logo.png"
+                alt="logo"
+                width="74"
+                height="41"
               />
-              <div className="w-[5rem]">
-                <Image
-                  src={CImages.logo}
-                  width={0}
-                  height={0}
-                  sizes="100vw"
-                  style={{ width: "100%", height: "auto" }}
-                  alt="logo flix"
+            </a>
+          </div>
+          <div className="header-center">
+            <nav className="main-nav">
+              <ul className="menu">
+                {navOptions.map((dt, i) => {
+                  return (
+                    <li key={"nav-" + i} className={dt.link == pathname ? "active" : ""}>
+                      <Link href={dt.link ?? "/"}>{dt.name}</Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </nav>
+          </div>
+          <div className="header-right">
+            <div className="header-search hs-toggle">
+              <a className="search-toggle" href="#">
+                <i className="p-icon-search-solid"></i>
+              </a>
+              <form action="#" className="form-simple">
+                <input
+                  type="search"
+                  autoComplete="off"
+                  placeholder="Search in..."
+                  required
                 />
-              </div>
+                <button className="btn btn-search" type="submit">
+                  <i className="p-icon-search-solid"></i>
+                </button>
+              </form>
             </div>
-            {/* </div> */}
+            <div className="dropdown cart-dropdown off-canvas mr-0 mr-lg-2">
+              <a href="#" className="cart-toggle link">
+                <i className="p-icon-cart-solid">
+                  <span className="cart-count">2</span>
+                </i>
+              </a>
+              <div className="canvas-overlay"></div>
+              <div className="dropdown-box">
+                <div className="canvas-header">
+                  <h4 className="canvas-title">Shopping Cart</h4>
+                  <a href="#" className="btn btn-dark btn-link btn-close">
+                    close<i className="p-icon-arrow-long-right"></i>
+                    <span className="sr-only">Cart</span>
+                  </a>
+                </div>
+                <div className="products scrollable">
+                  <div className="product product-mini">
+                    <figure className="product-media">
+                      <a href="product-simple.html">
+                        <img
+                          src="assets//images/cart/product.jpg"
+                          alt="product"
+                          width="84"
+                          height="105"
+                        />
+                      </a>
+                      <a href="#" title="Remove Product" className="btn-remove">
+                        <i className="p-icon-times"></i>
+                        <span className="sr-only">Close</span>
+                      </a>
+                    </figure>
+                    <div className="product-detail">
+                      <a href="product.html" className="product-name">
+                        Peanuts
+                      </a>
+                      <div className="price-box">
+                        <span className="product-quantity">7</span>
+                        <span className="product-price">$12.00</span>
+                      </div>
+                    </div>
+                  </div>
 
-            <div className="justify-center hidden md:block">
-              {navOptions.map((dt, i) => (
-                <Link
-                  key={"nav-" + i}
-                  href={dt.link ?? "/"}
-                  className="mx-4 px-1 py-1 text-sm"
-                  style={
-                    dt.link == pathname
-                      ? {
-                          borderBottom: "3px solid #facc15",
-                        }
-                      : {}
-                  }
-                >
-                  <Text as="b" className="font-body">
-                    {dt.name}
-                  </Text>
-                </Link>
-              ))}
-            </div>
-            <Link href={"/carts"}>
-              <div className="flex items-center gap-3 md2:gap-5 cursor-pointer max-md:mr-[-1.2rem]">
-                <BsBag size={18} className="flex md2:hidden" />
-                <div className="relative top-[-10px] left-[-12px] bg-orange-400 h-5 w-5 flex text-center items-center justify-center rounded-full">
-                  <Text as={"b"} className="text-white mt-[1px] font-body">
-                    {state.carts?.length ?? 0}
-                  </Text>
+                  <div className="product product-mini">
+                    <figure className="product-media">
+                      <a href="product-simple.html">
+                        <img
+                          src="assets/images/cart/product.jpg"
+                          alt="product"
+                          width="84"
+                          height="105"
+                        />
+                      </a>
+                      <a href="#" title="Remove Product" className="btn-remove">
+                        <i className="p-icon-times"></i>
+                        <span className="sr-only">Close</span>
+                      </a>
+                    </figure>
+                    <div className="product-detail">
+                      <a href="product.html" className="product-name">
+                        Prime Beef
+                      </a>
+                      <div className="price-box">
+                        <span className="product-quantity">4</span>
+                        <span className="product-price">$16.00</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="cart-total">
+                  <label>Subtotal:</label>
+                  <span className="price">$148.00</span>
+                </div>
+                <div className="cart-action">
+                  <a href="cart.html" className="btn btn-outline btn-dim mb-2">
+                    View Cart
+                  </a>
+                  <a href="checkout.html" className="btn btn-dim">
+                    <span>Go To Checkout</span>
+                  </a>
                 </div>
               </div>
-            </Link>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </header>
   );
 };
 

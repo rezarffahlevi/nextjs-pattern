@@ -1,7 +1,7 @@
 import Image from "@/components/molecules/Loader";
 import { SectionBuilder } from "@/components/templates/Container/SectionBuilder";
 import { useWindowSize } from "@/hooks/useWindowSize";
-import { useListMovie } from "@/services/useMovieService";
+import { useListNowPlaying } from "@/services/useMovieService";
 import {
   Box,
   Button,
@@ -25,153 +25,188 @@ import { textToSlug } from "@/utils/utils";
 
 const MovieListSection = () => {
   const size = useWindowSize();
-  const { fetchListMovie, listMovie, listMovieLoading, listMovieIsError } =
-    useListMovie();
+  const { fetchListNowPlaying, listMovie, listMovieLoading, listMovieIsError } =
+    useListNowPlaying();
   const [showBottomSheet, setShowBottomSheet] = useState(false);
   let init = true;
 
   useEffect(() => {
     if (init) {
-      fetchListMovie({});
+      fetchListNowPlaying({});
       init = false;
     }
   }, []);
 
   return (
-    <SectionBuilder
-      isError={listMovieIsError}
-      isLoading={listMovieLoading}
-      loading={<MovieListLoading />}
-    >
-      <div className="w-full md:pl-4">
-        <div className="w-full flex flex-row justify-between">
-          <div className="flex flex-row items-center">
-            <Button
-              variant={"outline"}
-              className="hidden max-md:block rounded-none mr-2 px-2"
-              onClick={() => setShowBottomSheet(true)}
+    <div className="col-lg-9 main-content pl-lg-6">
+      <SectionBuilder
+        isError={listMovieIsError}
+        isLoading={listMovieLoading}
+        loading={<MovieListLoading />}
+      >
+        <nav className="toolbox sticky-toolbox sticky-content fix-top">
+          <div className="toolbox-left">
+            <a
+              href="#"
+              className="toolbox-item left-sidebar-toggle btn btn-outline btn-primary btn-icon-right d-lg-none"
             >
-              <MdFilterList size={24} />
-            </Button>
-            <BottomSheet
-              show={showBottomSheet}
-              onClose={() => setShowBottomSheet(false)}
-            />
-            <h4 className="hidden md:block w-24 mr-4 font-body">SORT BY</h4>
-            <Select
-              placeholder="Default Sorting"
-              size="md"
-              className="rounded-none font-body"
-            >
-              <option value="option1">Option 1</option>
-            </Select>
+              <span>Filter</span>
+              <i className="p-icon-category-1 ml-md-1"></i>
+            </a>
+            <div className="toolbox-item toolbox-sort select-menu">
+              <label>Sort By :</label>
+              <select name="orderby">
+                <option defaultValue="default">Default Sorting</option>
+                <option defaultValue="popularity">Sort By Popularity</option>
+                <option defaultValue="rating">Sort By The Latest</option>
+                <option defaultValue="date">Sort By Average Rating</option>
+                <option defaultValue="price-low">
+                  Sort By Price: Low To High
+                </option>
+                <option defaultValue="price-high">
+                  Sort By Price: High To Low
+                </option>
+              </select>
+            </div>
           </div>
-
-          <div className="flex flex-row items-center">
-            <h4 className="mr-4 hidden md:block font-body">SHOW</h4>
-            <Select
-              placeholder="10"
-              size="md"
-              className="rounded-none font-body"
-            >
-              <option value="option1">20</option>
-            </Select>
+          <div className="toolbox-right">
+            <div className="toolbox-item toolbox-show select-box">
+              <label>Show :</label>
+              <select name="count">
+                <option defaultValue="12">12</option>
+                <option defaultValue="24">24</option>
+                <option defaultValue="36">36</option>
+              </select>
+            </div>
+            <div className="toolbox-item toolbox-layout">
+              <a href="#" className="p-icon-list btn-layout"></a>
+              <a href="#" className="p-icon-grid btn-layout active"></a>
+            </div>
           </div>
-        </div>
+        </nav>
 
-        <div className="mt-8 w-full flex flex-row flex-wrap justify-between">
-          {(listMovie ?? []).map((dt: any, i: number) => (
-            <Link
-              href={"/movies/" + textToSlug(dt?.title)}
-              key={"mv-" + i}
-              className="basis-6/12 sm:basis-4/12 text-center items-center"
-            >
-              <div className={"m-4"}>
-                <Image
-                  src={dt?.image}
-                  alt={dt?.title}
-                  width={0}
-                  height={0}
-                  sizes="100vw"
-                  style={{ width: "100%", height: "auto" }}
-                  className={"mb-4"}
-                />
-                <Text className="font-body">
-                  {dt?.title}
-                </Text>
+        <div className="row product-wrapper cols-md-3 cols-2">
+          {(listMovie?.movielist ?? []).map((dt: any, i: any) => (
+            <div className="product-wrap" key={"movie-" + i}>
+              <div className="product shadow-media text-center">
+                <figure className="product-media">
+                  <a href="#">
+                    <Image
+                      src={dt?.thumbnailurl}
+                      alt={"film " + dt?.title}
+                      width={295}
+                      height={369}
+                    />
+                    <Image
+                      src={dt?.thumbnailurl}
+                      alt={"film " + dt?.title}
+                      width={295}
+                      height={369}
+                    />
+                  </a>
+                  {/* <div className="product-action-vertical">
+                    <a
+                      href="#"
+                      className="btn-product-icon btn-cart"
+                      data-toggle="modal"
+                      data-target="#addCartModal"
+                      title="Add to Cart"
+                    >
+                      <i className="p-icon-cart-solid"></i>
+                    </a>
+                    <a
+                      href="#"
+                      className="btn-product-icon btn-wishlist"
+                      title="Add to Wishlist"
+                    >
+                      <i className="p-icon-heart-solid"></i>
+                    </a>
+                    <a
+                      href="#"
+                      className="btn-product-icon btn-compare"
+                      title="Compare"
+                    >
+                      <i className="p-icon-compare-solid"></i>
+                    </a>
+                    <a
+                      href="#"
+                      className="btn-product-icon btn-quickview"
+                      title="Quick View"
+                    >
+                      <i className="p-icon-search-solid"></i>
+                    </a>
+                  </div> */}
+                </figure>
+                <div className="product-details">
+                  {/* <div className="ratings-container">
+                    <div className="ratings-full">
+                      <span className="ratings" style={{ width: "60%" }}></span>
+                      <span className="tooltiptext tooltip-top"></span>
+                    </div>
+                    <a
+                      href="product-simple.html#content-reviews"
+                      className="rating-reviews"
+                    >
+                      (12)
+                    </a>
+                  </div> */}
+                  <h5 className="product-name">
+                    <a href="#">{dt?.title}</a>
+                  </h5>
+                  {/* <span className="product-price">
+                    <del className="old-price">$28.00</del>
+                    <ins className="new-price">$12.00</ins>
+                  </span> */}
+                </div>
               </div>
-            </Link>
+            </div>
           ))}
         </div>
-      </div>
-
-      <nav aria-label="Page navigation" className="float-right my-12 ">
-        <ul className="flex items-center -space-x-px h-8 text-sm">
-          <li>
-            <a
-              href="#"
-              className="flex items-center justify-center px-3 h-8 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-            >
-              <span className="sr-only">Previous</span>
-              <svg
-                className="w-2.5 h-2.5"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 6 10"
+        <nav className="toolbox toolbox-pagination pt-2 pb-6">
+          <p className="toolbox-item show-info">
+            Showing <span>1-12 of 60</span> Products
+          </p>
+          <ul className="pagination">
+            <li className="page-item disabled">
+              <a
+                className="page-link page-link-prev"
+                href="#"
+                aria-label="Previous"
+                tabIndex={-1}
+                aria-disabled="true"
               >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M5 1 1 5l4 4"
-                />
-              </svg>
-            </a>
-          </li>
-          <li>
-            <a
-              href="#"
-              className="z-10 flex items-center justify-center px-3 h-8 leading-tight text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
-            >
-              1
-            </a>
-          </li>
-          <li>
-            <a
-              href="#"
-              className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-            >
-              2
-            </a>
-          </li>
-          <li>
-            <a
-              href="#"
-              className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-            >
-              <span className="sr-only">Next</span>
-              <svg
-                className="w-2.5 h-2.5"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 6 10"
+                <i className="p-icon-angle-left"></i>
+              </a>
+            </li>
+            <li className="page-item active" aria-current="page">
+              <a className="page-link" href="#">
+                1
+              </a>
+            </li>
+            <li className="page-item">
+              <a className="page-link" href="#">
+                2
+              </a>
+            </li>
+            <li className="page-item page-item-dots"></li>
+            <li className="page-item">
+              <a className="page-link" href="#">
+                5
+              </a>
+            </li>
+            <li className="page-item">
+              <a
+                className="page-link page-link-next"
+                href="#"
+                aria-label="Next"
               >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="m1 9 4-4-4-4"
-                />
-              </svg>
-            </a>
-          </li>
-        </ul>
-      </nav>
-    </SectionBuilder>
+                <i className="p-icon-angle-right"></i>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </SectionBuilder>
+    </div>
   );
 };
 
