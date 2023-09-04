@@ -3,7 +3,6 @@
 import { useAppContext } from "@/app/provider";
 import Image from "@/components/molecules/Loader";
 import { SectionBuilder } from "@/components/templates/Container/SectionBuilder";
-import { useListMovie } from "@/services/useMovieService";
 import {
   Accordion,
   AccordionButton,
@@ -26,12 +25,8 @@ import {
   VStack,
   useNumberInput,
 } from "@chakra-ui/react";
-import { useState } from "react";
-import { MdClose } from "react-icons/md";
 
 const CartsPage = () => {
-  const { fetchListMovie, listMovie, listMovieLoading, listMovieIsError } =
-    useListMovie();
   const { state, dispatch } = useAppContext();
 
   const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =

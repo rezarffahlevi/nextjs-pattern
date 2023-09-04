@@ -3,7 +3,7 @@
 import { useAppContext } from "@/app/provider";
 import Image from "@/components/molecules/Loader";
 import { SectionBuilder } from "@/components/templates/Container/SectionBuilder";
-import { useListMovie } from "@/services/useMovieService";
+import { useListNowPlaying } from "@/services/useMovieService";
 import { textToSlug } from "@/utils/utils";
 import {
   Box,
@@ -27,8 +27,8 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const MovieDetailPage = ({ slug }: { slug: string }) => {
-  const { fetchListMovie, listMovie, listMovieLoading, listMovieIsError } =
-    useListMovie();
+  const { fetchListNowPlaying, listMovie, listMovieLoading, listMovieIsError } =
+  useListNowPlaying();
   const [detail, setDetail] = useState<any>(null);
   const [showModalCart, setShowModalCart] = useState<boolean>(false);
   const { state, dispatch } = useAppContext();
@@ -49,7 +49,7 @@ const MovieDetailPage = ({ slug }: { slug: string }) => {
 
   useEffect(() => {
     if (init) {
-      fetchListMovie({});
+      fetchListNowPlaying({});
       init = false;
     }
   }, []);
