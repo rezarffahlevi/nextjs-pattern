@@ -4,17 +4,12 @@ import { useWindowSize } from "@/hooks/useWindowSize";
 import { useListNowPlaying } from "@/services/useMovieService";
 import {
   Box,
-  Button,
-  Checkbox,
   Drawer,
   DrawerBody,
   DrawerContent,
   DrawerHeader,
   DrawerOverlay,
-  Select,
   Skeleton,
-  Stack,
-  Text,
   useDisclosure,
 } from "@chakra-ui/react";
 import Link from "next/link";
@@ -215,10 +210,10 @@ interface IMovieListLoading {
 }
 const MovieListLoading = ({ children }: IMovieListLoading) => {
   return (
-    <Box className="w-full">
-      <div className="flex mx-4 justify-between">
-        <Skeleton className="basis-4/12 h-8 mr-4" />
-        <Skeleton className="basis-3/12 h-8 ml-4" />
+    <Box className="w-full mt-4">
+      <div className="flex justify-between mx-4">
+        <Skeleton className="basis-4/12 h-8" />
+        <Skeleton className="basis-3/12 h-8" />
       </div>
 
       <div className="mt-4 w-full flex flex-wrap justify-between">
@@ -227,7 +222,7 @@ const MovieListLoading = ({ children }: IMovieListLoading) => {
             key={"mls" + i}
             className="h-48 max-sm:basis-6/12 basis-4/12 my-4"
           >
-            <Skeleton className="h-48 max-sm:basis-6/12 basis-4/12 m-4" />
+            <Skeleton className="h-48 max-sm:basis-6/12 basis-4/12 mx-4" />
           </div>
         ))}
       </div>

@@ -1,19 +1,7 @@
 import { SectionBuilder } from "@/components/templates/Container/SectionBuilder";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { useCategories } from "@/services/useMovieService";
-import {
-  Accordion,
-  AccordionButton,
-  AccordionIcon,
-  AccordionItem,
-  AccordionPanel,
-  Box,
-  Button,
-  Checkbox,
-  Input,
-  Skeleton,
-  Stack,
-} from "@chakra-ui/react";
+import { Box, Checkbox, Skeleton, Stack } from "@chakra-ui/react";
 import { ReactNode, useEffect } from "react";
 
 const FilterSection = () => {
@@ -108,18 +96,18 @@ interface IFilterLoading {
 }
 const FilterLoading = ({ children }: IFilterLoading) => {
   return (
-    <Box className="w-full">
-      <div className="flex mr-4 flex justify-between">
+    <Box className="w-full mt-4">
+      <div className="flex flex justify-between">
         <Skeleton className="basis-3/12 h-6" />
         <Skeleton className="basis-1/12 h-6" />
       </div>
-      <div className="flex mt-4 mr-4">
-        <Skeleton className="basis-6/12 h-8 mr-4" />
-        <Skeleton className="basis-6/12 h-8 ml-4" />
+      <div className="flex mt-4">
+        <Skeleton className="basis-6/12 h-8" />
+        <Skeleton className="basis-6/12 h-8" />
       </div>
       <Skeleton className="h-8 mt-4 w-16" />
 
-      <Stack spacing={[1, 5]} direction={["column"]} className="mt-8 mr-4">
+      <Stack spacing={[1, 5]} direction={["column"]} className="mt-8">
         {[1, 2, 3, 4]?.map((dt: any, i: number) => (
           <Skeleton key={"cbxl" + i}>
             <Checkbox size="md" colorScheme="yellow">

@@ -1,19 +1,7 @@
 "use client";
 import Link from "next/link";
-import {
-  Button,
-  Drawer,
-  DrawerBody,
-  DrawerContent,
-  DrawerHeader,
-  DrawerOverlay,
-  Stack,
-  Text,
-  useDisclosure,
-} from "@chakra-ui/react";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { FilterSection } from "@/components/pages/home/sections/FilterSection";
 import { useAppContext } from "@/app/provider";
 import Image from "@/components/molecules/Loader";
 
@@ -48,78 +36,7 @@ const topRow = () => {
           </a>
         </div>
         <div className="header-right">
-          {/* <div className="dropdown switcher">
-            <a href="#currency">USD</a>
-            <ul className="dropdown-box">
-              <li>
-                <a href="#USD">USD</a>
-              </li>
-              <li>
-                <a href="#EUR">EUR</a>
-              </li>
-            </ul>
-          </div> */}
-          {/* <div className="dropdown switcher">
-            <a href="#language">
-              <Image
-                src="assets//images/flagus.jpg"
-                width="14"
-                height="10"
-                className="mr-1"
-                alt="flagus"
-              />
-              ENG
-            </a>
-            <ul className="dropdown-box">
-              <li>
-                <a href="#USD">
-                  <Image
-                    src="assets//images/flagus.jpg"
-                    width="14"
-                    height="10"
-                    className="mr-1"
-                    alt="flagus"
-                  />
-                  ENG
-                </a>
-              </li>
-              <li>
-                <a href="#EUR">
-                  <Image
-                    src="assets//images/flagfr.jpg"
-                    width="14"
-                    height="10"
-                    className="mr-1"
-                    alt="flagfr"
-                  />
-                  FRH
-                </a>
-              </li>
-            </ul>
-          </div> */}
           <span className="divider"></span>
-          {/* <div className="social-links">
-            <a
-              href="#"
-              className="social-link fab fa-facebook-f"
-              title="Facebook"
-            ></a>
-            <a
-              href="#"
-              className="social-link fab fa-twitter"
-              title="Twitter"
-            ></a>
-            <a
-              href="#"
-              className="social-link fab fa-pinterest"
-              title="Pinterest"
-            ></a>
-            <a
-              href="#"
-              className="social-link fab fa-linkedin-in"
-              title="Linkedin"
-            ></a>
-          </div> */}
         </div>
       </div>
     </div>
@@ -129,41 +46,53 @@ const topRow = () => {
 const NavBar = () => {
   const pathname = usePathname();
   const { state, dispatch } = useAppContext();
-  const [headerClass, setHeaderClass] = useState("");
-  const [sidebarClass, setSidebarClass] = useState("cart-dropdown");
+  const [navbarFixed, setNavbarFixed] = useState("");
+  const [openCart, setOpenCart] = useState("cart-dropdown");
+  const [openMenu, setOpenMenu] = useState("");
 
   useEffect(() => {
     const handleScroll = () => {
       var isFixed = window.scrollY >= 200;
 
       if (isFixed) {
-        setHeaderClass("fixed sticky-header-active");
+        setNavbarFixed("fixed sticky-header-active");
       } else {
-        setHeaderClass("sticky-header");
+        setNavbarFixed("sticky-header");
       }
     };
 
     handleScroll();
 
     window.addEventListener("scroll", handleScroll);
+    window.addEventListener("resize", () => setOpenMenu(""));
     return () => {
       window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", () => setOpenMenu(""));
     };
   }, []);
 
-  const toggleCart = () => setSidebarClass((prev) => prev == 'cart-dropdown' ? 'cart-dropdown opened' : 'cart-dropdown')
-  // $( '.cart-dropdown' ).addClass( 'opened' );
-  // Panda.$body.addClass( 'offcanvas-active' );
+  const toggleCart = () =>
+    setOpenCart((prev) =>
+      prev == "cart-dropdown" ? "cart-dropdown opened" : "cart-dropdown"
+    );
+
+  const toggleOpenMenu = () =>
+    setOpenMenu((prev) => (prev == "" ? " mmenu-active" : ""));
 
   return (
-    <header className="header">
+    <header className={"header" + openMenu}>
       {topRow()}
       <div
-        className={`header-middle has-center ${headerClass} fix-top sticky-content`}
+        className={`header-middle has-center ${navbarFixed} fix-top sticky-content`}
       >
         <div className="container">
           <div className="header-left">
-            <a href="#" className="mobile-menu-toggle" title="Mobile Menu">
+            <a
+              href="#"
+              className="mobile-menu-toggle"
+              title="Mobile Menu"
+              onClick={toggleOpenMenu}
+            >
               <i className="p-icon-bars-solid"></i>
             </a>
             <a href="#" className="logo">
@@ -208,7 +137,7 @@ const NavBar = () => {
                 </button>
               </form>
             </div>
-            <div className={`dropdown ${sidebarClass} off-canvas mr-0 mr-lg-2`}>
+            <div className={`dropdown ${openCart} off-canvas mr-0 mr-lg-2`}>
               <a href="#" className={"cart-toggle link"} onClick={toggleCart}>
                 <i className="p-icon-cart-solid">
                   <span className="cart-count">2</span>
@@ -218,7 +147,11 @@ const NavBar = () => {
               <div className="dropdown-box">
                 <div className="canvas-header">
                   <h4 className="canvas-title">Shopping Cart</h4>
-                  <a href="#" className="btn btn-dark btn-link btn-close" onClick={toggleCart}>
+                  <a
+                    href="#"
+                    className="btn btn-dark btn-link btn-close"
+                    onClick={toggleCart}
+                  >
                     close<i className="p-icon-arrow-long-right"></i>
                     <span className="sr-only">Cart</span>
                   </a>
@@ -293,69 +226,31 @@ const NavBar = () => {
           </div>
         </div>
       </div>
+
+      <div className="mobile-menu-wrapper">
+        <div className="mobile-menu-overlay" onClick={toggleOpenMenu}></div>
+
+        <a className="mobile-menu-close" href="#" onClick={toggleOpenMenu}>
+          <i className="p-icon-times"></i>
+        </a>
+
+        <div className="mobile-menu-container scrollable">
+          <ul className="mobile-menu mmenu-anim">
+            {navOptions.map((dt, i) => {
+              return (
+                <li
+                  key={"nav-mbl-" + i}
+                  className={dt.link == pathname ? "active" : ""}
+                  onClick={toggleOpenMenu}
+                >
+                  <Link href={dt.link ?? "/"}>{dt.name}</Link>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </div>
     </header>
-  );
-};
-
-interface IMyDrawer {
-  show: boolean;
-  onClose?: any;
-  onOpen?: any;
-}
-
-const MyDrawer = ({
-  show = false,
-  onClose: onCloseDrawer,
-  onOpen: onOpenDrawer,
-}: IMyDrawer) => {
-  const pathname = usePathname();
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
-  useEffect(() => {
-    if (show) {
-      onOpen();
-      if (onOpenDrawer) onOpenDrawer();
-    }
-  }, [show]);
-
-  return (
-    <>
-      <Drawer
-        placement={"left"}
-        onClose={() => {
-          onClose();
-          if (onCloseDrawer) onCloseDrawer();
-        }}
-        isOpen={isOpen}
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerHeader borderBottomWidth="1px">Menu</DrawerHeader>
-          <DrawerBody>
-            <Stack className="hidden max-sm:block" direction={["column"]}>
-              {navOptions.map((dt, i) => (
-                <div className="my-4" key={"nav-xs-" + i}>
-                  <Link
-                    href={dt.link ?? "/"}
-                    onClick={() => onClose() + onCloseDrawer()}
-                    className="px-1 py-1 text-sm"
-                    style={
-                      dt.link == pathname
-                        ? {
-                            borderBottom: "3px solid #facc15",
-                          }
-                        : {}
-                    }
-                  >
-                    <Text as="b">{dt.name}</Text>
-                  </Link>
-                </div>
-              ))}
-            </Stack>
-          </DrawerBody>
-        </DrawerContent>
-      </Drawer>
-    </>
   );
 };
 

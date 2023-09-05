@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import { Inter, Josefin_Sans } from "next/font/google";
 import { Providers, theme } from "./provider";
 import Head from "next/head";
+import { Footer } from "@/components/organisms/Footer/Footer";
 
 const inter = Josefin_Sans({ subsets: ["latin"] });
 
@@ -32,6 +33,7 @@ export default function RootLayout({
           <div className="page-wrapper">
             <NavBar />
             {children}
+            <Footer />
           </div>
         </Providers>
       </body>
