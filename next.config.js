@@ -24,21 +24,20 @@ const nextConfig = {
     //   }));
     //   return config;
     // },
-    // images: {
-    //     remotePatterns: [
-    //     {
-    //         protocol: 'https',
-    //         hostname: '**',
-    //         port: '',
-    //         pathname: '**',
-    //     },
-    //     ],
-    //     domains: [
-    //     'localhost',
-    //     'fcprod.azurewebsites.net',
-    //     'media.21cineplex.com'
-    //     ],
-    // },
+    images: {
+        remotePatterns: [
+        {
+            protocol: 'http',
+            hostname: '**',
+            port: '',
+            pathname: '**',
+        },
+        ],
+        domains: [
+        'localhost',
+        'vistatstsvr.flixcinema.com',
+        ],
+    },
 
     // experimental: {
     //     images: {
