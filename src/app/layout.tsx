@@ -2,8 +2,9 @@ import NavBar from "@/components/organisms/NavBar/NavBar";
 import "@assets/css/style.min.css";
 import "./globals.css";
 import type { Metadata } from "next";
-import { Josefin_Sans } from "next/font/google";
+import { Inter, Josefin_Sans } from "next/font/google";
 import { Providers, theme } from "./provider";
+import Head from "next/head";
 
 const inter = Josefin_Sans({ subsets: ["latin"] });
 
@@ -20,6 +21,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <Head>
+        <meta
+          http-equiv="Content-Security-Policy"
+          content="upgrade-insecure-requests"
+        />
+      </Head>
       <body className={inter.className}>
         <Providers>
           <div className="page-wrapper">
