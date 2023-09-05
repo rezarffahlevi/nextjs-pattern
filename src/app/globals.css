@@ -45,3 +45,8 @@ button, [type='button'], [type='reset'], [type='submit'] {
   background-image: none;
   /* 2 */
 }
+
+.sticky-header, .sticky-header-active {
+  padding-top: 1.5rem;
+  padding-bottom: 1.4rem;
+}

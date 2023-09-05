@@ -2,10 +2,10 @@ import NavBar from "@/components/organisms/NavBar/NavBar";
 import "@assets/css/style.min.css";
 import "./globals.css";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Josefin_Sans } from "next/font/google";
 import { Providers, theme } from "./provider";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Josefin_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Flix Cinema",
