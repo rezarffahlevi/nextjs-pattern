@@ -104,7 +104,7 @@ const BannerSection = () => {
         >
           <div className="banner banner-fixed banner1">
             <figure>
-              <img
+              <Image
                 src="assets/images/demos/demo1/intro/slider-1.jpg"
                 alt="banner"
                 width="1903"
@@ -147,7 +147,7 @@ const BannerSection = () => {
           </div>
           <div className="banner banner-fixed banner2">
             <figure>
-              <img
+              <Image
                 src="assets/images/demos/demo1/intro/slider-2.jpg"
                 alt="banner"
                 width="1903"
@@ -156,7 +156,7 @@ const BannerSection = () => {
               />
             </figure>
             <div className="banner-content y-50 pb-1">
-              <img
+              <Image
                 src="assets/images/demos/demo1/intro/brand1.png"
                 width="269"
                 height="75"

@@ -1,6 +1,4 @@
 "use client";
-
-import Image from "next/image";
 import Link from "next/link";
 import {
   Button,
@@ -17,7 +15,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FilterSection } from "@/components/pages/home/sections/FilterSection";
 import { useAppContext } from "@/app/provider";
-import "@assets/js/main";
+import Image from "@/components/molecules/Loader";
 
 export const navOptions: { name: string; link?: string }[] = [
   {
@@ -63,7 +61,7 @@ const topRow = () => {
           </div> */}
           {/* <div className="dropdown switcher">
             <a href="#language">
-              <img
+              <Image
                 src="assets//images/flagus.jpg"
                 width="14"
                 height="10"
@@ -75,7 +73,7 @@ const topRow = () => {
             <ul className="dropdown-box">
               <li>
                 <a href="#USD">
-                  <img
+                  <Image
                     src="assets//images/flagus.jpg"
                     width="14"
                     height="10"
@@ -87,7 +85,7 @@ const topRow = () => {
               </li>
               <li>
                 <a href="#EUR">
-                  <img
+                  <Image
                     src="assets//images/flagfr.jpg"
                     width="14"
                     height="10"
@@ -130,20 +128,46 @@ const topRow = () => {
 
 const NavBar = () => {
   const pathname = usePathname();
-  const [showBottomSheet, setShowBottomSheet] = useState(false);
   const { state, dispatch } = useAppContext();
+  const [headerClass, setHeaderClass] = useState("");
+  const [sidebarClass, setSidebarClass] = useState("cart-dropdown");
+
+  useEffect(() => {
+    const handleScroll = () => {
+      var isFixed = window.scrollY >= 200;
+
+      if (isFixed) {
+        setHeaderClass("fixed sticky-header-active");
+      } else {
+        setHeaderClass("sticky-header");
+      }
+    };
+
+    handleScroll();
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  const toggleCart = () => setSidebarClass((prev) => prev == 'cart-dropdown' ? 'cart-dropdown opened' : 'cart-dropdown')
+  // $( '.cart-dropdown' ).addClass( 'opened' );
+  // Panda.$body.addClass( 'offcanvas-active' );
 
   return (
     <header className="header">
       {topRow()}
-      <div className="header-middle has-center sticky-header fix-top sticky-content">
+      <div
+        className={`header-middle has-center ${headerClass} fix-top sticky-content`}
+      >
         <div className="container">
           <div className="header-left">
             <a href="#" className="mobile-menu-toggle" title="Mobile Menu">
               <i className="p-icon-bars-solid"></i>
             </a>
             <a href="#" className="logo">
-              <img
+              <Image
                 src="assets/images/logo.png"
                 alt="logo"
                 width="74"
@@ -156,7 +180,10 @@ const NavBar = () => {
               <ul className="menu">
                 {navOptions.map((dt, i) => {
                   return (
-                    <li key={"nav-" + i} className={dt.link == pathname ? "active" : ""}>
+                    <li
+                      key={"nav-" + i}
+                      className={dt.link == pathname ? "active" : ""}
+                    >
                       <Link href={dt.link ?? "/"}>{dt.name}</Link>
                     </li>
                   );
@@ -181,17 +208,17 @@ const NavBar = () => {
                 </button>
               </form>
             </div>
-            <div className="dropdown cart-dropdown off-canvas mr-0 mr-lg-2">
-              <a href="#" className="cart-toggle link">
+            <div className={`dropdown ${sidebarClass} off-canvas mr-0 mr-lg-2`}>
+              <a href="#" className={"cart-toggle link"} onClick={toggleCart}>
                 <i className="p-icon-cart-solid">
                   <span className="cart-count">2</span>
                 </i>
               </a>
-              <div className="canvas-overlay"></div>
+              <div className="canvas-overlay" onClick={toggleCart}></div>
               <div className="dropdown-box">
                 <div className="canvas-header">
                   <h4 className="canvas-title">Shopping Cart</h4>
-                  <a href="#" className="btn btn-dark btn-link btn-close">
+                  <a href="#" className="btn btn-dark btn-link btn-close" onClick={toggleCart}>
                     close<i className="p-icon-arrow-long-right"></i>
                     <span className="sr-only">Cart</span>
                   </a>
@@ -200,7 +227,7 @@ const NavBar = () => {
                   <div className="product product-mini">
                     <figure className="product-media">
                       <a href="product-simple.html">
-                        <img
+                        <Image
                           src="assets//images/cart/product.jpg"
                           alt="product"
                           width="84"
@@ -226,7 +253,7 @@ const NavBar = () => {
                   <div className="product product-mini">
                     <figure className="product-media">
                       <a href="product-simple.html">
-                        <img
+                        <Image
                           src="assets/images/cart/product.jpg"
                           alt="product"
                           width="84"

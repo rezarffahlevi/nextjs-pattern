@@ -13,6 +13,8 @@ const nextConfig = {
     //     issuer: /\.[jt]sx?$/,
     //     use: ['@svgr/webpack'],
     //     })
+    //     return config
+    // },
     // webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     //     config.plugins.push(
     //      new webpack.ProvidePlugin({
@@ -22,11 +24,6 @@ const nextConfig = {
     //   }));
     //   return config;
     // },
-     
-
-    //     return config
-    // },
-    
     // images: {
     //     remotePatterns: [
     //     {
