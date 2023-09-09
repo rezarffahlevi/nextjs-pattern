@@ -4,7 +4,7 @@ import { useCategories } from "@/services/useMovieService";
 import { Box, Checkbox, Skeleton, Stack } from "@chakra-ui/react";
 import { ReactNode, useEffect } from "react";
 
-const FilterSection = () => {
+const FilterSection = ({ toggleOpenFilter = () => {} }: any) => {
   const size = useWindowSize();
   const { fetchCategories, categories, categoriesLoading, categoriesIsError } =
     useCategories();
@@ -24,8 +24,8 @@ const FilterSection = () => {
         isLoading={categoriesLoading}
         loading={<FilterLoading />}
       >
-        <div className="sidebar-overlay"></div>
-        <a className="sidebar-close" href="#">
+        <div className="sidebar-overlay" onClick={toggleOpenFilter}></div>
+        <a className="sidebar-close" href="#" onClick={toggleOpenFilter}>
           <i className="p-icon-times"></i>
         </a>
         <div className="sidebar-content">

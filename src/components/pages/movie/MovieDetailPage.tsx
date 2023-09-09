@@ -2,6 +2,7 @@
 
 import { useAppContext } from "@/app/provider";
 import Image from "@/components/molecules/Loader";
+import { addToCart } from "@/components/organisms/NavBar/NavBar";
 import { ErrorBuilder, SectionBuilder } from "@/components/templates/Container/SectionBuilder";
 import { useListNowPlaying, useMovieDetail } from "@/services/useMovieService";
 import { textToSlug } from "@/utils/utils";
@@ -27,6 +28,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const MovieDetailPage = ({ slug }: { slug: string }) => {
+  const { state, dispatch } = useAppContext();
   const { fetchMovieDetail, movie, setMovie, movieLoading, movieIsError, movieError } =
     useMovieDetail();
   const [detail, setDetail] = useState<any>(null);
@@ -39,6 +41,12 @@ const MovieDetailPage = ({ slug }: { slug: string }) => {
       init = false;
     }
   }, []);
+
+  const onChangeQty = (value: string | Number) => {
+    let val = Number(value);
+    val = isNaN(val) || val > movie?.maxQty || val < 1 ? movie.qty : val;
+    setMovie((prev: any) => { return { ...prev, qty: value == '' ? '' : val } })
+  }
 
 
 
@@ -99,7 +107,7 @@ const MovieDetailPage = ({ slug }: { slug: string }) => {
                   <div className="product-form product-qty pt-1">
                     <div className="product-form-group">
                       <div className="input-group">
-                        <button className="quantity-minus p-icon-minus-solid bg-transparent"></button>
+                        <button className="quantity-minus p-icon-minus-solid bg-transparent" onClick={() => onChangeQty(movie?.qty == 1 ? 1 : (movie?.qty - 1))}></button>
                         <input className="quantity form-control"
                           type="number"
                           min="1"
@@ -108,15 +116,20 @@ const MovieDetailPage = ({ slug }: { slug: string }) => {
                           value={movie?.qty ?? 0}
                           onChange={(d) => {
                             let value = d.target.value;
-                            let val = Number(value);
-                            val = isNaN(val) || val > movie?.maxQty || val < 1 ? movie.qty : val;
-                            setMovie((prev: any) => { return { ...prev, qty: value == '' ? '' : val } })
+                            onChangeQty(value);
                           }}
                         />
-                        <button className="quantity-plus p-icon-plus-solid bg-transparent"></button>
+                        <button className="quantity-plus p-icon-plus-solid bg-transparent" onClick={() => onChangeQty(movie?.qty + 1)}></button>
                       </div>
-                      <button className="btn-product btn-cart ls-normal font-weight-semi-bold"><i
-                        className="p-icon-cart-solid"></i>ADD TO CART</button>
+                      <button
+                        className="btn-product btn-cart ls-normal font-weight-semi-bold"
+                        onClick={() => {
+                          addToCart(movie, state, dispatch);
+                        }}
+                      >
+                        <i
+                          className="p-icon-cart-solid"></i>ADD TO CART
+                      </button>
                     </div>
                   </div>
 

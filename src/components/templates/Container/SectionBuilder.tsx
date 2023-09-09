@@ -24,10 +24,14 @@ export const SectionBuilder = ({
 export const ErrorBuilder = ({ message }: { message?: string }) => {
   return (
     <div className="m-2 my-4">
-      <Alert status="error" className="font-body">
-        <AlertIcon />
-        {message ?? `There was an error processing your request`}
-      </Alert>
+      <div className="alert alert-colored alert-danger alert-icon">
+        <i className="p-icon-face-bad"></i>
+        <h5 className="alert-title">
+          {message ?? `There was an error processing your request`}</h5>
+        {/* <button type="button" className="btn btn-link btn-close bg-trasparent">
+          <i className="p-icon-close"></i>
+        </button> */}
+      </div>
     </div>
   );
 };

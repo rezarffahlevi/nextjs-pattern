@@ -17,6 +17,7 @@ export const theme = extendTheme({ colors });
 const initialState = {
   init: true,
   carts: [],
+  addCartPopup: null,
 };
 const AppContext = createContext<any>(null);
 const reducer = (current: any, update: any) => {

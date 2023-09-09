@@ -22,10 +22,7 @@ const HomePage = () => {
 
       <div className="page-content mb-10 shop-page">
         <div className="container">
-          <div className="row main-content-wrap">
-            <FilterSection />
-            <MovieListSection />
-          </div>
+          <MovieListSection />
         </div>
       </div>
     </main>

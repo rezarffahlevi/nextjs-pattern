@@ -29,18 +29,6 @@ import {
 const CartsPage = () => {
   const { state, dispatch } = useAppContext();
 
-  const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
-    useNumberInput({
-      step: 1,
-      defaultValue: 1,
-      min: 1,
-      max: 996,
-    });
-
-  const inc = getIncrementButtonProps();
-  const dec = getDecrementButtonProps();
-  const input = getInputProps();
-
   const updateCarts = (detail: any, update: any) => {
     let carts = [...state.carts];
     let index = carts.findIndex((e) => e.id == detail?.id);

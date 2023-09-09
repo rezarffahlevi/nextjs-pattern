@@ -22,7 +22,8 @@ const MovieListSection = () => {
   const size = useWindowSize();
   const { fetchListNowPlaying, listMovie, listMovieLoading, listMovieIsError, listMovieError } =
     useListNowPlaying();
-  const [showBottomSheet, setShowBottomSheet] = useState(false);
+  const [openFilter, setOpenFilter] = useState("");
+
   let init = true;
 
   useEffect(() => {
@@ -32,75 +33,81 @@ const MovieListSection = () => {
     }
   }, []);
 
+
+  const toggleOpenFilter = () =>
+    setOpenFilter((prev) => (prev == "" ? " sidebar-active" : ""));
+
   return (
-    <div className="col-lg-9 main-content pl-lg-6">
-      <SectionBuilder
-        isError={listMovieIsError}
-        isLoading={listMovieLoading}
-        loading={<MovieListLoading />}
-        error={<ErrorBuilder message={listMovieError} />}
-      >
-        <nav className="toolbox sticky-toolbox sticky-content fix-top">
-          <div className="toolbox-left">
-            <a
-              href="#"
-              className="toolbox-item left-sidebar-toggle btn btn-outline btn-primary btn-icon-right d-lg-none"
-            >
-              <span>Filter</span>
-              <i className="p-icon-category-1 ml-md-1"></i>
-            </a>
-            <div className="toolbox-item toolbox-sort select-menu">
-              <label>Sort By :</label>
-              <select name="orderby">
-                <option defaultValue="default">Default Sorting</option>
-                <option defaultValue="popularity">Sort By Popularity</option>
-                <option defaultValue="rating">Sort By The Latest</option>
-                <option defaultValue="date">Sort By Average Rating</option>
-                <option defaultValue="price-low">
-                  Sort By Price: Low To High
-                </option>
-                <option defaultValue="price-high">
-                  Sort By Price: High To Low
-                </option>
-              </select>
+    <div className={"row main-content-wrap" + openFilter}>
+      <FilterSection toggleOpenFilter={toggleOpenFilter} />
+      <div className={"col-lg-9 main-content pl-lg-6"}>
+        <SectionBuilder
+          isError={listMovieIsError}
+          isLoading={listMovieLoading}
+          loading={<MovieListLoading />}
+          error={<ErrorBuilder message={listMovieError} />}
+        >
+          <nav className="toolbox sticky-toolbox sticky-content fix-top">
+            <div className="toolbox-left">
+              <a
+                className="toolbox-item left-sidebar-toggle btn btn-outline btn-primary btn-icon-right d-lg-none"
+                onClick={toggleOpenFilter}
+              >
+                <span>Filter</span>
+                <i className="p-icon-category-1 ml-md-1"></i>
+              </a>
+              <div className="toolbox-item toolbox-sort select-menu">
+                <label>Sort By :</label>
+                <select name="orderby">
+                  <option defaultValue="default">Default Sorting</option>
+                  <option defaultValue="popularity">Sort By Popularity</option>
+                  <option defaultValue="rating">Sort By The Latest</option>
+                  <option defaultValue="date">Sort By Average Rating</option>
+                  <option defaultValue="price-low">
+                    Sort By Price: Low To High
+                  </option>
+                  <option defaultValue="price-high">
+                    Sort By Price: High To Low
+                  </option>
+                </select>
+              </div>
             </div>
-          </div>
-          <div className="toolbox-right">
-            <div className="toolbox-item toolbox-show select-box">
-              <label>Show :</label>
-              <select name="count">
-                <option defaultValue="12">12</option>
-                <option defaultValue="24">24</option>
-                <option defaultValue="36">36</option>
-              </select>
-            </div>
-            {/* <div className="toolbox-item toolbox-layout">
+            <div className="toolbox-right">
+              <div className="toolbox-item toolbox-show select-box">
+                <label>Show :</label>
+                <select name="count">
+                  <option defaultValue="12">12</option>
+                  <option defaultValue="24">24</option>
+                  <option defaultValue="36">36</option>
+                </select>
+              </div>
+              {/* <div className="toolbox-item toolbox-layout">
               <a href="#" className="p-icon-list btn-layout"></a>
               <a href="#" className="p-icon-grid btn-layout active"></a>
             </div> */}
-          </div>
-        </nav>
+            </div>
+          </nav>
 
-        <div className="row product-wrapper cols-md-3 cols-2">
-          {(listMovie?.movielist ?? []).map((dt: any, i: any) => (
-            <Link href={`movies/${dt?.scheduledfilmid}`} className="product-wrap" key={"movie-" + i}>
-              <div className="product shadow-media text-center">
-                <figure className="product-media">
-                  <div>
-                    <Image
-                      src={dt?.thumbnailurl}
-                      alt={"film " + dt?.title}
-                      width={295}
-                      height={369}
-                    />
-                    <Image
-                      src={dt?.thumbnailurl}
-                      alt={"film " + dt?.title}
-                      width={295}
-                      height={369}
-                    />
-                  </div>
-                  {/* <div className="product-action-vertical">
+          <div className="row product-wrapper cols-md-3 cols-2">
+            {(listMovie?.movielist ?? []).map((dt: any, i: any) => (
+              <Link href={`movies/${dt?.scheduledfilmid}`} className="product-wrap" key={"movie-" + i}>
+                <div className="product shadow-media text-center">
+                  <figure className="product-media">
+                    <div>
+                      <Image
+                        src={dt?.thumbnailurl}
+                        alt={"film " + dt?.title}
+                        width={295}
+                        height={369}
+                      />
+                      <Image
+                        src={dt?.thumbnailurl}
+                        alt={"film " + dt?.title}
+                        width={295}
+                        height={369}
+                      />
+                    </div>
+                    {/* <div className="product-action-vertical">
                     <a
                       href="#"
                       className="btn-product-icon btn-cart"
@@ -132,9 +139,9 @@ const MovieListSection = () => {
                       <i className="p-icon-search-solid"></i>
                     </a>
                   </div> */}
-                </figure>
-                <div className="product-details">
-                  {/* <div className="ratings-container">
+                  </figure>
+                  <div className="product-details">
+                    {/* <div className="ratings-container">
                     <div className="ratings-full">
                       <span className="ratings" style={{ width: "60%" }}></span>
                       <span className="tooltiptext tooltip-top"></span>
@@ -146,23 +153,23 @@ const MovieListSection = () => {
                       (12)
                     </a>
                   </div> */}
-                  <h5 className="product-name">
-                    <div>{dt?.title}</div>
-                  </h5>
-                  {/* <span className="product-price">
+                    <h5 className="product-name">
+                      <div>{dt?.title}</div>
+                    </h5>
+                    {/* <span className="product-price">
                     <del className="old-price">$28.00</del>
                     <ins className="new-price">$12.00</ins>
                   </span> */}
+                  </div>
                 </div>
-              </div>
-            </Link>
-          ))}
-        </div>
-        <nav className="toolbox toolbox-pagination pt-2 pb-6">
-          <p className="toolbox-item show-info">
-            Menampilkan <span>1-{listMovie?.movielist?.length} dari {listMovie?.movielist?.length}</span> Film
-          </p>
-          {/* <ul className="pagination">
+              </Link>
+            ))}
+          </div>
+          <nav className="toolbox toolbox-pagination pt-2 pb-6">
+            <p className="toolbox-item show-info">
+              Menampilkan <span>1-{listMovie?.movielist?.length} dari {listMovie?.movielist?.length}</span> Film
+            </p>
+            {/* <ul className="pagination">
             <li className="page-item disabled">
               <a
                 className="page-link page-link-prev"
@@ -200,8 +207,9 @@ const MovieListSection = () => {
               </a>
             </li>
           </ul> */}
-        </nav>
-      </SectionBuilder>
+          </nav>
+        </SectionBuilder>
+      </div>
     </div>
   );
 };

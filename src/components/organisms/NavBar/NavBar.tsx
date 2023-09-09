@@ -30,7 +30,7 @@ const topRow = () => {
             <span>+456 789 000</span>
           </a>
           <span className="divider"></span>
-          <a href="contact.html" className="contact">
+          <a href="#" className="contact">
             <i className="p-icon-map"></i>
             <span>Jl. Pantai Indah Kapuk Boulevard</span>
           </a>
@@ -43,12 +43,23 @@ const topRow = () => {
   );
 };
 
+
 const NavBar = () => {
   const pathname = usePathname();
   const { state, dispatch } = useAppContext();
   const [navbarFixed, setNavbarFixed] = useState("");
   const [openCart, setOpenCart] = useState("cart-dropdown");
   const [openMenu, setOpenMenu] = useState("");
+  const [showPopup, setShowPopup] = useState<any>({
+    show: false,
+    title: 'Berhasil ditambahkan',
+    image: null,
+    content: null,
+    button: null,
+    action: null
+  });
+
+  let timer: any = null;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -70,6 +81,39 @@ const NavBar = () => {
       window.removeEventListener("resize", () => setOpenMenu(""));
     };
   }, []);
+
+  useEffect(() => {
+    if (state?.addCartPopup?.show) {
+      // dispatch({addCartPopup: true})
+      clearTimeout(timer);
+      setShowPopup({
+        show: true,
+        title: state?.addCartPopup?.title ?? 'Berhasil ditambahkan',
+        image: state?.addCartPopup?.image,
+        content: <div>
+          <p className="product-name">{state?.addCartPopup?.productName}</p>
+          <span>{state?.addCartPopup?.qty} x
+            <label className="font-bold"> Rp. {state?.addCartPopup?.price}</label>
+          </span>
+        </div>,
+        button: 'CHECK OUT',
+        action: state?.addCartPopup?.action
+      });
+
+      timer = setTimeout(() => {
+        dispatch({
+          addCartPopup: {
+            show: false
+          }
+        });
+        setShowPopup((prev: any) => { return { ...prev, show: false } })
+      }, 3000);
+    }
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [state.addCartPopup, timer])
 
   const toggleCart = () =>
     setOpenCart((prev) =>
@@ -140,7 +184,7 @@ const NavBar = () => {
             <div className={`dropdown ${openCart} off-canvas mr-0 mr-lg-2`}>
               <a href="#" className={"cart-toggle link"} onClick={toggleCart}>
                 <i className="p-icon-cart-solid">
-                  <span className="cart-count">2</span>
+                  <span className="cart-count">{state.carts?.length}</span>
                 </i>
               </a>
               <div className="canvas-overlay" onClick={toggleCart}></div>
@@ -157,69 +201,50 @@ const NavBar = () => {
                   </a>
                 </div>
                 <div className="products scrollable">
-                  <div className="product product-mini">
-                    <figure className="product-media">
-                      <a href="product-simple.html">
-                        <Image
-                          src="/assets/images/cart/product.jpg"
-                          alt="product"
-                          width="84"
-                          height="105"
-                        />
-                      </a>
-                      <a href="#" title="Remove Product" className="btn-remove">
-                        <i className="p-icon-times"></i>
-                        <span className="sr-only">Close</span>
-                      </a>
-                    </figure>
-                    <div className="product-detail">
-                      <a href="product.html" className="product-name">
-                        Peanuts
-                      </a>
-                      <div className="price-box">
-                        <span className="product-quantity">7</span>
-                        <span className="product-price">$12.00</span>
-                      </div>
-                    </div>
-                  </div>
 
-                  <div className="product product-mini">
-                    <figure className="product-media">
-                      <a href="product-simple.html">
-                        <Image
-                          src="/assets/images/cart/product.jpg"
-                          alt="product"
-                          width="84"
-                          height="105"
-                        />
-                      </a>
-                      <a href="#" title="Remove Product" className="btn-remove">
-                        <i className="p-icon-times"></i>
-                        <span className="sr-only">Close</span>
-                      </a>
-                    </figure>
-                    <div className="product-detail">
-                      <a href="product.html" className="product-name">
-                        Prime Beef
-                      </a>
-                      <div className="price-box">
-                        <span className="product-quantity">4</span>
-                        <span className="product-price">$16.00</span>
+                  {state.carts?.map((item: any, i: any) => {
+                    return (
+                      <div className="product product-mini" key={'item-movie' + i}>
+                        <figure className="product-media">
+                          <a href="#">
+                            <Image
+                              src={item?.imageurl}
+                              alt={"film " + item?.title}
+                              style={{ maxWidth: 90 }}
+                              width={90}
+                              height={10}
+                            />
+                          </a>
+                          <a href="#" title="Remove Product" className="btn-remove" onClick={() => deleteCart(item, state, dispatch)}>
+                            <i className="p-icon-times"></i>
+                            <span className="sr-only">Close</span>
+                          </a>
+                        </figure>
+                        <div className="product-detail">
+                          <a href="#" className="product-name">
+                            {item?.title}
+                          </a>
+                          <div className="price-box">
+                            <span className="product-quantity">{item?.qty}</span>
+                            <span className="product-price">Rp. {item?.price?.toLocaleString()}</span>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
+                    )
+                  })
+                  }
                 </div>
                 <div className="cart-total">
                   <label>Subtotal:</label>
                   <span className="price">$148.00</span>
                 </div>
                 <div className="cart-action">
-                  <a href="cart.html" className="btn btn-outline btn-dim mb-2">
+                  {/* <a href="#" className="btn btn-outline btn-dim mb-2">
                     View Cart
-                  </a>
-                  <a href="checkout.html" className="btn btn-dim">
+                  </a> */}
+                  <Link href="/checkout" className="btn btn-dim">
                     <span>Go To Checkout</span>
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -250,8 +275,61 @@ const NavBar = () => {
           </ul>
         </div>
       </div>
+
+      <div className="minipopup-area">
+        <div className={"minipopup-box top-0" + (showPopup.show ? ' show' : '')}>
+          <p className="minipopup-title">{showPopup?.title}</p>
+          <div className="product product-purchased product-mini mb-0">
+            {showPopup.image && (
+              <figure className="product-media"><a href="#">
+                <img src={showPopup.image ?? "/assets/images/cart/product.jpg"} alt="product" width="90" height="90" /></a>
+              </figure>
+            )}
+            <div className="product-detail">
+              {showPopup.content}
+              {/* <span className="purchased-time">12 MINUTES AGO</span> */}
+            </div>
+          </div>
+          {showPopup.button && (
+            <Link href="/checkout" onClick={showPopup.action ? showPopup.button : () => { }} className="btn btn-dim mt-3 w-full">
+              <span>{showPopup.button}</span>
+            </Link>)}
+        </div>
+      </div>
     </header>
   );
 };
 
 export default NavBar;
+
+
+export const addToCart = (movie: any, state: any, dispatch: any) => {
+  let carts = [...state.carts];
+  let index = carts.findIndex((e) => e.scheduledfilmid == movie?.scheduledfilmid);
+  if (index >= 0) {
+    carts[index] = { ...movie, qty: movie?.qty };
+  } else {
+    carts.push({ ...movie, qty: movie?.qty });
+  };
+
+  dispatch({
+    addCartPopup: {
+      show: true,
+      productName: movie?.title,
+      qty: movie?.qty,
+      price: movie?.price?.toLocaleString(),
+      image: movie?.imageurl,
+    },
+    carts: carts
+  });
+}
+
+
+export const deleteCart = (movie: any, state: any, dispatch: any) => {
+  let carts = [...state.carts];
+  let index = carts.findIndex((e) => e.id == movie?.id);
+  if (index >= 0) {
+    carts.splice(index, 1);
+  }
+  dispatch({ carts: carts });
+}
