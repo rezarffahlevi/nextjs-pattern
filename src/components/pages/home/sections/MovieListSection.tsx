@@ -1,5 +1,5 @@
 import Image from "@/components/molecules/Loader";
-import { SectionBuilder } from "@/components/templates/Container/SectionBuilder";
+import { ErrorBuilder, SectionBuilder } from "@/components/templates/Container/SectionBuilder";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { useListNowPlaying } from "@/services/useMovieService";
 import {
@@ -20,7 +20,7 @@ import { textToSlug } from "@/utils/utils";
 
 const MovieListSection = () => {
   const size = useWindowSize();
-  const { fetchListNowPlaying, listMovie, listMovieLoading, listMovieIsError } =
+  const { fetchListNowPlaying, listMovie, listMovieLoading, listMovieIsError, listMovieError } =
     useListNowPlaying();
   const [showBottomSheet, setShowBottomSheet] = useState(false);
   let init = true;
@@ -38,6 +38,7 @@ const MovieListSection = () => {
         isError={listMovieIsError}
         isLoading={listMovieLoading}
         loading={<MovieListLoading />}
+        error={<ErrorBuilder message={listMovieError} />}
       >
         <nav className="toolbox sticky-toolbox sticky-content fix-top">
           <div className="toolbox-left">
@@ -73,19 +74,19 @@ const MovieListSection = () => {
                 <option defaultValue="36">36</option>
               </select>
             </div>
-            <div className="toolbox-item toolbox-layout">
+            {/* <div className="toolbox-item toolbox-layout">
               <a href="#" className="p-icon-list btn-layout"></a>
               <a href="#" className="p-icon-grid btn-layout active"></a>
-            </div>
+            </div> */}
           </div>
         </nav>
 
         <div className="row product-wrapper cols-md-3 cols-2">
           {(listMovie?.movielist ?? []).map((dt: any, i: any) => (
-            <div className="product-wrap" key={"movie-" + i}>
+            <Link href={`movies/${dt?.scheduledfilmid}`} className="product-wrap" key={"movie-" + i}>
               <div className="product shadow-media text-center">
                 <figure className="product-media">
-                  <a href="#">
+                  <div>
                     <Image
                       src={dt?.thumbnailurl}
                       alt={"film " + dt?.title}
@@ -98,7 +99,7 @@ const MovieListSection = () => {
                       width={295}
                       height={369}
                     />
-                  </a>
+                  </div>
                   {/* <div className="product-action-vertical">
                     <a
                       href="#"
@@ -146,7 +147,7 @@ const MovieListSection = () => {
                     </a>
                   </div> */}
                   <h5 className="product-name">
-                    <a href="#">{dt?.title}</a>
+                    <div>{dt?.title}</div>
                   </h5>
                   {/* <span className="product-price">
                     <del className="old-price">$28.00</del>
@@ -154,14 +155,14 @@ const MovieListSection = () => {
                   </span> */}
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
         <nav className="toolbox toolbox-pagination pt-2 pb-6">
           <p className="toolbox-item show-info">
-            Showing <span>1-12 of 60</span> Products
+            Menampilkan <span>1-{listMovie?.movielist?.length} dari {listMovie?.movielist?.length}</span> Film
           </p>
-          <ul className="pagination">
+          {/* <ul className="pagination">
             <li className="page-item disabled">
               <a
                 className="page-link page-link-prev"
@@ -198,7 +199,7 @@ const MovieListSection = () => {
                 <i className="p-icon-angle-right"></i>
               </a>
             </li>
-          </ul>
+          </ul> */}
         </nav>
       </SectionBuilder>
     </div>

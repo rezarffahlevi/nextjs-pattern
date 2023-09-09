@@ -3,7 +3,7 @@ import { IFetchData, IGetData } from "./useGetData";
 import { REQ_STATUS } from "@/constants/constants";
 import { useState } from "react";
 
-interface IPostData extends IGetData, IFetchData {
+export interface IPostData extends IGetData, IFetchData {
   body?: object;
 }
 

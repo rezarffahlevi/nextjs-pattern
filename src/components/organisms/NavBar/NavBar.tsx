@@ -52,7 +52,7 @@ const NavBar = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      var isFixed = window.scrollY >= 200;
+      var isFixed = window.scrollY >= 100;
 
       if (isFixed) {
         setNavbarFixed("fixed sticky-header-active");
@@ -95,14 +95,14 @@ const NavBar = () => {
             >
               <i className="p-icon-bars-solid"></i>
             </a>
-            <a href="#" className="logo">
+            <Link href="/" className="logo">
               <Image
-                src="assets/images/logo.png"
+                src="/assets/images/logo.png"
                 alt="logo"
                 width="74"
                 height="41"
               />
-            </a>
+            </Link>
           </div>
           <div className="header-center">
             <nav className="main-nav">
@@ -161,7 +161,7 @@ const NavBar = () => {
                     <figure className="product-media">
                       <a href="product-simple.html">
                         <Image
-                          src="assets//images/cart/product.jpg"
+                          src="/assets/images/cart/product.jpg"
                           alt="product"
                           width="84"
                           height="105"
@@ -187,7 +187,7 @@ const NavBar = () => {
                     <figure className="product-media">
                       <a href="product-simple.html">
                         <Image
-                          src="assets/images/cart/product.jpg"
+                          src="/assets/images/cart/product.jpg"
                           alt="product"
                           width="84"
                           height="105"

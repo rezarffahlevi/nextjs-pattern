@@ -16,17 +16,17 @@ export const SectionBuilder = ({
 }: Props) => {
   if (isLoading) return loading;
 
-  if (isError) return error ?? <ErrorBuilder/>;
+  if (isError) return error ?? <ErrorBuilder />;
 
   return children;
 };
 
-export const ErrorBuilder = () => {
+export const ErrorBuilder = ({ message }: { message?: string }) => {
   return (
     <div className="m-2 my-4">
       <Alert status="error" className="font-body">
         <AlertIcon />
-        There was an error processing your request
+        {message ?? `There was an error processing your request`}
       </Alert>
     </div>
   );
