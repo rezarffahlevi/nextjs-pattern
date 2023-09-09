@@ -1,11 +1,11 @@
-import NavBar from "@/components/organisms/NavBar/NavBar";
 import "@assets/css/style.min.css";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter, Josefin_Sans } from "next/font/google";
 import { Providers, theme } from "./provider";
 import Head from "next/head";
-import { Footer } from "@/components/organisms/Footer/Footer";
+import { Footer } from "@/components/Footer/Footer";
+import NavBar from "@/components/NavBar/NavBar";
 
 const inter = Josefin_Sans({ subsets: ["latin"] });
 

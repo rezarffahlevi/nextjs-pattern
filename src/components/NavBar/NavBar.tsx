@@ -3,7 +3,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useAppContext } from "@/app/provider";
-import Image from "@/components/molecules/Loader";
+import Image from "@/components/Loader";
 
 export const navOptions: { name: string; link?: string }[] = [
   {
@@ -242,7 +242,8 @@ const NavBar = () => {
                   {/* <a href="#" className="btn btn-outline btn-dim mb-2">
                     View Cart
                   </a> */}
-                  <Link href="/checkout" className="btn btn-dim">
+                  <Link href="/checkout" className="btn btn-dim"
+                    onClick={toggleCart}>
                     <span>Go To Checkout</span>
                   </Link>
                 </div>

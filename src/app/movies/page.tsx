@@ -1,9 +1,10 @@
 import React from "react";
+import MoviePage from "./MoviePage";
 
 const Movie = () => {
   return (
     <>
-        <div/>
+      <MoviePage />
     </>
   );
 };

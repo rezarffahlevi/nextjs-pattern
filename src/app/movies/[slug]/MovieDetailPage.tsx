@@ -1,9 +1,9 @@
 "use client";
 
 import { useAppContext } from "@/app/provider";
-import Image from "@/components/molecules/Loader";
-import { addToCart } from "@/components/organisms/NavBar/NavBar";
-import { ErrorBuilder, SectionBuilder } from "@/components/templates/Container/SectionBuilder";
+import Image from "@/components/Loader";
+import { addToCart } from "@/components/NavBar/NavBar";
+import { ErrorBuilder, SectionBuilder } from "@/components/Container/SectionBuilder";
 import { useListNowPlaying, useMovieDetail } from "@/services/useMovieService";
 import { textToSlug } from "@/utils/utils";
 import {

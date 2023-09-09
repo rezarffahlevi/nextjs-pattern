@@ -4,9 +4,9 @@ import { useState } from "react";
 
 export interface IFetchData {
   urlPath?: string;
-  header?: object;
+  header?: any;
   queryParams?: any;
-  option?: object;
+  option?: any;
 }
 
 export interface IGetData {

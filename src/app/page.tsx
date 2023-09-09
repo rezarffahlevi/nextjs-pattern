@@ -1,10 +1,10 @@
 import React from "react";
 import type { NextPage } from "next";
-import HomePage from "@/components/pages/home/HomePage";
+import MoviePage from "./movies/MoviePage";
 
 const Home: NextPage = () => (
   <>
-    <HomePage />
+    <MoviePage />
   </>
 );
 

@@ -6,8 +6,8 @@ import "swiper/css/pagination";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { useEffect, useRef, useState } from "react";
 import { Container, Skeleton } from "@chakra-ui/react";
-import { SectionBuilder } from "@/components/templates/Container/SectionBuilder";
-import Image from "@/components/molecules/Loader";
+import { SectionBuilder } from "@/components/Container/SectionBuilder";
+import Image from "@/components/Loader";
 
 const BannerSection = () => {
   const [isLoading, setIsLoading] = useState(true);

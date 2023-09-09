@@ -4,7 +4,7 @@ import { REQ_STATUS } from "@/constants/constants";
 import { useState } from "react";
 
 export interface IPostData extends IGetData, IFetchData {
-  body?: object;
+  body?: any;
 }
 
 const usePostData = () => {

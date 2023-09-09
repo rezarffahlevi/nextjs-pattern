@@ -1,5 +1,5 @@
 "use client";
-import Image from "@/components/molecules/Loader";
+import Image from "@/components/Loader";
 
 const ContactPage = () => {
   return (

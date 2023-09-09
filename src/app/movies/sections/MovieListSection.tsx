@@ -1,5 +1,5 @@
-import Image from "@/components/molecules/Loader";
-import { ErrorBuilder, SectionBuilder } from "@/components/templates/Container/SectionBuilder";
+import Image from "@/components/Loader";
+import { ErrorBuilder, SectionBuilder } from "@/components/Container/SectionBuilder";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { useListNowPlaying } from "@/services/useMovieService";
 import {

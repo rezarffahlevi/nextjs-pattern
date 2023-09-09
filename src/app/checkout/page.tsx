@@ -1,10 +1,10 @@
 import React from "react";
 import type { NextPage } from "next";
-import CartsPage from "./CartsPage";
+import CheckoutPage from "./CheckoutPage";
 
 const Carts: NextPage = () => (
   <>
-    <CartsPage />
+    <CheckoutPage />
   </>
 );
 

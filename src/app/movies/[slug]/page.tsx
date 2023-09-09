@@ -1,5 +1,5 @@
 import React from "react";
-import MovieDetailPage from "@/components/pages/movie/MovieDetailPage";
+import MovieDetailPage from "./MovieDetailPage";
 
 const MovieDetail = ({ params }: { params: { slug: string } }) => {
   return (

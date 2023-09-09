@@ -1,8 +1,8 @@
 "use client";
 
 import { useAppContext } from "@/app/provider";
-import Image from "@/components/molecules/Loader";
-import { SectionBuilder } from "@/components/templates/Container/SectionBuilder";
+import Image from "@/components/Loader";
+import { SectionBuilder } from "@/components/Container/SectionBuilder";
 import {
   Accordion,
   AccordionButton,

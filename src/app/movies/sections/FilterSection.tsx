@@ -1,4 +1,4 @@
-import { SectionBuilder } from "@/components/templates/Container/SectionBuilder";
+import { SectionBuilder } from "@/components/Container/SectionBuilder";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { useCategories } from "@/services/useMovieService";
 import { Box, Checkbox, Skeleton, Stack } from "@chakra-ui/react";

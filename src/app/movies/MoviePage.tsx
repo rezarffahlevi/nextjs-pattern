@@ -1,9 +1,8 @@
 "use client";
 import { BannerSection } from "./sections/BannerSection";
-import { FilterSection } from "./sections/FilterSection";
 import { MovieListSection } from "./sections/MovieListSection";
 
-const HomePage = () => {
+const MoviePage = () => {
   return (
     <main className="main">
       <div className="cph-header">
@@ -29,4 +28,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default MoviePage;
