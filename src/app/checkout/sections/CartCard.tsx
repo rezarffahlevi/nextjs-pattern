@@ -177,6 +177,9 @@ export const CartCard = ({ movie, subTotal }: any) => {
             </Card>
 
             <div className="widget-body mt-1">
+                <span className="self-center font-bold mr-4 text-[14px]">
+                    Jam Tayang
+                </span>
                 {
                     showTime?.moviecinemascreen?.map((dt: any, i: any) => {
                         return (
@@ -188,7 +191,11 @@ export const CartCard = ({ movie, subTotal }: any) => {
                 }
             </div>
 
-            <div className="widget-body mt-1">
+            <div className="widget-body mt-2">
+                <span className="self-center font-bold mr-4 text-[14px]">
+                    Ticket Type
+                </span>
+
                 {
                     ticketType?.TicketTypes?.map((dt: any, i: any) => {
                         return (
@@ -197,6 +204,9 @@ export const CartCard = ({ movie, subTotal }: any) => {
                             </div>
                         )
                     })
+                }
+                {
+                    ticketType?.TicketTypes?.length < 1 ? 'Kosong' : selectedShowTime ? '' : 'Pilih jam tayang terlebih dahulu'
                 }
             </div>
             <Card className="bg-gray-500 my-5">
