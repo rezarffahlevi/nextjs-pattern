@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useAppContext } from "@/app/provider";
 import Image from "@/components/Loader";
+import { useListCinema } from "@/services/useCinemaService";
 
 export const navOptions: { name: string; link?: string }[] = [
   {
@@ -59,6 +60,8 @@ const NavBar = () => {
     action: null
   });
 
+
+  let init = true;
   let timer: any = null;
 
   useEffect(() => {
@@ -81,6 +84,7 @@ const NavBar = () => {
       window.removeEventListener("resize", () => setOpenMenu(""));
     };
   }, []);
+
 
   useEffect(() => {
     if (state?.addCartPopup?.show) {
@@ -122,6 +126,10 @@ const NavBar = () => {
 
   const toggleOpenMenu = () =>
     setOpenMenu((prev) => (prev == "" ? " mmenu-active" : ""));
+
+  const subTotal = state.carts?.reduce((a: any, b: any) => {
+    return a + b.price * b.qty;
+  }, 0);
 
   return (
     <header className={"header" + openMenu}>
@@ -165,6 +173,14 @@ const NavBar = () => {
             </nav>
           </div>
           <div className="header-right">
+            <div className="select-box mr-4 w-[20rem]">
+              <select name="country" className="form-control">
+                {
+                  (state.listCinema ?? []).map((dt: any) =>
+                    <option value={dt?.id} key={'cnmx' + dt?.id}>{dt?.name}</option>)
+                }
+              </select>
+            </div>
             <div className="header-search hs-toggle">
               <a className="search-toggle" href="#">
                 <i className="p-icon-search-solid"></i>
@@ -236,7 +252,7 @@ const NavBar = () => {
                 </div>
                 <div className="cart-total">
                   <label>Subtotal:</label>
-                  <span className="price">$148.00</span>
+                  <span className="price">Rp. {subTotal?.toLocaleString()}</span>
                 </div>
                 <div className="cart-action">
                   {/* <a href="#" className="btn btn-outline btn-dim mb-2">

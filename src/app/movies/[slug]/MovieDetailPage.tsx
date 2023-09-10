@@ -37,7 +37,7 @@ const MovieDetailPage = ({ slug }: { slug: string }) => {
 
   useEffect(() => {
     if (init) {
-      fetchMovieDetail({ scheduledFilmId: slug });
+      fetchMovieDetail({ body: { scheduledFilmId: slug } });
       init = false;
     }
   }, []);

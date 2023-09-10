@@ -7,7 +7,7 @@ export const useCategories = () => {
   const { postData, data, loading, status, error, isError } = usePostData();
 
   return {
-    fetchCategories: ({ header, option, queryParams }: IFetchData) =>
+    fetchCategories: ({ header, option, queryParams }: IPostData) =>
       postData({
         urlPath: "api/v1/flix/Movies/GetGenre",
         header: header,
@@ -32,7 +32,7 @@ export const useListNowPlaying = () => {
   const { postData, data, loading, status, error, isError } = usePostData();
 
   return {
-    fetchListNowPlaying: ({ header, option, queryParams }: IFetchData) =>
+    fetchListNowPlaying: ({ header, option, queryParams }: IPostData) =>
       postData({
         urlPath: "api/v1/flix/Movies/GetNowPlayingList",
         header: header,
@@ -54,10 +54,6 @@ export const useListNowPlaying = () => {
   };
 };
 
-
-interface IPostDataMovieDetail extends IPostData {
-  scheduledFilmId: string
-}
 export const useMovieDetail = () => {
   const { postData, data, loading, status, error, isError } = usePostData();
   const [movie, setMovie] = useState<any>(null);
@@ -73,7 +69,7 @@ export const useMovieDetail = () => {
   }, [data])
 
   return {
-    fetchMovieDetail: ({ header, option, queryParams, scheduledFilmId }: IPostDataMovieDetail) =>
+    fetchMovieDetail: ({ header, option, queryParams, body }: IPostData) =>
       postData({
         urlPath: "api/v1/flix/Movies/GetMovieDetail",
         header: header,
@@ -84,7 +80,7 @@ export const useMovieDetail = () => {
           ipaddress: "192:1.1.1",
           apikey: process.env.NEXT_PUBLIC_API_KEY,
           signature: process.env.NEXT_PUBLIC_SIGNATURE,
-          scheduledFilmId
+          ...body
         },
       }),
     movie,
@@ -93,5 +89,86 @@ export const useMovieDetail = () => {
     movieStatus: status,
     movieError: error || movie?.message,
     movieIsError: isError || movie?.status == '1',
+  };
+};
+
+export const useShowTime = () => {
+  const { postData, data, loading, status, error, isError } = usePostData();
+
+  return {
+    fetchShowTime: ({ header, option, queryParams, body }: IPostData) =>
+      postData({
+        urlPath: "api/v1/flix/Movies/GetShowTime",
+        header: header,
+        option: option,
+        queryParams: queryParams,
+        body: {
+          actionby: process.env.NEXT_PUBLIC_ACTION_BY,
+          ipaddress: "192:1.1.1",
+          apikey: process.env.NEXT_PUBLIC_API_KEY,
+          signature: process.env.NEXT_PUBLIC_SIGNATURE,
+          "returnformat": "single",
+          ...body,
+        },
+      }),
+    showTime: data,
+    showTimeLoading: loading,
+    showTimeStatus: status,
+    showTimeError: error || data?.message,
+    showTimeIsError: isError || data?.status == '1',
+  };
+};
+
+
+export const useTicketType = () => {
+  const { postData, data, loading, status, error, isError } = usePostData();
+
+  return {
+    fetchTicketType: ({ header, option, queryParams, body }: IPostData) =>
+      postData({
+        urlPath: "api/v1/flix/Movies/GetTicketType",
+        header: header,
+        option: option,
+        queryParams: queryParams,
+        body: {
+          actionby: process.env.NEXT_PUBLIC_ACTION_BY,
+          ipaddress: "192:1.1.1",
+          apikey: process.env.NEXT_PUBLIC_API_KEY,
+          signature: process.env.NEXT_PUBLIC_SIGNATURE,
+          ...body,
+        },
+      }),
+    ticketType: data,
+    ticketTypeLoading: loading,
+    ticketTypeStatus: status,
+    ticketTypeError: error || data?.message,
+    ticketTypeIsError: isError || data?.status == '1',
+  };
+};
+
+
+export const useSeatLayout = () => {
+  const { postData, data, loading, status, error, isError } = usePostData();
+
+  return {
+    fetchSeatLayout: ({ header, option, queryParams, body }: IPostData) =>
+      postData({
+        urlPath: "api/v1/flix/Movies/GetSeatLayout",
+        header: header,
+        option: option,
+        queryParams: queryParams,
+        body: {
+          actionby: process.env.NEXT_PUBLIC_ACTION_BY,
+          ipaddress: "192:1.1.1",
+          apikey: process.env.NEXT_PUBLIC_API_KEY,
+          signature: process.env.NEXT_PUBLIC_SIGNATURE,
+          ...body,
+        },
+      }),
+    seatLayout: data,
+    seatLayoutLoading: loading,
+    seatLayoutStatus: status,
+    seatLayoutError: error || data?.message,
+    seatLayoutIsError: isError || data?.status == '1',
   };
 };
