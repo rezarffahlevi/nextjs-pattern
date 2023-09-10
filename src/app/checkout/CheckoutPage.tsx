@@ -3,46 +3,22 @@
 import { useAppContext } from "@/app/provider";
 import Image from "@/components/Loader";
 import { SectionBuilder } from "@/components/Container/SectionBuilder";
-import {
-    Accordion,
-    AccordionButton,
-    AccordionIcon,
-    AccordionItem,
-    AccordionPanel,
-    Box,
-    Button,
-    Card,
-    CardBody,
-    Checkbox,
-    CloseButton,
-    Divider,
-    HStack,
-    Heading,
-    IconButton,
-    Input,
-    Select,
-    Text,
-    VStack,
-    useNumberInput,
-} from "@chakra-ui/react";
 import Link from "next/link";
+import { deleteCart, updateCarts } from "@/components/NavBar/NavBar";
+import { useListCinema } from "@/services/useCinemaService";
+import { useEffect } from "react";
 
 const CheckoutPage = () => {
     const { state, dispatch } = useAppContext();
+    const { fetchListCinema, listCinema, listCinemaLoading, listCinemaError, listCinemaIsError } = useListCinema()
 
-    const updateCarts = (detail: any, update: any) => {
-        let carts = [...state.carts];
-        let index = carts.findIndex((e) => e.id == detail?.id);
-        if (index >= 0) {
-            let oldQty = carts[index].qty;
-            let newData = { ...detail, ...update };
-            if (newData?.qty > newData?.stock || newData?.qty < 1) {
-                newData = { ...newData, qty: oldQty };
-            }
-            carts[index] = newData;
+    let init = true;
+    useEffect(() => {
+        if (init) {
+            init = false;
+            fetchListCinema({});
         }
-        dispatch({ carts: carts });
-    };
+    }, [])
 
     const subTotal = state.carts?.reduce((a: any, b: any) => {
         return a + b.price * b.qty;
@@ -94,8 +70,8 @@ const CheckoutPage = () => {
                                             <div className="input-group">
                                                 <button className="quantity-minus p-icon-minus-solid bg-transparent" onClick={() =>
                                                     updateCarts(movie, {
-                                                        qty: movie.qty - 1,
-                                                    })}></button>
+                                                        qty: movie?.qty == 1 ? 1 : movie.qty - 1,
+                                                    }, state, dispatch)}></button>
                                                 <input className="quantity form-control"
                                                     type="number"
                                                     min="1"
@@ -105,13 +81,19 @@ const CheckoutPage = () => {
                                                         let value = d.target.value;
                                                         updateCarts(movie, {
                                                             qty: value,
-                                                        })
+                                                        }, state, dispatch)
+                                                    }}
+                                                    onBlur={(d) => {
+                                                        let value = d.target.value;
+                                                        updateCarts(movie, {
+                                                            qty: value == '' ? 1 : value,
+                                                        }, state, dispatch)
                                                     }}
                                                 />
                                                 <button className="quantity-plus p-icon-plus-solid bg-transparent" onClick={() =>
                                                     updateCarts(movie, {
                                                         qty: movie.qty + 1,
-                                                    })}></button>
+                                                    }, state, dispatch)}></button>
                                             </div>
                                             <label className="mt-4">Stok = {movie?.maxQty}</label>
                                         </td>
@@ -119,7 +101,9 @@ const CheckoutPage = () => {
                                             <span className="amount">Rp. {(movie?.price * movie?.qty).toLocaleString()}</span>
                                         </td>
                                         <td className="product-remove">
-                                            <a href="#" className="btn-remove" title="Remove this product">
+                                            <a href="#" className="btn-remove" title="Remove this product" onClick={() => {
+                                                deleteCart(movie, state, dispatch);
+                                            }}>
                                                 <i className="p-icon-times"></i>
                                             </a>
                                         </td>
@@ -161,19 +145,18 @@ const CheckoutPage = () => {
                                     <label className="mb-4">Lokasi Teater *</label>
                                     <div className="select-box">
                                         <select name="country" className="form-control">
-                                            <option value="us">United States (US)</option>
-                                            <option value="uk"> United Kingdom</option>
-                                            <option value="fr">France</option>
-                                            <option value="aus">Austria</option>
+                                            {
+                                                (listCinema?.cinemalist ?? []).map((dt: any) =>
+                                                    <option value={dt?.id} key={dt?.id}>{dt?.name}</option>)
+                                            }
                                         </select>
                                     </div>
                                     <label className="mb-4">Metode Pengiriman *</label>
                                     <div className="select-box">
                                         <select name="country" className="form-control">
-                                            <option value="us">California</option>
-                                            <option value="uk">Alaska</option>
-                                            <option value="fr">Delaware</option>
-                                            <option value="aus">Hawaii</option>
+                                            <option>Instant</option>
+                                            <option>Same Day</option>
+                                            <option>Regular</option>
                                         </select>
                                     </div>
                                 </div>

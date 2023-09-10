@@ -304,31 +304,51 @@ const NavBar = () => {
 export default NavBar;
 
 
-export const addToCart = (movie: any, state: any, dispatch: any) => {
+export const addToCart = (item: any, state: any, dispatch: any) => {
   let carts = [...state.carts];
-  let index = carts.findIndex((e) => e.scheduledfilmid == movie?.scheduledfilmid);
+  let index = carts.findIndex((e) => e.scheduledfilmid == item?.scheduledfilmid);
   if (index >= 0) {
-    carts[index] = { ...movie, qty: movie?.qty };
+    carts[index] = { ...item, qty: item?.qty };
   } else {
-    carts.push({ ...movie, qty: movie?.qty });
+    carts.push({ ...item, qty: item?.qty });
   };
 
   dispatch({
     addCartPopup: {
       show: true,
-      productName: movie?.title,
-      qty: movie?.qty,
-      price: movie?.price?.toLocaleString(),
-      image: movie?.imageurl,
+      productName: item?.title,
+      qty: item?.qty,
+      price: item?.price?.toLocaleString(),
+      image: item?.imageurl,
     },
     carts: carts
   });
 }
 
 
-export const deleteCart = (movie: any, state: any, dispatch: any) => {
+export const updateCarts = (item: any, update: any, state: any, dispatch: any) => {
   let carts = [...state.carts];
-  let index = carts.findIndex((e) => e.id == movie?.id);
+  let index = carts.findIndex((e) => e.scheduledfilmid == item?.scheduledfilmid);
+
+  if (index >= 0) {
+    let oldQty = carts[index].qty;
+    let newData = { ...item, ...update };
+
+
+    let val = Number(newData?.qty);
+    val = isNaN(val) || val > newData?.maxQty || val < 1 ? oldQty : val;
+    newData = { ...newData, qty: newData?.qty == '' ? '' : val };
+
+    carts[index] = newData;
+  }
+  dispatch({ carts: carts });
+};
+
+
+
+export const deleteCart = (item: any, state: any, dispatch: any) => {
+  let carts = [...state.carts];
+  let index = carts.findIndex((e) => e.scheduledfilmid == item?.scheduledfilmid);
   if (index >= 0) {
     carts.splice(index, 1);
   }

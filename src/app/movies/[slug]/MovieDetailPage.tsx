@@ -49,7 +49,6 @@ const MovieDetailPage = ({ slug }: { slug: string }) => {
   }
 
 
-
   const videoId = movie?.trailerurl?.split('?v=')[1];
   return (
     <main className="flex min-h-screen flex-col items-center">
@@ -117,6 +116,10 @@ const MovieDetailPage = ({ slug }: { slug: string }) => {
                           onChange={(d) => {
                             let value = d.target.value;
                             onChangeQty(value);
+                          }}
+                          onBlur={(d) => {
+                            let value = d.target.value;
+                            onChangeQty(value == '' ? 1 : value);
                           }}
                         />
                         <button className="quantity-plus p-icon-plus-solid bg-transparent" onClick={() => onChangeQty(movie?.qty + 1)}></button>
