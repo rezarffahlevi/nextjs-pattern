@@ -37,7 +37,10 @@ body {
 }
 
 
-button, [type='button'], [type='reset'], [type='submit'] {
+button,
+[type='button'],
+[type='reset'],
+[type='submit'] {
   -webkit-appearance: button;
   /* 1 */
   background-color: #54524d;
@@ -46,7 +49,28 @@ button, [type='button'], [type='reset'], [type='submit'] {
   /* 2 */
 }
 
-.sticky-header, .sticky-header-active {
+.sticky-header,
+.sticky-header-active {
   padding-top: 1.5rem;
   padding-bottom: 1.4rem;
+}
+
+.chakra-alert {
+  padding: 2rem !important;
+}
+
+.inputan {
+  display: block;
+  width: 20rem;
+  /* height: 4.5rem; */
+  padding: 1.1em 1.22em 0.9em;
+  border: 1px solid #e0dede;
+  border-radius: 0;
+  box-shadow: none;
+  box-sizing: border-box;
+  font-size: 0.875em;
+  line-height: 1.5;
+  color: #999;
+  -webkit-appearance: none;
+  -moz-appearance: none;
 }

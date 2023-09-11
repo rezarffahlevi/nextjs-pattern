@@ -2,7 +2,8 @@ import { useAppContext } from "@/app/provider";
 import Image from "@/components/Loader";
 import { deleteCart, updateCarts } from "@/components/NavBar/NavBar";
 import { useSeatLayout, useShowTime, useTicketType } from "@/services/useMovieService";
-import { Button, Card, CardBody } from "@chakra-ui/react";
+import { Button, Card, CardBody, useToast } from "@chakra-ui/react";
+import moment from "moment";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -12,6 +13,8 @@ export const CartCard = ({ movie, subTotal }: any) => {
     const [selected, setSelected] = useState<any>([]);
     const [selectedShowTime, setSelectedShowTime] = useState<any>(null);
     const [selectedTicketType, setSelectedTicketType] = useState<any>(null);
+    const toast = useToast()
+
 
     const { fetchShowTime, showTime, showTimeLoading, showTimeError, showTimeIsError } = useShowTime();
     const { fetchTicketType, ticketType, ticketTypeLoading, ticketTypeError, ticketTypeIsError } = useTicketType();
@@ -20,49 +23,26 @@ export const CartCard = ({ movie, subTotal }: any) => {
     let init = true;
 
     useEffect(() => {
-        if (movie && init) {
+        if (state.checkout && init) {
             init = false;
-            fetchShowTime({
-                body: {
-                    "scheduledFilmId": movie?.scheduledfilmid,
-                    "cinemaid": state.cinema?.id,
-                    "showdate": "2023/09/10",
-                }
-            });
-        }
-    }, []);
-
-    useEffect(() => {
-        if (selectedShowTime) {
-            fetchTicketType({
-                body: {
-                    "cinemaid": state.cinema?.id,
-                    "sessionid": selectedShowTime?.sessionid,
-                }
-            });
-        }
-    }, [selectedShowTime]);
-
-    useEffect(() => {
-        if (selectedTicketType) {
             fetchSeatLayout({
                 body: {
                     "cinemaid": state.cinema?.id,
-                    "sessionid": selectedTicketType?.Session_strID,
-                    "areacategorycode": selectedTicketType?.AreaCat_strCode,
-                    "tickettypecode": selectedTicketType?.Price_strTicket_Type_Code,
-                    "ticketprice": selectedTicketType?.Price_intTicket_Price,
-                    "ticketqty": selectedTicketType?.PPack_intQuantity,
+                    "sessionid": movie?.Session_strID,
+                    "areacategorycode": movie?.AreaCat_strCode,
+                    "tickettypecode": movie?.Price_strTicket_Type_Code,
+                    "ticketprice": movie?.Price_intTicket_Price,
+                    "ticketqty": movie?.PPack_intQuantity,
                     "filmid": movie?.scheduledfilmid,
                     "filmname": movie?.title,
-                    "cinemaname": selectedShowTime?.cinemaname,
-                    "screenname": selectedShowTime?.screenname,
-                    "sessiondatetime": `2023/09/10 ${selectedShowTime?.showtime}`,
+                    "cinemaname": movie?.cinemaname,
+                    "screenname": movie?.screenname,
+                    "sessiondatetime": `${moment(movie?.date).format('YYYY/MM/DD')} ${movie?.showtime}`,
                     "guestemail": "email-that-did-not-exist@mimin.io",
                 }
             });
         }
-    }, [selectedTicketType]);
+    }, [state.checkout]);
 
     return (
         <div className="mb-6">
@@ -83,7 +63,7 @@ export const CartCard = ({ movie, subTotal }: any) => {
                         </Link>
                     </figure>
                 </div>
-                <div className="product-name basis-3/12">
+                <div className="product-name basis-4/12">
                     <div className="product-name-section">
                         <Link href={"/movies/" + movie?.scheduledfilmid}>{movie?.title}</Link>
                     </div>
@@ -91,7 +71,10 @@ export const CartCard = ({ movie, subTotal }: any) => {
                 <div className="product-subtotal basis-2/12">
                     <span className="amount">Rp. {movie?.price?.toLocaleString()}</span>
                 </div>
-                <div className="product-quantity basis-2/12">
+                <div className="product-quantity basis-1/12">
+                    x <span className="amount">{movie?.qty}</span>
+                </div>
+                {/* <div className="product-quantity basis-2/12">
                     <div className="input-group">
                         <button className="quantity-minus p-icon-minus-solid bg-transparent" onClick={() =>
                             updateCarts(movie, {
@@ -121,7 +104,7 @@ export const CartCard = ({ movie, subTotal }: any) => {
                             }, state, dispatch)}></button>
                     </div>
                     <p className="mt-1">Stok = {movie?.maxQty}</p>
-                </div>
+                </div> */}
                 <div className="product-price basis-3/12">
                     <span className="amount">Rp. {(movie?.price * movie?.qty).toLocaleString()}</span>
                 </div>
@@ -148,13 +131,13 @@ export const CartCard = ({ movie, subTotal }: any) => {
                     <div className="max-md:px-6 max-md:min-w-[10rem]">
                         <p className="text-[12px]">When</p>
                         <span className="font-bold text-[13px]">
-                            {new Date().toDateString()}
+                            {new Date(movie?.date).toDateString()}
                         </span>
                     </div>
                     <div className="max-md:px-6 max-md:min-w-[10rem]">
                         <p className="text-[12px]">Location</p>
                         <span className="font-bold text-[13px]">
-                            FLIX - PIK AVENUE
+                            {movie?.cinemaname}
                         </span>
                     </div>
                     <div className="max-md:px-6 max-md:min-w-[10rem]">
@@ -163,7 +146,7 @@ export const CartCard = ({ movie, subTotal }: any) => {
                     </div>
                     <div className="max-md:px-6 max-md:min-w-[10rem]">
                         <p className="text-[12px]">Class</p>
-                        <span className="font-bold text-[13px]">PLATINUM S</span>
+                        <span className="font-bold text-[13px]">{movie?.Price_strTicket_Type_Description}</span>
                     </div>
                     <div className="max-md:px-6 max-md:min-w-[14rem]">
                         <span className="text-[12px]">
@@ -176,7 +159,7 @@ export const CartCard = ({ movie, subTotal }: any) => {
                 </CardBody>
             </Card>
 
-            <div className="widget-body mt-1">
+            {/* <div className="widget-body mt-1">
                 <span className="self-center font-bold mr-4 text-[14px]">
                     Jam Tayang
                 </span>
@@ -208,7 +191,8 @@ export const CartCard = ({ movie, subTotal }: any) => {
                 {
                     ticketType?.TicketTypes?.length < 1 ? 'Kosong' : selectedShowTime ? '' : 'Pilih jam tayang terlebih dahulu'
                 }
-            </div>
+            </div> */}
+
             <Card className="bg-gray-500 my-5">
                 <CardBody className="flex">
                     <span className="text-[13px] mr-12 font-bold text-white">
@@ -221,7 +205,7 @@ export const CartCard = ({ movie, subTotal }: any) => {
             </Card>
 
             <div className="md:flex w-full">
-                <Card className="basis-12/12 md:basis-5/12">
+                <Card className="basis-12/12 md:basis-3/12">
                     <CardBody>
                         <div className="flex justify-between">
                             <span className="text-[12px] font-semibold text-gray-600">
@@ -266,9 +250,9 @@ export const CartCard = ({ movie, subTotal }: any) => {
                         </div>
                     </CardBody>
                 </Card>
-                <div className="md:flex basis-7/12 max-md:mt-6 max-md:mb-10">
+                <div className="md:flex basis-9/12 max-md:mt-6 max-md:mb-10">
                     <div className="basis-5/12 mx-6">
-                        {["A", "B", "C", "D"].map((col, i) => {
+                        {/* {["A", "B", "C", "D"].map((col, i) => {
                             return (
                                 <div
                                     key={"st" + i}
@@ -277,52 +261,89 @@ export const CartCard = ({ movie, subTotal }: any) => {
                                     {renderSeat(col, selected, setSelected)}
                                 </div>
                             );
-                        })}
-                        <div className="mr-[1.5rem] mt-3 py-3 rounded-md text-sm text-center bg-gray-500 text-white font-body font-bold">
+                        })} */}
+                        {
+                            seatLayout?.Rows?.map((seat: any, i: any) => {
+                                return (
+                                    <div
+                                        key={"st" + i}
+                                        className="flex w-full justify-between"
+                                    >
+                                        {renderSeat(seat, selected, setSelected, state.checkout?.qty, toast)}
+                                    </div>
+                                );
+                            })
+                        }
+
+                        <div className="mt-3 py-3 rounded-md text-sm text-center bg-gray-500 text-white font-body font-bold">
                             SCREEN
                         </div>
                     </div>
-                    <div className="basis-7/12 relative max-md:pt-8 max-md:pb-8">
+                    {/* <div className="basis-7/12 relative max-md:pt-8 max-md:pb-8 max-md:mt-6">
                         <Button
                             variant={"solid"}
                             className="bg-yellow-300 hover:bg-neutral-800 h-10 px-20 py-8 chakra-button rounded-none text-white font-body text-bold absolute bottom-0 right-0"
                         >
                             NEXT
                         </Button>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>
     )
 }
 
-const renderSeat = (col: string, selected: any, setSelected: any) => {
+const renderSeat = (data: any, selected: any, setSelected: any, maxQty: any = 1, toast: any) => {
     let element = [];
-    element.push(<span className="w-[2.5rem] text-gray-500" key={'span' + col}>{col}</span>);
-    for (let index = 0; index < 6; index++) {
+    element.push(<span className="w-[2.5rem] text-gray-500" key={'span' + data?.PhysicalName}>{data?.PhysicalName}</span>);
+    for (let index = 0; index < data?.Seats?.length; index++) {
         let seatDivider = index % 2 == 1;
-        let mr = seatDivider ? " mr-6" : "";
+        let mr = '';
+        // seatDivider ? " mr-6" : "";
+
+        let item = data?.Seats[index];
+
         element.push(
             <input
-                className={"custom-checkbox mx-[1px]" + mr}
+                className={"custom-checkbox m-[0px]" + mr}
                 key={'cbx-' + index}
                 type="checkbox"
-                onClick={() => setSelected((prev: any) => {
-                    let newState = [...prev]
-                    let i = newState.indexOf(`${col}${index}`);
-                    if (i >= 0) {
-                        newState.splice(i, 1);
-                    } else {
-                        newState.push(`${col}${index}`);
+                onClick={() => {
+                    let i = selected.findIndex((fd: any) => `${fd?.AreaNumber}-${fd?.RowIndex}-${fd?.ColumnIndex}` == `${item?.AreaNumber}-${item?.RowIndex}-${item?.ColumnIndex}`);
+
+                    if (i < 0 && selected.length >= parseInt(maxQty)) {
+                        toast({
+                            title: `Tidak dapat melebihi jumlah qty`,
+                            status: 'error',
+                            isClosable: true,
+                            duration: 2000
+                        })
+                        return;
                     }
-                    return newState;
-                })}
-                style={{ borderColor: '#54524d', borderWidth: 1.5, backgroundColor: selected.includes(`${col}${index}`) ? 'rgb(253 224 71' : 'transparent' }}
+
+                    setSelected((prev: any) => {
+                        let newState = [...prev]
+                        if (i >= 0) {
+                            newState.splice(i, 1);
+                        } else {
+                            newState.push(item);
+                        }
+                        // console.log(newState);
+
+                        return newState;
+                    })
+                }}
+                style={{
+                    borderColor: '#54524d',
+                    borderWidth: 1.5,
+                    backgroundColor: selected.some((fd: any) => `${fd?.AreaNumber}-${fd?.RowIndex}-${fd?.ColumnIndex}` == `${item?.AreaNumber}-${item?.RowIndex}-${item?.ColumnIndex}`) ? 'rgb(253 224 71' : 'transparent',
+                    // margin: 0,
+                }}
                 checked={false}
                 onChange={() => { }}
             />
         );
     }
-    element.push(<span className="w-[2.5rem] ml-[-1rem] text-gray-500" key={'span-' + col}>{col}</span>);
+    element.push(<span className="w-[2.5rem] text-right text-gray-500" key={'span-' + data?.PhysicalName}>{data?.PhysicalName}</span>);
     return element;
 };

@@ -20,7 +20,7 @@ import { textToSlug } from "@/utils/utils";
 
 const MovieListSection = () => {
   const size = useWindowSize();
-  const { fetchListNowPlaying, listMovie, listMovieLoading, listMovieIsError, listMovieError } =
+  const { fetchListNowPlaying, listMovie, listMovieLoading, listMovieIsError, listMessage } =
     useListNowPlaying();
   const [openFilter, setOpenFilter] = useState("");
 
@@ -45,7 +45,7 @@ const MovieListSection = () => {
           isError={listMovieIsError}
           isLoading={listMovieLoading}
           loading={<MovieListLoading />}
-          error={<ErrorBuilder message={listMovieError} />}
+          error={<ErrorBuilder message={listMessage ?? 'Error'} />}
         >
           <nav className="toolbox sticky-toolbox sticky-content fix-top">
             <div className="toolbox-left">

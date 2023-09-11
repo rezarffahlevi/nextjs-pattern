@@ -4,7 +4,7 @@ import { useAppContext } from "@/app/provider";
 import Image from "@/components/Loader";
 import { addToCart } from "@/components/NavBar/NavBar";
 import { ErrorBuilder, SectionBuilder } from "@/components/Container/SectionBuilder";
-import { useListNowPlaying, useMovieDetail } from "@/services/useMovieService";
+import { useListNowPlaying, useMovieDetail, useShowTime, useTicketType } from "@/services/useMovieService";
 import { textToSlug } from "@/utils/utils";
 import {
   Box,
@@ -23,24 +23,59 @@ import {
   SkeletonText,
   Text,
   useNumberInput,
+  useToast,
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import moment from 'moment';
 
 const MovieDetailPage = ({ slug }: { slug: string }) => {
   const { state, dispatch } = useAppContext();
   const { fetchMovieDetail, movie, setMovie, movieLoading, movieIsError, movieError } =
     useMovieDetail();
-  const [detail, setDetail] = useState<any>(null);
+  const { fetchShowTime, showTime, showTimeLoading, showTimeError, showTimeIsError } = useShowTime();
+  const { fetchTicketType, ticketType, ticketTypeLoading, ticketTypeError, ticketTypeIsError } = useTicketType();
+
+  const [date, setDate] = useState<any>(moment().format('YYYY/MM/DD'));
+  const [selectedShowTime, setSelectedShowTime] = useState<any>(null);
+  const [selectedTicketType, setSelectedTicketType] = useState<any>(null);
+
+  const router = useRouter();
+  const toast = useToast()
 
   let init = true;
+  let needFetch = true;
 
   useEffect(() => {
     if (init) {
-      fetchMovieDetail({ body: { scheduledFilmId: slug } });
       init = false;
+      fetchMovieDetail({ body: { scheduledFilmId: slug } });
     }
-  }, []);
+  }, [])
+
+  useEffect(() => {
+    if (needFetch && state.cinema) {
+      fetchShowTime({
+        body: {
+          "scheduledFilmId": slug,
+          "cinemaid": state.cinema?.id,
+          "showdate": date,
+        }
+      });
+      needFetch = false;
+    }
+  }, [state.cinema, date]);
+
+  useEffect(() => {
+    if (selectedShowTime) {
+      fetchTicketType({
+        body: {
+          "cinemaid": state.cinema?.id,
+          "sessionid": selectedShowTime?.sessionid,
+        }
+      });
+    }
+  }, [selectedShowTime]);
 
   const onChangeQty = (value: string | Number) => {
     let val = Number(value);
@@ -48,15 +83,28 @@ const MovieDetailPage = ({ slug }: { slug: string }) => {
     setMovie((prev: any) => { return { ...prev, qty: value == '' ? '' : val } })
   }
 
+  const getTypeMsg = () => {
+    let ticketTypeMsg = null;
+    if (ticketTypeLoading) {
+      ticketTypeMsg = 'Loading..';
+    } else if (ticketType?.TicketTypes?.length < 1) {
+      ticketTypeMsg = 'Kosong';
+    } else if (!selectedShowTime) {
+      ticketTypeMsg = 'Pilih jam tayang terlebih dahulu'
+    } else {
+      ticketTypeMsg = null;
+    }
+    return ticketTypeMsg;
+  }
 
   const videoId = movie?.trailerurl?.split('?v=')[1];
   return (
     <main className="flex min-h-screen flex-col items-center">
       <SectionBuilder
         loading={<MovieDetailLoading />}
-        isLoading={movieLoading && detail == null}
+        isLoading={movieLoading}
         isError={movieIsError}
-        error={<ErrorBuilder message={movieError} />}
+        error={<ErrorBuilder message={movieError?.toString()} />}
       >
         <div className="page-content">
           <div className="container">
@@ -66,24 +114,25 @@ const MovieDetailPage = ({ slug }: { slug: string }) => {
                   <div
                     className="product-single-carousel row cols-1 gutter-no">
                     {/* <figure className="product-image"> */}
-                    {movie?.imageurl && (<Image
-                      src={movie?.imageurl}
-                      id='thumbnail'
-                      // data-zoom-image={movie?.imageurl}
-                      alt={movie?.title + ' ' + movie?.titlealt}
-                      width={0}
-                      height={0}
-                      sizes="100vw"
-                      style={{ width: "100%", height: "auto" }}
-                      onError={(e: any) => {
-                        // document.getElementById('thumbnail')?.setAttribute('src', '/assets/images/movie-error.png')
-                        let object = Object.assign({}, movie);
-                        object['imageurl'] = '/assets/images/demos/demo1/banner/banner1.jpg';
-                        setMovie(object);
-                      }}
-                    // placeholder="blur"
-                    // blurDataURL="/assets/images/movie-error.png"
-                    />)}
+                    {movie?.imageurl && (
+                      <Image
+                        src={movie?.imageurl}
+                        id='thumbnail'
+                        // data-zoom-image={movie?.imageurl}
+                        alt={movie?.title + ' ' + movie?.titlealt}
+                        width={0}
+                        height={0}
+                        sizes="100vw"
+                        style={{ width: "100%", height: "auto" }}
+                        onError={(e: any) => {
+                          // document.getElementById('thumbnail')?.setAttribute('src', '/assets/images/movie-error.png')
+                          let object = Object.assign({}, movie);
+                          object['imageurl'] = '/assets/images/demos/demo1/banner/banner1.jpg';
+                          setMovie(object);
+                        }}
+                      // placeholder="blur"
+                      // blurDataURL="/assets/images/movie-error.png"
+                      />)}
                     {/* </figure> */}
                   </div>
                 </div>
@@ -103,6 +152,56 @@ const MovieDetailPage = ({ slug }: { slug: string }) => {
                     {/* <del className="old-price">$24.00</del> */}
                     <ins className="new-price">Rp. {movie?.price?.toLocaleString()}</ins>
                   </p>
+                  <div className="product-form product-unit pt-1">
+                    <label>Jam Tayang</label>
+                  </div>
+                  <div className="product-form product-unit mb-2 pt-1 flex">
+                    <input type="date" value={date?.replaceAll('/', '-')} onChange={(e) => {
+                      let value = e.target.value;
+                      if (moment(value).isBefore(moment(), 'D')) {
+                        toast({
+                          title: `Tidak bisa memilih tanggal sebelumnya`,
+                          status: 'error',
+                          isClosable: true,
+                        })
+                      } else {
+                        needFetch = true;
+                        setDate(moment(value).format('YYYY/MM/DD'));
+                      }
+                    }} className="inputan mr-2 h-14" />
+                    {
+                      showTime?.moviecinemascreen?.map((dt: any, i: any) => {
+                        return (
+                          <div key={'time-' + i + dt?.sessionid} className={"tag cursor-pointer my-0" + (dt?.sessionid == selectedShowTime?.sessionid ? ' btn-dim' : '')} onClick={() => { setSelectedShowTime(dt); setSelectedTicketType(null) }}>
+                            {dt?.showtime}
+                          </div>
+                        )
+                      })
+                    }
+                  </div>
+                  {selectedShowTime && (<div className="product-form product-unit mb-2 pt-1">
+                    <label>Ticket Type</label>
+                    {
+                      (getTypeMsg() == null) && ticketType?.TicketTypes?.map((dt: any, i: any) => {
+                        return (
+                          <div key={'type-' + i + dt?.Price_strTicket_Type_Code} className={"tag cursor-pointer" + (dt?.Price_strTicket_Type_Code == selectedTicketType?.Price_strTicket_Type_Code ? ' btn-dim' : '')}
+                            onClick={() => {
+                              setSelectedTicketType(dt);
+                              setMovie((prev: any) => {
+                                return {
+                                  ...prev,
+                                  price: parseInt(dt?.Price_intTicket_Price),
+                                  maxQty: parseInt(dt?.QuantityAvailablePerOrder),
+                                }
+                              })
+                            }}>
+                            {dt?.Price_strTicket_Type_Description}
+                          </div>
+                        )
+                      })
+                    }
+                    {(!selectedTicketType && getTypeMsg()) && (<p>{getTypeMsg()}</p>)}
+                  </div>)}
                   <div className="product-form product-qty pt-1">
                     <div className="product-form-group">
                       <div className="input-group">
@@ -113,12 +212,12 @@ const MovieDetailPage = ({ slug }: { slug: string }) => {
                           defaultValue={movie?.qty}
                           max={movie?.maxQty}
                           value={movie?.qty ?? 0}
-                          onChange={(d) => {
-                            let value = d.target.value;
+                          onChange={(e) => {
+                            let value = e.target.value;
                             onChangeQty(value);
                           }}
-                          onBlur={(d) => {
-                            let value = d.target.value;
+                          onBlur={(e) => {
+                            let value = e.target.value;
                             onChangeQty(value == '' ? 1 : value);
                           }}
                         />
@@ -127,7 +226,17 @@ const MovieDetailPage = ({ slug }: { slug: string }) => {
                       <button
                         className="btn-product btn-cart ls-normal font-weight-semi-bold"
                         onClick={() => {
-                          addToCart(movie, state, dispatch);
+                          // addToCart(movie, state, dispatch);
+                          if (selectedShowTime && selectedTicketType) {
+                            dispatch({ checkout: { ...movie, ...selectedShowTime, ...selectedTicketType, date: moment(), imageurl: movie?.imageurl } });
+                            router.push('/checkout');
+                          } else {
+                            toast({
+                              title: `Pilih ${selectedShowTime ? `type ticket` : `jam tayang`} terlebih dahulu`,
+                              status: 'error',
+                              isClosable: true,
+                            })
+                          }
                         }}
                       >
                         <i
@@ -211,6 +320,7 @@ type ModalProps = {
   isOpen: boolean;
   data: any;
 };
+
 const ModalCart = ({ onClose, isOpen, data }: ModalProps) => {
   const router = useRouter();
 

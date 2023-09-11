@@ -6,18 +6,25 @@ import { SectionBuilder } from "@/components/Container/SectionBuilder";
 import Link from "next/link";
 import { deleteCart, updateCarts } from "@/components/NavBar/NavBar";
 import { useListCinema } from "@/services/useCinemaService";
-import { useEffect } from "react";
-import { Button, Card, CardBody, Checkbox } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 import './checkout.module.css';
 import { useShowTime } from "@/services/useMovieService";
 import { CartCard } from "./sections/CartCard";
+import moment from "moment";
 
 const CheckoutPage = () => {
     const { state, dispatch } = useAppContext();
 
-    const subTotal = state.carts?.reduce((a: any, b: any) => {
-        return a + b.price * b.qty;
-    }, 0);
+    const [subTotal, setSubTotal] = useState(0);
+
+    useEffect(() => {
+        let sub = [state.checkout].reduce((a: any, b: any) => {
+            return a + (b?.price * b?.qty);
+        }, 0);
+        setSubTotal(sub);
+    }, [state.checkout])
+    // const subTotal = state.carts?.reduce((a: any, b: any) => {
+
 
     return (
         <main className="container mt-7 mb-2">
@@ -35,7 +42,8 @@ const CheckoutPage = () => {
                                 </tr>
                             </thead> */}
                             <div>
-                                {state.carts.map((movie: any, i: any) => {
+                                {[state.checkout].map((movie: any, i: any) => {
+                                    // {state.carts.map((movie: any, i: any) => {
                                     return (
                                         <CartCard
                                             key={'cart-' + i}
@@ -86,14 +94,14 @@ const CheckoutPage = () => {
                                             }
                                         </select>
                                     </div>
-                                    <label className="mb-4">Metode Pengiriman *</label>
+                                    {/* <label className="mb-4">Metode Pengiriman *</label>
                                     <div className="select-box">
                                         <select name="country" className="form-control">
                                             <option>Instant</option>
                                             <option>Same Day</option>
                                             <option>Regular</option>
                                         </select>
-                                    </div>
+                                    </div> */}
                                 </div>
                                 <table className="total">
                                     <tbody>

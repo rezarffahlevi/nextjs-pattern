@@ -11,6 +11,7 @@ const usePostData = () => {
   const [result, setResult] = useState<IPostData>({
     loading: true,
     data: null,
+    message: null,
     error: null,
     status: REQ_STATUS.INITIAL,
     isError: false,
@@ -27,6 +28,7 @@ const usePostData = () => {
       return {
         ...prevData,
         loading: true,
+        message: null,
         errorData: null,
         isError: false,
         status: REQ_STATUS.LOADING,
@@ -44,6 +46,7 @@ const usePostData = () => {
           return {
             ...prevData,
             data: value,
+            message: result?.data?.data?.message ?? 'Success post data',
             loading: false,
             status: REQ_STATUS.SUCCESS,
           };
@@ -57,6 +60,7 @@ const usePostData = () => {
             ...prevData,
             loading: false,
             error: err,
+            message: err?.message,
             isError: true,
             status: REQ_STATUS.FAILED,
           };
@@ -66,6 +70,7 @@ const usePostData = () => {
 
   return {
     data: result?.data,
+    message: result?.message,
     error: result?.error,
     isError: result?.isError,
     loading: result?.loading,

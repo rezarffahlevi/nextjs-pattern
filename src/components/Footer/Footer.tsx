@@ -91,7 +91,7 @@ export const Footer = () => {
 
       <div
         className={
-          "hidden sticky-footer sticky-content fix-bottom" +
+          "invisible sticky-footer sticky-content fix-bottom" +
           (showBottombar ? " fixed" : "")
         }
       >

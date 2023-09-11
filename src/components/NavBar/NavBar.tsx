@@ -197,7 +197,8 @@ const NavBar = () => {
                 </button>
               </form>
             </div>
-            <div className={`dropdown ${openCart} off-canvas mr-0 mr-lg-2`}>
+            {/* HIDE CART [GA DIPAKE DULU] */}
+            <div className={`dropdown ${openCart} off-canvas mr-0 mr-lg-2`} style={{ display: 'none' }}>
               <a href="#" className={"cart-toggle link"} onClick={toggleCart}>
                 <i className="p-icon-cart-solid">
                   <span className="cart-count">{state.carts?.length}</span>

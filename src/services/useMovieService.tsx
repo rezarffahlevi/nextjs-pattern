@@ -29,7 +29,7 @@ export const useCategories = () => {
 };
 
 export const useListNowPlaying = () => {
-  const { postData, data, loading, status, error, isError } = usePostData();
+  const { postData, data, loading, status, error, isError, message } = usePostData();
 
   return {
     fetchListNowPlaying: ({ header, option, queryParams }: IPostData) =>
@@ -47,6 +47,7 @@ export const useListNowPlaying = () => {
         },
       }),
     listMovie: data,
+    listMessage: message,
     listMovieLoading: loading,
     listMovieStatus: status,
     listMovieError: error || data?.message,

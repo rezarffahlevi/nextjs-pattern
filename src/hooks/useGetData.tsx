@@ -41,6 +41,7 @@ export const useGetData = () => {
         ...prevData,
         loading: true,
         data: null,
+        message: null,
         isError: false,
         status: REQ_STATUS.LOADING,
       };
@@ -57,6 +58,7 @@ export const useGetData = () => {
           return {
             ...prevData,
             data: value,
+            message: response?.data?.data?.message ?? 'Success get data',
             loading: false,
             status: REQ_STATUS.SUCCESS,
           };
@@ -67,6 +69,7 @@ export const useGetData = () => {
           return {
             ...prevData,
             loading: false,
+            message: err?.message,
             error: err,
             isError: true,
             status: REQ_STATUS.FAILED,
@@ -77,6 +80,7 @@ export const useGetData = () => {
 
   return {
     data: result?.data,
+    message: result?.message,
     error: result?.error,
     status: result?.status,
     isError: result?.isError,
