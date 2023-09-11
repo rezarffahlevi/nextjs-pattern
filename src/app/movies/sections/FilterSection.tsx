@@ -2,12 +2,13 @@ import { SectionBuilder } from "@/components/Container/SectionBuilder";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { useCategories } from "@/services/useMovieService";
 import { Box, Checkbox, Skeleton, Stack } from "@chakra-ui/react";
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect, useState } from "react";
 
-const FilterSection = ({ toggleOpenFilter = () => {} }: any) => {
-  const size = useWindowSize();
+const FilterSection = ({ toggleOpenFilter = () => { } }: any) => {
   const { fetchCategories, categories, categoriesLoading, categoriesIsError } =
     useCategories();
+  const [filter, setFilter] = useState<any>([]);
+
   let init = true;
 
   useEffect(() => {
@@ -78,8 +79,21 @@ const FilterSection = ({ toggleOpenFilter = () => {} }: any) => {
               </h3> */}
               <ul className="widget-body filter-items">
                 {(categories ?? []).map((dt: any, i: any) => (
-                  <li key={"flter" + i}>
-                    <a href="#">{dt?.name}</a>
+                  <li key={"flter" + i}
+                    className={filter?.includes(dt?.name) ? 'active' : ''}
+                    onClick={() => {
+                      setFilter((prev: any) => {
+                        let newState = [...prev];
+                        let index = newState.indexOf(dt?.name);
+                        if (index >= 0) {
+                          newState.splice(index, 1);
+                        } else {
+                          newState.push(dt?.name);
+                        }
+                        return newState;
+                      })
+                    }}>
+                    <a>{dt?.name}</a>
                   </li>
                 ))}
               </ul>
