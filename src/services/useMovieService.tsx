@@ -173,3 +173,30 @@ export const useSeatLayout = () => {
     seatLayoutIsError: isError || data?.status == '1',
   };
 };
+
+
+export const useSetSelectedSeat = () => {
+  const { postData, data, loading, status, error, isError } = usePostData();
+
+  return {
+    fetchSetSelectedSeat: ({ header, option, queryParams, body }: IPostData) =>
+      postData({
+        urlPath: "api/v1/flix/Movies/SetSelectedSeats",
+        header: header,
+        option: option,
+        queryParams: queryParams,
+        body: {
+          actionby: process.env.NEXT_PUBLIC_ACTION_BY,
+          ipaddress: "192:1.1.1",
+          apikey: process.env.NEXT_PUBLIC_API_KEY,
+          signature: process.env.NEXT_PUBLIC_SIGNATURE,
+          ...body,
+        },
+      }),
+    setSeat: data,
+    setSeatLoading: loading,
+    setSeatStatus: status,
+    setSeatError: error || data?.message,
+    setSeatIsError: isError || data?.status == '1',
+  };
+};

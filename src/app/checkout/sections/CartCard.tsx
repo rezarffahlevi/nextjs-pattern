@@ -8,9 +8,9 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 
-export const CartCard = ({ movie, subTotal }: any) => {
+export const CartCard = ({ movie, subTotal, selected, setSelected, seatLayout }: any) => {
     const { state, dispatch } = useAppContext();
-    const [selected, setSelected] = useState<any>([]);
+    // const [selected, setSelected] = useState<any>([]);
     const [selectedShowTime, setSelectedShowTime] = useState<any>(null);
     const [selectedTicketType, setSelectedTicketType] = useState<any>(null);
     const toast = useToast()
@@ -18,31 +18,7 @@ export const CartCard = ({ movie, subTotal }: any) => {
 
     const { fetchShowTime, showTime, showTimeLoading, showTimeError, showTimeIsError } = useShowTime();
     const { fetchTicketType, ticketType, ticketTypeLoading, ticketTypeError, ticketTypeIsError } = useTicketType();
-    const { fetchSeatLayout, seatLayout, seatLayoutLoading, seatLayoutError, seatLayoutIsError } = useSeatLayout();
 
-    let init = true;
-
-    useEffect(() => {
-        if (state.checkout && init) {
-            init = false;
-            fetchSeatLayout({
-                body: {
-                    "cinemaid": state.cinema?.id,
-                    "sessionid": movie?.Session_strID,
-                    "areacategorycode": movie?.AreaCat_strCode,
-                    "tickettypecode": movie?.Price_strTicket_Type_Code,
-                    "ticketprice": movie?.Price_intTicket_Price,
-                    "ticketqty": movie?.PPack_intQuantity,
-                    "filmid": movie?.scheduledfilmid,
-                    "filmname": movie?.title,
-                    "cinemaname": movie?.cinemaname,
-                    "screenname": movie?.screenname,
-                    "sessiondatetime": `${moment(movie?.date).format('YYYY/MM/DD')} ${movie?.showtime}`,
-                    "guestemail": "email-that-did-not-exist@mimin.io",
-                }
-            });
-        }
-    }, [state.checkout]);
 
     return (
         <div className="mb-6">
@@ -302,6 +278,12 @@ const renderSeat = (data: any, selected: any, setSelected: any, maxQty: any = 1,
         // seatDivider ? " mr-6" : "";
 
         let item = data?.Seats[index];
+        let bgColor = 'transparent';
+        if (item?.Status == "Sold") {
+            bgColor = 'silver'
+        } else if (selected.some((fd: any) => `${fd?.AreaNumber}-${fd?.RowIndex}-${fd?.ColumnIndex}` == `${item?.AreaNumber}-${item?.RowIndex}-${item?.ColumnIndex}`)) {
+            bgColor = 'rgb(253 224 71';
+        }
 
         element.push(
             <input
@@ -309,6 +291,9 @@ const renderSeat = (data: any, selected: any, setSelected: any, maxQty: any = 1,
                 key={'cbx-' + index}
                 type="checkbox"
                 onClick={() => {
+                    if (item?.Status != "Empty") {
+                        return;
+                    }
                     let i = selected.findIndex((fd: any) => `${fd?.AreaNumber}-${fd?.RowIndex}-${fd?.ColumnIndex}` == `${item?.AreaNumber}-${item?.RowIndex}-${item?.ColumnIndex}`);
 
                     if (i < 0 && selected.length >= parseInt(maxQty)) {
@@ -336,7 +321,7 @@ const renderSeat = (data: any, selected: any, setSelected: any, maxQty: any = 1,
                 style={{
                     borderColor: '#54524d',
                     borderWidth: 1.5,
-                    backgroundColor: selected.some((fd: any) => `${fd?.AreaNumber}-${fd?.RowIndex}-${fd?.ColumnIndex}` == `${item?.AreaNumber}-${item?.RowIndex}-${item?.ColumnIndex}`) ? 'rgb(253 224 71' : 'transparent',
+                    backgroundColor: bgColor,
                     // margin: 0,
                 }}
                 checked={false}
