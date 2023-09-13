@@ -149,7 +149,7 @@ export const useTicketType = () => {
 
 
 export const useSeatLayout = () => {
-  const { postData, data, loading, status, error, isError } = usePostData();
+  const { postData, data, message, loading, status, error, isError } = usePostData();
 
   return {
     fetchSeatLayout: ({ header, option, queryParams, body }: IPostData) =>
@@ -167,6 +167,7 @@ export const useSeatLayout = () => {
         },
       }),
     seatLayout: data,
+    seatLayoutMessage: message,
     seatLayoutLoading: loading,
     seatLayoutStatus: status,
     seatLayoutError: error || data?.message,

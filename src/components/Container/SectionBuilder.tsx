@@ -21,7 +21,7 @@ export const SectionBuilder = ({
   return children;
 };
 
-export const ErrorBuilder = ({ message }: { message?: string }) => {
+export const ErrorBuilder = ({ message }: { message?: string | null | undefined }) => {
   return (
     <div className="m-2 my-4">
       <div className="alert alert-colored alert-danger alert-icon">

@@ -44,7 +44,7 @@ export const useCinemaDetail = () => {
                     ipaddress: "192:1.1.1",
                     apikey: process.env.NEXT_PUBLIC_API_KEY,
                     signature: process.env.NEXT_PUBLIC_SIGNATURE,
-                    cinemaid: body?.cinemaid,
+                    ...body
                 },
             }),
         cinema: data,

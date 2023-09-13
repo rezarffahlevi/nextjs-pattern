@@ -53,8 +53,6 @@ const usePostData = () => {
         });
       })
       .catch((err) => {
-        console.log('err', err);
-
         setResult((prevData) => {
           return {
             ...prevData,
@@ -136,12 +134,12 @@ const postDataHooks = async ({
       message: response.data.message,
       status: REQ_STATUS.SUCCESS,
     };
-  } catch (error) {
+  } catch (error: any) {
     console.log('error', error);
     throw {
       data: null,
       error: error,
-      message: error?.toString(),
+      message: error?.message,
       status: REQ_STATUS.FAILED,
     };
   }

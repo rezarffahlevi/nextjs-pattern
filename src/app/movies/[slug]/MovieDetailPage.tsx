@@ -228,7 +228,7 @@ const MovieDetailPage = ({ slug }: { slug: string }) => {
                         onClick={() => {
                           // addToCart(movie, state, dispatch);
                           if (selectedShowTime && selectedTicketType) {
-                            dispatch({ checkout: { ...movie, ...selectedShowTime, ...selectedTicketType, date: moment(), imageurl: movie?.imageurl } });
+                            dispatch({ checkout: { ...movie, ...selectedShowTime, ...selectedTicketType, date: date, imageurl: movie?.imageurl } });
                             router.push('/checkout');
                           } else {
                             toast({

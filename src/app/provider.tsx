@@ -1,6 +1,6 @@
 "use client";
 
-import { useListCinema } from "@/services/useCinemaService";
+import { useCinemaDetail, useListCinema } from "@/services/useCinemaService";
 import { CacheProvider } from "@chakra-ui/next-js";
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import { createContext, useContext, useEffect, useReducer } from "react";
@@ -28,7 +28,7 @@ const reducer = (current: any, update: any) => {
   const state = { ...current, ...update };
   localStorage.setItem("state", JSON.stringify(state));
   // console.log('dispatch', current, update);
-  
+
   return { ...current, ...update };
 };
 
@@ -36,6 +36,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(reducer, initialState);
   const value = { state, dispatch };
   const { fetchListCinema, listCinema, listCinemaLoading, listCinemaError, listCinemaIsError } = useListCinema()
+  const { fetchCinemaDetail, cinema } = useCinemaDetail()
 
   useEffect(() => {
     // console.log(state, localStorage.getItem('state'));
@@ -53,9 +54,25 @@ export function Providers({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (listCinema?.cinemalist) {
       dispatch({ listCinema: listCinema?.cinemalist, cinema: listCinema?.cinemalist[0] });
+      // fetchCinemaDetail({
+      //   body: {
+      //     "cinemaid": listCinema?.cinemalist[0]?.id,
+      //     "actionby": "",
+      //     "ipaddress": "127.0.0.1",
+      //     "apikey": "0fe40dd3-92b4-4dd2-954d-016efb289f99",
+      //     "signature": "A1CD3ACB3EABDCAC77579E56D51983675E3951AA"
+      //   }
+      // })
+    }
+  }, [listCinema])
+
+
+  useEffect(() => {
+    if (cinema) {
+      dispatch({ cinema: cinema });
     }
 
-  }, [listCinema])
+  }, [cinema])
 
   return (
     <AppContext.Provider value={value}>
