@@ -1,67 +1,129 @@
-"use client";
-import Image from "@/components/Loader";
 
 const ContactPage = () => {
-  return (
-    <div className="px-2 md:px-16 py-8">
-      &nbsp; &nbsp; &nbsp; &nbsp;
-      <h4 className={"mb-6"}>
-        {" "}
-        <span className="font-bold">Contact Us</span>{" "}
-      </h4>
-      <div className="divider mx-2">
-        <i className="icon-circle"></i>
-      </div>
-      <div id="divcontents">
-        <h3 className="font-bold">FLIX PIK Avenue</h3>
+    return (
 
-        <p>PIK Avenue, 3rd Floor</p>
+        <main className="main">
+            <div className="page-header" style={{ backgroundColor: '#f9f8f4' }}>
+                <h1 className="page-title font-weight-light text-capitalize pt-2 text-8xl">Contact Us</h1>
+            </div>
+            <nav className="breadcrumb-nav has-border">
+                <div className="container">
+                    <ul className="breadcrumb">
+                        <li><a href="demo1.html">Home</a></li>
+                        <li>Contact Us</li>
+                    </ul>
+                </div>
+            </nav>
+            <div className="page-content contact-page">
+                <div className="container">
+                    <section className="mt-10 pt-8">
+                        <h2 className="title title-center mb-8">Contact Information</h2>
+                        <div className="owl-carousel owl-theme row cols-lg-4 cols-md-3 cols-sm-2 cols-1 mb-10"
+                            data-owl-options="{
+                                'nav': false,
+                                'dots': false,
+                                'loop': false,
+                                'margin': 20,
+                                'autoplay': true,
+                                'responsive': {
+                                    '0': {
+                                        'items': 1,
+                                        'autoplay': true
+                                    },
+                                    '576': {
+                                        'items': 2
+                                    },
+                                    '768': {
+                                        'items': 3
+                                    },
+                                    '992': {
+                                        'items': 4,
+                                        'autoplay': false
+                                    }
+                                }
+                            }">
+                            <div className="icon-box text-center">
+                                <span className="icon-box-icon mb-4">
+                                    <i className="p-icon-map"></i>
+                                </span>
+                                <div className="icon-box-content">
+                                    <h4 className="icon-box-title">Address</h4>
+                                    <p className="text-dim">121 King Street, New York</p>
+                                </div>
+                            </div>
+                            <div className="icon-box text-center">
+                                <span className="icon-box-icon mb-4">
+                                    <i className="p-icon-phone-solid"></i>
+                                </span>
+                                <div className="icon-box-content">
+                                    <h4 className="icon-box-title">Phone Number</h4>
+                                    <p className="text-dim">+1 (456) 789 000</p>
+                                </div>
+                            </div>
+                            <div className="icon-box text-center">
+                                <span className="icon-box-icon mb-4">
+                                    <i className="p-icon-message"></i>
+                                </span>
+                                <div className="icon-box-content">
+                                    <h4 className="icon-box-title">E-mail Address</h4>
+                                    <p className="text-dim">mail@example.com</p>
+                                </div>
+                            </div>
+                            <div className="icon-box text-center">
+                                <span className="icon-box-icon mb-4">
+                                    <i className="p-icon-clock"></i>
+                                </span>
+                                <div className="icon-box-content">
+                                    <h4 className="icon-box-title">Opening Hours</h4>
+                                    <p className="text-dim">Mon-Fri: 10:00 - 18:00</p>
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                    </section>
 
-        <p>
-          Jl. Pantai Indah Kapuk Boulevard
-          <br />
-          Jakarta Utara 14470
-        </p>
+                    <section className="mt-10 pt-2 mb-10 pb-8">
+                        <div className="row align-items-center">
+                            <div className="col-md-6">
+                                <figure>
+                                    <img src="images/subpage/contact/1.jpg" width="600" height="557"
+                                        alt="About Image" />
+                                </figure>
+                            </div>
+                            <div className="col-md-6 pl-md-4 mt-8 mt-md-0">
+                                <h2 className="title mb-1">Leave a Comment</h2>
+                                <p className="mb-6">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod.
+                                </p>
+                                <form action="#">
+                                    <div className="row">
+                                        <div className="col-md-6 mb-4">
+                                            <input type="text" id="comment-name" name="comment-name"
+                                                placeholder="Your Name" required />
+                                        </div>
+                                        <div className="col-md-6 mb-4">
+                                            <input type="email" id="comment-email" name="comment-email"
+                                                placeholder="Your Email" required />
+                                        </div>
+                                        <div className="col-12 mb-4">
+                                            <input type="text" id="comment-subject" name="comment-subject"
+                                                placeholder="Your Subject" required />
+                                        </div>
+                                        <div className="col-12 mb-4">
+                                            <textarea id="comment-message" placeholder="Your Message"
+                                                required></textarea>
+                                        </div>
+                                    </div>
+                                    <button type="submit" className="btn btn-dark">Send Message</button>
+                                </form>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </main>
+    );
 
-        <p>&nbsp;</p>
+}
 
-        <h3 className="font-bold">FLIX Grand Galaxy Park</h3>
-
-        <p>Grand Galaxy Park, 2nd Floor</p>
-
-        <p>
-          Jl. Boulevard Raya No.1, RT.003/RW.017, Jaka Setia, Kec. Bekasi Sel.,
-          Kota Bks, Jawa Barat 17147
-        </p>
-
-        <h3>&nbsp;</h3>
-
-        <h3 className="font-bold">FLIX Mall of Indonesia</h3>
-
-        <p>Mall of Indonesia, 2nd Floor</p>
-
-        <p>
-          Jl. Raya Boulevard Barat Kelapa Gading
-          <br />
-          Jakarta Utara - 14240
-        </p>
-
-        <p>&nbsp;</p>
-
-        <h3 className="font-bold">FLIX Ashta District 8</h3>
-
-        <p>District 8, SCBD Lot 28, 2nd Floor</p>
-
-        <p>
-          Jl. Jend. Sudirman Kav. 52-53, RT.8/RW.3, Senayan, Kec. Kebayoran
-          Baru, DKI Jakarta - 12190
-        </p>
-
-        <p>&nbsp;</p>
-      </div>
-      &nbsp; &nbsp; &nbsp; &nbsp;
-    </div>
-  );
-};
 
 export default ContactPage;
