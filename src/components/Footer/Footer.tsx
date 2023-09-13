@@ -1,11 +1,13 @@
 "use client";
 
+import { useAppContext } from "@/app/provider";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { useCallback, useEffect, useState } from "react";
 
 export const Footer = () => {
   const [scrollY, setScrollY] = useState(100);
   const [showBottombar, setShowBottombar] = useState(false);
+  const { state, dispatch } = useAppContext();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -43,22 +45,21 @@ export const Footer = () => {
                 <li>
                   <a href="tel:#" className="footer-icon-box">
                     <i className="p-icon-phone-solid"></i>
-                    <span>+62 817 0816 668</span>
+                    <span>{state.cinema?.phonenumber}</span>
                   </a>
                 </li>
                 <li>
                   <a href="#" className="">
                     <i className="p-icon-map"></i>
                     <span>
-                      Jl. Jenderal Sudirman, RT.6/RW.11, Karet Tengsin, Kota
-                      Jakarta Pusat, Daerah Khusus Ibukota Jakarta, Indonesia
+                      {state.cinema?.address}
                     </span>
                   </a>
                 </li>
                 <li>
-                  <a href="mailto:ddtstore@istyle.id" className="">
+                  <a href={`mailto:${state.cinema?.emailaddress}`} className="">
                     <i className="p-icon-message"></i>
-                    <span>ddtstore@istyle.id</span>
+                    <span>{state.cinema?.emailaddress}</span>
                   </a>
                 </li>
               </ul>

@@ -21,19 +21,19 @@ export const navOptions: { name: string; link?: string }[] = [
   },
 ];
 
-const topRow = () => {
+const topRow = (state: any) => {
   return (
     <div className="header-top">
       <div className="container">
         <div className="header-left">
           <a href="tel:#" className="call">
             <i className="p-icon-phone-solid"></i>
-            <span>+456 789 000</span>
+            <span>{state.cinema?.phonenumber}</span>
           </a>
           <span className="divider"></span>
           <a href="#" className="contact">
             <i className="p-icon-map"></i>
-            <span>Jl. Pantai Indah Kapuk Boulevard</span>
+            <span>{state.cinema?.address}</span>
           </a>
         </div>
         <div className="header-right">
@@ -133,7 +133,7 @@ const NavBar = () => {
 
   return (
     <header className={"header" + openMenu}>
-      {topRow()}
+      {topRow(state)}
       <div
         className={`header-middle has-center ${navbarFixed} fix-top sticky-content`}
       >
@@ -174,7 +174,10 @@ const NavBar = () => {
           </div>
           <div className="header-right">
             <div className="select-box mr-4 w-[20rem]">
-              <select name="country" className="form-control">
+              <select name="country" className="form-control" onChange={(e) => {
+                let val = e.target.value;
+                dispatch({ cinema: state.listCinema?.find((fd: any) => fd?.id == val) });
+              }}>
                 {
                   (state.listCinema ?? []).map((dt: any) =>
                     <option value={dt?.id} key={'cnmx' + dt?.id}>{dt?.name}</option>)
