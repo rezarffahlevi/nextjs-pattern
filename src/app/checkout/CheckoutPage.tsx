@@ -8,7 +8,7 @@ import { deleteCart, updateCarts } from "@/components/NavBar/NavBar";
 import { useListCinema } from "@/services/useCinemaService";
 import { useEffect, useState } from "react";
 import './checkout.module.css';
-import { useSeatLayout, useSetSelectedSeat, useShowTime } from "@/services/useMovieService";
+import { useAddConcessionItems, useSeatLayout, useSetSelectedSeat, useShowTime } from "@/services/useMovieService";
 import { CartCard } from "./sections/CartCard";
 import moment from "moment";
 import { Box, Skeleton, useToast } from "@chakra-ui/react";
@@ -27,6 +27,7 @@ const CheckoutPage = () => {
 
     const { fetchSeatLayout, seatLayout, seatLayoutLoading, seatLayoutMessage, seatLayoutError, seatLayoutIsError } = useSeatLayout();
     const { fetchSetSelectedSeat, setSeat, setSeatLoading, setSeatMessage, setSeatIsError, setSeatError } = useSetSelectedSeat();
+    const { postAddConcessionItems, addConcession, addConcessionLoading, addConcessionMessage, addConcessionIsError, addConcessionError } = useAddConcessionItems();
 
     let init = true;
 
@@ -95,7 +96,36 @@ const CheckoutPage = () => {
             });
             setAllowedStep((prev) => prev > 1 ? prev : (prev + 1));
         } else if (step < 2) {
-            setAllowedStep((prev) => prev > 1 ? prev : (prev + 1));
+            postAddConcessionItems({
+                body: {
+                    "sessionid": state.checkout?.sessionid,
+                    "cinemaid": state.cinema?.id,
+                    "orderid": seatLayout?.orderid,
+                    "tickettypename": state.checkout?.Price_strTicket_Type_Description,
+                    "deliverytype": "Deliver",
+                    "Concessions": listConcession?.filter((fd: any) => fd.selected == true)?.map((dt: any) => {
+                        return {
+                            "ItemId": dt?.id,
+                            "Quantity": dt?.qty ?? 1,
+                            "Name": dt?.description,
+                            "Price": dt?.priceincents
+                        }
+                    }),
+                }
+            });
+            setAllowedStep((prev) => prev > 2 ? prev : (prev + 1));
+        } else if (step < 3) {
+            const res = {
+                "BookingFeeValueCents": "0",
+                "OrderId": "5B2F87FA-94C5-490D-81C3-E37042C60A9F",
+                "TotalOrderCount": "3",
+                "TotalTicketFeeValueInCents": "",
+                "TotalValueCents": "14000000",
+                "VistaBookingNumber": "0",
+                "VistaTransactionNumber": "0",
+                "status": "0",
+                "message": ""
+            }
         }
 
         setStep((prev) => (prev + 1));

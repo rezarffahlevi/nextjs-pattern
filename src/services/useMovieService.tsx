@@ -202,3 +202,31 @@ export const useSetSelectedSeat = () => {
     setSeatIsError: isError || data?.status == '1',
   };
 };
+
+
+export const useAddConcessionItems = () => {
+  const { postData, data, message, loading, status, error, isError } = usePostData();
+
+  return {
+    postAddConcessionItems: ({ header, option, queryParams, body }: IPostData) =>
+      postData({
+        urlPath: "api/v1/flix/Movies/AddConcessionItems",
+        header: header,
+        option: option,
+        queryParams: queryParams,
+        body: {
+          actionby: process.env.NEXT_PUBLIC_ACTION_BY,
+          ipaddress: "192:1.1.1",
+          apikey: process.env.NEXT_PUBLIC_API_KEY,
+          signature: process.env.NEXT_PUBLIC_SIGNATURE,
+          ...body,
+        },
+      }),
+    addConcession: data,
+    addConcessionMessage: message,
+    addConcessionLoading: loading,
+    addConcessionStatus: status,
+    addConcessionError: error || data?.message,
+    addConcessionIsError: isError || data?.status == '1',
+  };
+};

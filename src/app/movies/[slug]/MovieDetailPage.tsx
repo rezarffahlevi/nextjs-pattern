@@ -172,7 +172,7 @@ const MovieDetailPage = ({ slug }: { slug: string }) => {
                     {
                       showTime?.moviecinemascreen?.map((dt: any, i: any) => {
                         return (
-                          <div key={'time-' + i + dt?.sessionid} className={"tag cursor-pointer my-0" + (dt?.sessionid == selectedShowTime?.sessionid ? ' btn-dim' : '')} onClick={() => { setSelectedShowTime(dt); setSelectedTicketType(null) }}>
+                          <div key={'time-' + i + dt?.sessionid} className={"tag cursor-pointer mt-0 mb-0 h-14" + (dt?.sessionid == selectedShowTime?.sessionid ? ' btn-dim' : '')} onClick={() => { setSelectedShowTime(dt); setSelectedTicketType(null) }}>
                             {dt?.showtime}
                           </div>
                         )
