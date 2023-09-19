@@ -42,8 +42,14 @@ export function Providers({ children }: { children: React.ReactNode }) {
     // console.log(state, localStorage.getItem('state'));
 
     if (state.init) {
-      let localData = localStorage.getItem("state");
-      if (localData) dispatch({ ...JSON.parse(localData), init: false });
+      let localData: any = localStorage.getItem("state");
+      if (localData) {
+        localData = JSON.parse(localData);
+        if (localData?.length < 1) {
+          fetchListCinema({});
+        }
+        dispatch({ ...localData, init: false });
+      }
       else {
         fetchListCinema({});
       }

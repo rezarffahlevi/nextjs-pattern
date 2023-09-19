@@ -63,7 +63,7 @@ export const useMovieDetail = () => {
   useEffect(() => {
     if (data) setMovie({
       ...data,
-      price: 50000,
+      price: null,
       qty: 1,
       maxQty: 20,
     });
@@ -177,7 +177,7 @@ export const useSeatLayout = () => {
 
 
 export const useSetSelectedSeat = () => {
-  const { postData, data, loading, status, error, isError } = usePostData();
+  const { postData, data, message, loading, status, error, isError } = usePostData();
 
   return {
     fetchSetSelectedSeat: ({ header, option, queryParams, body }: IPostData) =>
@@ -195,6 +195,7 @@ export const useSetSelectedSeat = () => {
         },
       }),
     setSeat: data,
+    setSeatMessage: message,
     setSeatLoading: loading,
     setSeatStatus: status,
     setSeatError: error || data?.message,

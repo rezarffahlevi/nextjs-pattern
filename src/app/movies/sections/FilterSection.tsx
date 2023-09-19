@@ -36,9 +36,9 @@ const FilterSection = ({ toggleOpenFilter = () => { } }: any) => {
           >
             <div className="widget widget-collapsible">
               <h3 className="widget-title title-underline">
-                <span className="title-text">Filter by Price</span>
+                <span className="title-text">Filter</span>
               </h3>
-              <div className="widget-body">
+              {/* <div className="widget-body">
                 <form action="#" method="get">
                   <div className="row">
                     <div className="col-md-6 mb-4">
@@ -71,7 +71,7 @@ const FilterSection = ({ toggleOpenFilter = () => { } }: any) => {
                     </button>
                   </div>
                 </form>
-              </div>
+              </div> */}
             </div>
             <div className="widget widget-collapsible">
               {/* <h3 className="widget-title title-underline">

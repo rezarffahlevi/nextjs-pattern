@@ -11,8 +11,7 @@ import './checkout.module.css';
 import { useSeatLayout, useSetSelectedSeat, useShowTime } from "@/services/useMovieService";
 import { CartCard } from "./sections/CartCard";
 import moment from "moment";
-import { Box, Skeleton } from "@chakra-ui/react";
-import setSeat from './set_selected.json';
+import { Box, Skeleton, useToast } from "@chakra-ui/react";
 import { MdDelete } from "react-icons/md";
 
 const CheckoutPage = () => {
@@ -20,11 +19,14 @@ const CheckoutPage = () => {
 
     const [subTotal, setSubTotal] = useState(0);
     const [step, setStep] = useState(0);
+    const [allowedStep, setAllowedStep] = useState(0);
     const [selected, setSelected] = useState<any>([]);
     const [listConcession, setListConcession] = useState<any>([]);
+    const toast = useToast()
+
 
     const { fetchSeatLayout, seatLayout, seatLayoutLoading, seatLayoutMessage, seatLayoutError, seatLayoutIsError } = useSeatLayout();
-    const { fetchSetSelectedSeat, setSeatLoading, setSeatIsError, setSeatError } = useSetSelectedSeat();
+    const { fetchSetSelectedSeat, setSeat, setSeatLoading, setSeatMessage, setSeatIsError, setSeatError } = useSetSelectedSeat();
 
     let init = true;
 
@@ -52,9 +54,13 @@ const CheckoutPage = () => {
             return a + (b?.price * b?.qty);
         }, 0);
         setSubTotal(sub);
-
-        setListConcession(setSeat?.ConcessionItems);
     }, [state.checkout]);
+
+    useEffect(() => {
+        if (setSeat) {
+            setListConcession(setSeat?.ConcessionItems ?? []);
+        }
+    }, [setSeat]);
 
 
     const onChangeQtyConcession = (item: any, value: string | Number) => {
@@ -70,26 +76,42 @@ const CheckoutPage = () => {
     }
 
     const onBuyClick = () => {
-        fetchSetSelectedSeat({
-            body: {
-                "sessionid": state.checkout?.sessionid,
-                "cinemaid": state.cinema?.id,
-                "orderid": seatLayout?.orderid,
-                "tickettypename": state.checkout?.Price_strTicket_Type_Description,
-                "SelectedSeats": selected.map((dt: any) => {
-                    return {
-                        "AreaCategoryCode": dt?.AreaCategoryCode,
-                        "AreaNumber": dt?.AreaNumber,
-                        "RowIndex": dt?.RowIndex,
-                        "ColumnIndex": dt?.ColumnIndex
-                    }
-                }),
-            }
-        })
+        if (step < 1) {
+            fetchSetSelectedSeat({
+                body: {
+                    "sessionid": state.checkout?.sessionid,
+                    "cinemaid": state.cinema?.id,
+                    "orderid": seatLayout?.orderid,
+                    "tickettypename": state.checkout?.Price_strTicket_Type_Description,
+                    "SelectedSeats": selected.map((dt: any) => {
+                        return {
+                            "AreaCategoryCode": dt?.AreaCategoryCode,
+                            "AreaNumber": dt?.AreaNumber,
+                            "RowIndex": dt?.RowIndex,
+                            "ColumnIndex": dt?.ColumnIndex
+                        }
+                    }),
+                }
+            });
+            setAllowedStep((prev) => prev > 1 ? prev : (prev + 1));
+        } else if (step < 2) {
+            setAllowedStep((prev) => prev > 1 ? prev : (prev + 1));
+        }
+
+        setStep((prev) => (prev + 1));
     }
 
     const getClassStepActive = (i: Number) => {
         return i == step ? ' active' : ''
+    }
+
+    const handleToastStep = () => {
+        toast({
+            title: `Belum bisa ke step yang ini`,
+            status: 'error',
+            isClosable: true,
+            duration: 2000
+        })
     }
 
     const renderStepActive = () => {
@@ -99,9 +121,9 @@ const CheckoutPage = () => {
                 return (
                     <SectionBuilder
                         loading={<CheckoutLoading />}
-                        isLoading={seatLayoutLoading}
-                        isError={false}
-                        error={<ErrorBuilder message={seatLayoutMessage} />}>
+                        isLoading={setSeatLoading}
+                        isError={setSeatIsError}
+                        error={<ErrorBuilder message={setSeatMessage} />}>
                         <div>
                             {
                                 listConcession.map((item: any, index: any) => {
@@ -132,7 +154,7 @@ const CheckoutPage = () => {
                                                     <div className="product-action">
                                                         <div className="product-quantity">
                                                             <button className="quantity-minus p-icon-minus-solid" onClick={() => {
-                                                                onChangeQtyConcession(item, item?.qty == 1 || typeof item?.qty == 'undefined' ? 1 :  (item?.qty ?? 1) - 1)
+                                                                onChangeQtyConcession(item, item?.qty == 1 || typeof item?.qty == 'undefined' ? 1 : (item?.qty ?? 1) - 1)
                                                             }}></button>
                                                             <input className="quantity form-control" type="number" min="1"
                                                                 max="1000" value={item?.qty ?? 1}
@@ -154,7 +176,7 @@ const CheckoutPage = () => {
                                                             setListConcession((prev: any) => {
                                                                 let newState = [...prev];
                                                                 newState[index] = newObject;
-                                                                console.log('test', newObject);
+                                                                // console.log('test', newObject);
                                                                 return newState;
                                                             })
                                                         }} className={`btn-product btn-cart`} style={item?.selected == true ? {
@@ -240,9 +262,9 @@ const CheckoutPage = () => {
     return (
         <main className="container mt-7 mb-2 pb-12">
             <div className="step-by pr-4 pl-4 mb-8">
-                <h3 className={`title title-step${getClassStepActive(0)}`}><a href="#" onClick={() => setStep(0)}>1. Pilih Kursi</a></h3>
-                <h3 className={`title title-step${getClassStepActive(1)}`}><a href="#" onClick={() => setStep(1)}>2. Pilih Makanan</a></h3>
-                <h3 className={`title title-step${getClassStepActive(2)}`}><a href="#" onClick={() => setStep(2)}>3. Summary</a></h3>
+                <h3 className={`title title-step${getClassStepActive(0)}`}><a href="#" onClick={allowedStep >= 0 ? () => setStep(0) : handleToastStep}>1. Pilih Kursi</a></h3>
+                <h3 className={`title title-step${getClassStepActive(1)}`}><a href="#" onClick={allowedStep >= 1 ? () => setStep(1) : handleToastStep}>2. Pilih Makanan</a></h3>
+                <h3 className={`title title-step${getClassStepActive(2)}`}><a href="#" onClick={allowedStep >= 2 ? () => setStep(2) : handleToastStep}>3. Summary</a></h3>
             </div>
             <div className="row">
                 <div className="col-lg-8 col-md-12 pr-lg-6">

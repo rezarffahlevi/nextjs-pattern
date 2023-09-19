@@ -126,9 +126,9 @@ const MovieDetailPage = ({ slug }: { slug: string }) => {
                         style={{ width: "100%", height: "auto" }}
                         onError={(e: any) => {
                           // document.getElementById('thumbnail')?.setAttribute('src', '/assets/images/movie-error.png')
-                          let object = Object.assign({}, movie);
-                          object['imageurl'] = '/assets/images/demos/demo1/banner/banner1.jpg';
-                          setMovie(object);
+                          // let object = Object.assign({}, movie);
+                          // object['imageurl'] = '/assets/images/demos/demo1/banner/banner1.jpg';
+                          // setMovie(object);
                         }}
                       // placeholder="blur"
                       // blurDataURL="/assets/images/movie-error.png"
@@ -148,10 +148,10 @@ const MovieDetailPage = ({ slug }: { slug: string }) => {
                     <a href="#content-reviews" className="link-to-tab rating-reviews">( 12 Customer
                       Reviews )</a>
                   </div> */}
-                  <p className="product-price mb-1">
+                  {movie?.price && (<p className="product-price mb-1">
                     {/* <del className="old-price">$24.00</del> */}
                     <ins className="new-price">Rp. {movie?.price?.toLocaleString()}</ins>
-                  </p>
+                  </p>)}
                   <div className="product-form product-unit pt-1">
                     <label>Jam Tayang</label>
                   </div>

@@ -89,7 +89,7 @@ const MovieListSection = () => {
           </nav>
 
           <div className="row product-wrapper cols-md-3 cols-2">
-            {(listMovie?.movielist ?? []).map((dt: any, i: any) => (
+            {(listMovie ?? []).map((dt: any, i: any) => (
               <Link href={`movies/${dt?.scheduledfilmid}`} className="product-wrap" key={"movie-" + i}>
                 <div className="product shadow-media text-center">
                   <figure className="product-media">
