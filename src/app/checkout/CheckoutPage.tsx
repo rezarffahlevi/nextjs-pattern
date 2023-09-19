@@ -162,7 +162,7 @@ const CheckoutPage = () => {
                                             <div className="product product-list product-with-qty">
                                                 <figure className="product-media">
                                                     <a href={item?.ItemURL}>
-                                                        <img src={item?.ItemURL} alt={"product " + item?.descriptionalt} width="288"
+                                                        <Image src={item?.ItemURL} alt={"product " + item?.descriptionalt} width="288"
                                                             height="360" />
                                                     </a>
                                                 </figure>
