@@ -51,6 +51,7 @@ const NavBar = () => {
   const [navbarFixed, setNavbarFixed] = useState("");
   const [openCart, setOpenCart] = useState("cart-dropdown");
   const [openMenu, setOpenMenu] = useState("");
+  const [openLogin, setOpenLogin] = useState("");
   const [showPopup, setShowPopup] = useState<any>({
     show: false,
     title: 'Berhasil ditambahkan',
@@ -127,12 +128,16 @@ const NavBar = () => {
   const toggleOpenMenu = () =>
     setOpenMenu((prev) => (prev == "" ? " mmenu-active" : ""));
 
+
+  const toggleOpenLogin = () =>
+    setOpenLogin((prev) => (prev == "" ? " offcanvas-active" : ""));
+
   const subTotal = state.carts?.reduce((a: any, b: any) => {
     return a + b.price * b.qty;
   }, 0);
 
   return (
-    <header className={"header" + openMenu}>
+    <header className={`header${openMenu}${openLogin}`}>
       {topRow(state)}
       <div
         className={`header-middle has-center ${navbarFixed} fix-top sticky-content`}
@@ -221,7 +226,6 @@ const NavBar = () => {
                   </a>
                 </div>
                 <div className="products scrollable">
-
                   {state.carts?.map((item: any, i: any) => {
                     return (
                       <div className="product product-mini" key={'item-movie' + i}>
@@ -269,6 +273,7 @@ const NavBar = () => {
                 </div>
               </div>
             </div>
+            <HeaderRight open={openLogin == ' offcanvas-active'} toggleOpenLogin={toggleOpenLogin} />
           </div>
         </div>
       </div>
@@ -303,7 +308,7 @@ const NavBar = () => {
           <div className="product product-purchased product-mini mb-0">
             {showPopup.image && (
               <figure className="product-media"><a href="#">
-                <img src={showPopup.image ?? "/assets/images/cart/product.jpg"} alt="product" width="90" height="90" /></a>
+                <Image src={showPopup.image ?? "/assets/images/cart/product.jpg"} alt="product" width="90" height="90" /></a>
               </figure>
             )}
             <div className="product-detail">
@@ -322,6 +327,109 @@ const NavBar = () => {
 };
 
 export default NavBar;
+
+const HeaderRight = ({ open, toggleOpenLogin }: any) => {
+
+  const [tabLogin, setTabLogin] = useState(true);
+
+  return (
+    <div className={`dropdown login-dropdown off-canvas${open ? ' opened' : ''}`}>
+      <a className="login-toggle" data-toggle="login-modal" onClick={toggleOpenLogin}>
+        <span className="sr-only">login</span>
+        <i className="p-icon-user-solid"></i>
+      </a>
+      <div className="canvas-overlay" onClick={toggleOpenLogin}></div>
+      <a onClick={toggleOpenLogin} className="btn-close"></a>
+      <div className="dropdown-box scrollable">
+        <div className="login-popup">
+          <div className="form-box">
+            <div className="tab tab-nav-underline tab-nav-boxed">
+              <ul className="nav nav-tabs nav-fill mb-4">
+                <li className="nav-item">
+                  <a className={`nav-link lh-1 ls-normal${tabLogin ? ' active' : ''}`} href="#signin" onClick={() => setTabLogin(true)}>Login</a>
+                </li>
+                <li className="nav-item">
+                  <a className="nav-link lh-1 ls-normal" href="#register" onClick={() => setTabLogin(false)}>Register</a>
+                </li>
+              </ul>
+              <div className="tab-content">
+                <div className={`tab-pane${tabLogin ? ' active in' : ''}`} id="signin">
+                  <form action="#">
+                    <div className="form-group">
+                      <input type="text" id="singin-email" name="singin-email"
+                        placeholder="Username or Email Address" required />
+                      <input type="password" id="singin-password"
+                        name="singin-password" placeholder="Password"
+                        required />
+                    </div>
+                    <div className="form-footer">
+                      <div className="form-checkbox">
+                        <input type="checkbox" id="signin-remember"
+                          name="signin-remember" />
+                        <label htmlFor="signin-remember">Remember
+                          me</label>
+                      </div>
+                      <a href="#" className="lost-link">Lost your password?</a>
+                    </div>
+                    <button className="btn btn-dark btn-block"
+                      type="submit">Login</button>
+                  </form>
+                  {/* <div className="form-choice text-center">
+                    <label>or Login With</label>
+                    <div className="social-links social-link-active ">
+                      <a href="#" title="Facebook"
+                        className="social-link social-facebook fab fa-facebook-f"></a>
+                      <a href="#" title="Twitter"
+                        className="social-link social-twitter fab fa-twitter"></a>
+                      <a href="#" title="Linkedin"
+                        className="social-link social-linkedin fab fa-linkedin-in"></a>
+                    </div>
+                  </div> */}
+                </div>
+                <div className={`tab-pane${!tabLogin ? ' active in' : ''}`} id="register">
+                  <form action="#">
+                    <div className="form-group">
+                      <input type="text" id="register-user" name="register-user"
+                        placeholder="Username" required />
+                      <input type="email" id="register-email"
+                        name="register-email" placeholder="Your Email Address"
+                        required />
+                      <input type="password" id="register-password"
+                        name="register-password" placeholder="Password"
+                      />
+                    </div>
+                    <div className="form-footer mb-5">
+                      <div className="form-checkbox">
+                        <input type="checkbox" id="register-agree"
+                          name="register-agree" required />
+                        <label htmlFor="register-agree">I
+                          agree to the
+                          privacy policy</label>
+                      </div>
+                    </div>
+                    <button className="btn btn-dark btn-block"
+                      type="submit">Register</button>
+                  </form>
+                  {/* <div className="form-choice text-center">
+                    <label className="ls-m">or Register With</label>
+                    <div className="social-links social-link-active ">
+                      <a href="#" title="Facebook"
+                        className="social-link social-facebook fab fa-facebook-f"></a>
+                      <a href="#" title="Twitter"
+                        className="social-link social-twitter fab fa-twitter"></a>
+                      <a href="#" title="Linkedin"
+                        className="social-link social-linkedin fab fa-linkedin-in"></a>
+                    </div>
+                  </div> */}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 
 export const addToCart = (item: any, state: any, dispatch: any) => {
