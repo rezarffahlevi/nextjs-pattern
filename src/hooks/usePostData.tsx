@@ -9,7 +9,7 @@ export interface IPostData extends IGetData, IFetchData {
 
 const usePostData = () => {
   const [result, setResult] = useState<IPostData>({
-    loading: true,
+    loading: false,
     data: null,
     message: null,
     error: null,
@@ -54,11 +54,12 @@ const usePostData = () => {
       })
       .catch((err) => {
         setResult((prevData) => {
+          let errMsg = err?.response?.data?.data?.message
           return {
             ...prevData,
             loading: false,
             error: err,
-            message: err?.message,
+            message: errMsg ?? err?.message,
             isError: true,
             status: REQ_STATUS.FAILED,
           };
@@ -89,7 +90,7 @@ const postDataHooks = async ({
   const instance = RESTAPI;
 
   try {
-    let token = "";
+    let token = localStorage.getItem("token");
 
     const headers = {
       Authorization: `${token}`,

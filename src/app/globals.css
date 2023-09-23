@@ -37,17 +37,14 @@ body {
 }
 
 
-button,
+/* button,
 [type='button'],
 [type='reset'],
 [type='submit'] {
   -webkit-appearance: button;
-  /* 1 */
   background-color: #54524d;
-  /* 2 */
   background-image: none;
-  /* 2 */
-}
+} */
 
 .sticky-header,
 .sticky-header-active {
@@ -73,6 +70,10 @@ button,
   color: #999;
   -webkit-appearance: none;
   -moz-appearance: none;
+}
+
+.input-pin {
+  font-size: 12px !important;
 }
 
 .alert {

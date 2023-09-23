@@ -5,6 +5,10 @@ import { useEffect, useState } from "react";
 import { useAppContext } from "@/app/provider";
 import Image from "@/components/Loader";
 import { useListCinema } from "@/services/useCinemaService";
+import { useLogin, useRegister, useSentOtp, useVerifyOtp } from "@/services/useUserService";
+import moment from "moment";
+import { Button, HStack, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, PinInput, PinInputField, useToast } from "@chakra-ui/react";
+import { useRouter } from "next/navigation";
 
 export const navOptions: { name: string; link?: string }[] = [
   {
@@ -273,7 +277,7 @@ const NavBar = () => {
                 </div>
               </div>
             </div>
-            <HeaderRight open={openLogin == ' offcanvas-active'} toggleOpenLogin={toggleOpenLogin} />
+            <SectionLogin open={openLogin == ' offcanvas-active'} toggleOpenLogin={toggleOpenLogin} />
           </div>
         </div>
       </div>
@@ -328,13 +332,121 @@ const NavBar = () => {
 
 export default NavBar;
 
-const HeaderRight = ({ open, toggleOpenLogin }: any) => {
+const SectionLogin = ({ open, toggleOpenLogin }: any) => {
 
+  const { state, dispatch } = useAppContext();
   const [tabLogin, setTabLogin] = useState(true);
+  const [openOtp, setOpenOtp] = useState(false);
+  const [formdata, setFormdata] = useState<any>({
+    email: null,
+    password: null,
+    phone: null,
+    name: null,
+    birthday: null,
+    gender: null,
+    rememberMe: false,
+  });
+  const { postLogin, login, loginLoading, loginMessage, loginError, loginIsError } = useLogin()
+  const { postRegister, register, registerMessage, registerLoading, registerError, registerIsError } = useRegister()
+  const { postSentOtp, sentOtp, sentOtpMessage, sentOtpLoading, sentOtpError, sentOtpIsError } = useSentOtp()
+  const { postVerifyOtp, verifyOtp, verifyOtpMessage, verifyOtpLoading, verifyOtpError, verifyOtpIsError } = useVerifyOtp()
+
+  const toast = useToast()
+  const router = useRouter();
+
+  useEffect(() => {
+    if (login) {
+      dispatch({
+        token: login?.token,
+        user: login?.data
+      })
+      localStorage.setItem('token', login?.token);
+      toggleOpenLogin();
+    }
+
+    if (loginIsError) {
+      toast({
+        title: loginMessage,
+        status: 'error',
+        isClosable: true,
+      })
+    }
+  }, [login, loginMessage]);
+
+  useEffect(() => {
+    if (register) {
+      dispatch({
+        token: register?.token,
+        user: register?.data
+      });
+      localStorage.setItem('token', register?.token);
+      toggleOpenLogin();
+      postSentOtp({
+        body: {
+          token: register?.token
+        }
+      });
+      setOpenOtp(true);
+    }
+
+    if (registerIsError) {
+      toast({
+        title: registerMessage,
+        status: 'error',
+        isClosable: true,
+      })
+    }
+  }, [register, registerError]);
+
+
+  useEffect(() => {
+    if (sentOtp) {
+      // toast({
+      //   title: 'Berhasil daftar',
+      //   status: 'success',
+      //   isClosable: true,
+      // })
+      setOpenOtp(true);
+    }
+
+    if (sentOtpIsError) {
+      toast({
+        title: sentOtpMessage,
+        status: 'error',
+        isClosable: true,
+      })
+    }
+  }, [sentOtp, sentOtpIsError, sentOtpMessage]);
+
+  useEffect(() => {
+    if (verifyOtp) {
+      setOpenOtp(false);
+      toast({
+        title: verifyOtpMessage,
+        status: 'success',
+        isClosable: true,
+      })
+    }
+
+    if (verifyOtpIsError) {
+      toast({
+        title: verifyOtpMessage,
+        status: 'error',
+        isClosable: true,
+      })
+    }
+  }, [verifyOtp, verifyOtpIsError, verifyOtpMessage]);
+
 
   return (
     <div className={`dropdown login-dropdown off-canvas${open ? ' opened' : ''}`}>
-      <a className="login-toggle" data-toggle="login-modal" onClick={toggleOpenLogin}>
+      <a className="login-toggle" data-toggle="login-modal" onClick={() => {
+        if (state.token == null) {
+          toggleOpenLogin();
+        } else {
+          router.push('/profile');
+        }
+      }}>
         <span className="sr-only">login</span>
         <i className="p-icon-user-solid"></i>
       </a>
@@ -349,20 +461,43 @@ const HeaderRight = ({ open, toggleOpenLogin }: any) => {
                   <a className={`nav-link lh-1 ls-normal${tabLogin ? ' active' : ''}`} href="#signin" onClick={() => setTabLogin(true)}>Login</a>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link lh-1 ls-normal" href="#register" onClick={() => setTabLogin(false)}>Register</a>
+                  <a className={`nav-link lh-1 ls-normal${tabLogin ? '' : ' active'}`} href="#register" onClick={() => setTabLogin(false)}>Register</a>
                 </li>
               </ul>
               <div className="tab-content">
                 <div className={`tab-pane${tabLogin ? ' active in' : ''}`} id="signin">
-                  <form action="#">
+                  <form action="#" onSubmit={(e) => {
+                    e.preventDefault();
+                    postLogin({
+                      body: {
+                        "email": formdata.email,
+                        "password": formdata.password
+                      }
+                    });
+                  }}>
                     <div className="form-group">
-                      <input type="text" id="singin-email" name="singin-email"
-                        placeholder="Username or Email Address" required />
-                      <input type="password" id="singin-password"
-                        name="singin-password" placeholder="Password"
+                      <input type="email"
+                        id="singin-email"
+                        name="singin-email"
+                        placeholder="Email Address"
+                        onChange={(e) => {
+                          let val = e.target.value;
+                          setFormdata((prev: any) => { return { ...prev, email: val } })
+                        }}
+                        value={formdata?.email ?? ''}
+                        required />
+                      <input type="password"
+                        id="singin-password"
+                        name="singin-password"
+                        placeholder="Password"
+                        value={formdata?.password ?? ''}
+                        onChange={(e) => {
+                          let val = e.target.value;
+                          setFormdata((prev: any) => { return { ...prev, password: val } })
+                        }}
                         required />
                     </div>
-                    <div className="form-footer">
+                    {/* <div className="form-footer">
                       <div className="form-checkbox">
                         <input type="checkbox" id="signin-remember"
                           name="signin-remember" />
@@ -370,9 +505,12 @@ const HeaderRight = ({ open, toggleOpenLogin }: any) => {
                           me</label>
                       </div>
                       <a href="#" className="lost-link">Lost your password?</a>
-                    </div>
-                    <button className="btn btn-dark btn-block"
-                      type="submit">Login</button>
+                    </div> */}
+                    <button
+                      className="btn btn-dark btn-block"
+                      type="submit"
+                      style={{ backgroundColor: '#54524d' }}
+                      disabled={loginLoading}>Login</button>
                   </form>
                   {/* <div className="form-choice text-center">
                     <label>or Login With</label>
@@ -387,28 +525,76 @@ const HeaderRight = ({ open, toggleOpenLogin }: any) => {
                   </div> */}
                 </div>
                 <div className={`tab-pane${!tabLogin ? ' active in' : ''}`} id="register">
-                  <form action="#">
+                  <form action="#" onSubmit={(e) => {
+                    e.preventDefault();
+                    postRegister({
+                      body: {
+                        "name": formdata?.name,
+                        "phone": formdata?.phone,
+                        "birthday": formdata?.birthday,
+                        "gender": formdata?.gender ?? 'Male',
+                        "email": formdata.email,
+                        "password": formdata.password
+                      }
+                    });
+                  }}>
                     <div className="form-group">
-                      <input type="text" id="register-user" name="register-user"
-                        placeholder="Username" required />
-                      <input type="email" id="register-email"
-                        name="register-email" placeholder="Your Email Address"
+                      <input type="text"
+                        onChange={(e) => {
+                          let val = e.target.value;
+                          setFormdata((prev: any) => { return { ...prev, name: val } })
+                        }}
+                        placeholder="Name" required />
+                      <input type="text"
+                        onChange={(e) => {
+                          let val = e.target.value;
+                          setFormdata((prev: any) => { return { ...prev, phone: val } })
+                        }}
+                        placeholder="Phone" required />
+                      <input type="date" value={formdata.birthday?.replaceAll('/', '-')} onChange={(e) => {
+                        let value = e.target.value;
+                        if (moment(value).isAfter(moment(), 'D')) {
+                          toast({
+                            title: `Tidak bisa memilih tanggal kedepan`,
+                            status: 'error',
+                            isClosable: true,
+                          })
+                        } else {
+                          setFormdata((prev: any) => { return { ...prev, birthday: moment(value).format('YYYY-MM-DD') } })
+                        }
+                      }} className="inputan mr-2 h-16" style={{ width: '100%' }} />
+
+                      <input type="email"
+                        onChange={(e) => {
+                          let val = e.target.value;
+                          setFormdata((prev: any) => { return { ...prev, email: val } })
+                        }}
+                        value={formdata?.email ?? ''}
+                        placeholder="Your Email Address"
                         required />
-                      <input type="password" id="register-password"
-                        name="register-password" placeholder="Password"
+                      <input type="password"
+                        onChange={(e) => {
+                          let val = e.target.value;
+                          setFormdata((prev: any) => { return { ...prev, password: val } })
+                        }}
+                        value={formdata?.password ?? ''}
+                        placeholder="Password"
                       />
                     </div>
                     <div className="form-footer mb-5">
                       <div className="form-checkbox">
                         <input type="checkbox" id="register-agree"
-                          name="register-agree" required />
+                          required />
                         <label htmlFor="register-agree">I
                           agree to the
                           privacy policy</label>
                       </div>
                     </div>
-                    <button className="btn btn-dark btn-block"
-                      type="submit">Register</button>
+                    <button
+                      className="btn btn-dark btn-block"
+                      style={{ backgroundColor: '#54524d' }}
+                      type="submit"
+                    >Register</button>
                   </form>
                   {/* <div className="form-choice text-center">
                     <label className="ls-m">or Register With</label>
@@ -427,6 +613,39 @@ const HeaderRight = ({ open, toggleOpenLogin }: any) => {
           </div>
         </div>
       </div>
+
+      <Modal closeOnOverlayClick={false} isOpen={openOtp} onClose={() => setOpenOtp(false)}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Masukkan kode OTP</ModalHeader>
+          <ModalCloseButton bgColor={'white'} />
+          <ModalBody pb={6}>
+            <HStack>
+              <PinInput onComplete={(val) => {
+                postVerifyOtp({
+                  body: {
+                    token: state?.token,
+                    otp: val
+                  }
+                });
+              }}>
+                <PinInputField className="input-pin" />
+                <PinInputField className="input-pin" />
+                <PinInputField className="input-pin" />
+                <PinInputField className="input-pin" />
+                <PinInputField className="input-pin" />
+                <PinInputField className="input-pin" />
+              </PinInput>
+            </HStack>
+          </ModalBody>
+
+          {/* <ModalFooter>
+            <Button colorScheme='blue' mr={3}>
+              Save
+            </Button>
+          </ModalFooter> */}
+        </ModalContent>
+      </Modal>
     </div>
   );
 }

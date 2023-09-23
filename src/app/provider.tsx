@@ -15,19 +15,21 @@ const colors = {
 
 export const theme = extendTheme({ colors });
 
-const initialState = {
+export const initialState = {
   init: true,
   carts: [],
   listCinema: [],
   cinema: null,
   addCartPopup: null,
   checkout: null,
+  user: null,
+  token: null
 };
 const AppContext = createContext<any>(null);
 const reducer = (current: any, update: any) => {
   const state = { ...current, ...update };
   localStorage.setItem("state", JSON.stringify(state));
-  // console.log('dispatch', current, update);
+  console.log('dispatch', current, update);
 
   return { ...current, ...update };
 };
