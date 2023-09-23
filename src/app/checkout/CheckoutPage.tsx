@@ -48,7 +48,7 @@ const CheckoutPage = () => {
                     "cinemaname": state.checkout?.cinemaname,
                     "screenname": state.checkout?.screenname,
                     "sessiondatetime": `${moment(state.checkout?.date).format('YYYY/MM/DD')} ${state.checkout?.showtime}`,
-                    "guestemail": "email-that-did-not-exist@mimin.io",
+                    "guestemail": state.user?.email,
                 }
             });
         }
@@ -61,8 +61,30 @@ const CheckoutPage = () => {
     useEffect(() => {
         if (setSeat) {
             setListConcession(setSeat?.ConcessionItems ?? []);
+            dispatch({ setSeat: setSeat, seatSelected: selected, allowedStep: allowedStep, step: step });
         }
     }, [setSeat]);
+
+    useEffect(() => {
+        if (addConcession) {
+            dispatch({ addConcession: addConcession, allowedStep: allowedStep, step: step });
+        }
+    }, [addConcession]);
+
+    useEffect(() => {
+        if (state?.setSeat && !setSeat) {
+            setListConcession(state?.setSeat?.ConcessionItems ?? []);
+        }
+    }, [state?.setSeat, setSeat]);
+
+
+    useEffect(() => {
+        if (state?.seatSelected) {
+            setSelected(state?.seatSelected);
+            setAllowedStep(state?.allowedStep);
+            setStep(state?.step);
+        }
+    }, [state?.seatSelected]);
 
 
     const onChangeQtyConcession = (item: any, value: string | Number) => {
@@ -72,29 +94,29 @@ const CheckoutPage = () => {
             let newState = [...prev];
             let i = newState.findIndex(e => e.id == item.id);
             newState[i] = { ...item, qty: value == '' ? '' : val };
-
             return newState;
-        })
+        });
     }
 
     const onBuyClick = () => {
         if (step < 1) {
-            fetchSetSelectedSeat({
-                body: {
-                    "sessionid": state.checkout?.sessionid,
-                    "cinemaid": state.cinema?.id,
-                    "orderid": seatLayout?.orderid,
-                    "tickettypename": state.checkout?.Price_strTicket_Type_Description,
-                    "SelectedSeats": selected.map((dt: any) => {
-                        return {
-                            "AreaCategoryCode": dt?.AreaCategoryCode,
-                            "AreaNumber": dt?.AreaNumber,
-                            "RowIndex": dt?.RowIndex,
-                            "ColumnIndex": dt?.ColumnIndex
-                        }
-                    }),
-                }
-            });
+            if (!state?.setSeat)
+                fetchSetSelectedSeat({
+                    body: {
+                        "sessionid": state.checkout?.sessionid,
+                        "cinemaid": state.cinema?.id,
+                        "orderid": seatLayout?.orderid,
+                        "tickettypename": state.checkout?.Price_strTicket_Type_Description,
+                        "SelectedSeats": selected.map((dt: any) => {
+                            return {
+                                "AreaCategoryCode": dt?.AreaCategoryCode,
+                                "AreaNumber": dt?.AreaNumber,
+                                "RowIndex": dt?.RowIndex,
+                                "ColumnIndex": dt?.ColumnIndex
+                            }
+                        }),
+                    }
+                });
             setAllowedStep((prev) => prev > 1 ? prev : (prev + 1));
         } else if (step < 2) {
             postAddConcessionItems({
@@ -115,6 +137,13 @@ const CheckoutPage = () => {
                 }
             });
             setAllowedStep((prev) => prev > 2 ? prev : (prev + 1));
+
+            dispatch({
+                setSeat: {
+                    ...state.setSeat,
+                    ConcessionItems: listConcession
+                }
+            })
         } else if (step < 3) {
             const res = {
                 "BookingFeeValueCents": "0",
@@ -175,7 +204,7 @@ const CheckoutPage = () => {
                                                     </h4>
                                                     <span className="product-price">
                                                         {/* <del className="old-price">$90.00</del> */}
-                                                        <ins className="new-price">Rp. {parseInt(item?.priceincents)?.toLocaleString()}</ins>
+                                                        <ins className="new-price">Rp. {(item?.priceincents / 100)?.toLocaleString()}</ins>
                                                     </span>
                                                     {/* <p className="product-short-desc">
                                                         Aliquam id diam maecenas ultricies mi eget, mauris volutpat
@@ -204,6 +233,7 @@ const CheckoutPage = () => {
                                                         <button onClick={() => {
                                                             let newObject = { ...item };
                                                             newObject['selected'] = !(item?.selected ?? false);
+                                                            let list: any = [];
                                                             setListConcession((prev: any) => {
                                                                 let newState = [...prev];
                                                                 newState[index] = newObject;
@@ -261,7 +291,7 @@ const CheckoutPage = () => {
                                     // key={'cart-' + i}
                                     movie={state.checkout}
                                     seatLayout={seatLayout}
-                                    subTotal={subTotal}
+                                    subTotal={subTotal / 100}
                                     selected={selected}
                                     setSelected={setSelected}
                                 />
@@ -293,9 +323,9 @@ const CheckoutPage = () => {
     return (
         <main className="container mt-7 mb-2 pb-12">
             <div className="step-by pr-4 pl-4 mb-8">
-                <h3 className={`title title-step${getClassStepActive(0)}`}><a href="#" onClick={allowedStep >= 0 ? () => setStep(0) : handleToastStep}>1. Pilih Kursi</a></h3>
-                <h3 className={`title title-step${getClassStepActive(1)}`}><a href="#" onClick={allowedStep >= 1 ? () => setStep(1) : handleToastStep}>2. Pilih Makanan</a></h3>
-                <h3 className={`title title-step${getClassStepActive(2)}`}><a href="#" onClick={allowedStep >= 2 ? () => setStep(2) : handleToastStep}>3. Summary</a></h3>
+                <h3 className={`title title-step${getClassStepActive(0)}`}><a onClick={allowedStep >= 0 ? () => setStep(0) : handleToastStep}>1. Pilih Kursi</a></h3>
+                <h3 className={`title title-step${getClassStepActive(1)}`}><a onClick={allowedStep >= 1 ? () => setStep(1) : handleToastStep}>2. Pilih Makanan</a></h3>
+                <h3 className={`title title-step${getClassStepActive(2)}`}><a onClick={allowedStep >= 2 ? () => setStep(2) : handleToastStep}>3. Summary</a></h3>
             </div>
             <div className="row">
                 <div className="col-lg-8 col-md-12 pr-lg-6">
@@ -312,7 +342,7 @@ const CheckoutPage = () => {
                                             <h4 className="summary-subtitle">Subtotal</h4>
                                         </td>
                                         <td>
-                                            <p className="summary-subtotal-price">Rp. {subTotal?.toLocaleString()}</p>
+                                            <p className="summary-subtotal-price">Rp. {(subTotal / 100)?.toLocaleString()}</p>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -346,7 +376,7 @@ const CheckoutPage = () => {
                                             <h4 className="summary-subtitle">Total</h4>
                                         </td>
                                         <td>
-                                            <p className="summary-total-price ls-s">Rp. {subTotal?.toLocaleString()}</p>
+                                            <p className="summary-total-price ls-s">Rp. {(subTotal / 100)?.toLocaleString()}</p>
                                         </td>
                                     </tr>
                                 </tbody>

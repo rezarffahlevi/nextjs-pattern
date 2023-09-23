@@ -45,7 +45,7 @@ export const CartCard = ({ movie, subTotal, selected, setSelected, seatLayout }:
                     </div>
                 </div>
                 <div className="product-subtotal basis-2/12">
-                    <span className="amount">Rp. {movie?.price?.toLocaleString()}</span>
+                    <span className="amount">Rp. {(movie?.price / 100)?.toLocaleString()}</span>
                 </div>
                 <div className="product-quantity basis-1/12">
                     x <span className="amount">{movie?.qty}</span>
@@ -82,7 +82,7 @@ export const CartCard = ({ movie, subTotal, selected, setSelected, seatLayout }:
                     <p className="mt-1">Stok = {movie?.maxQty}</p>
                 </div> */}
                 <div className="product-price basis-3/12">
-                    <span className="amount">Rp. {(movie?.price * movie?.qty).toLocaleString()}</span>
+                    <span className="amount">Rp. {((movie?.price * movie?.qty) / 100).toLocaleString()}</span>
                 </div>
                 <div className="product-remove basis-1/12">
                     <a href="#" className="btn-remove float-right" title="Remove this product" onClick={() => {

@@ -150,7 +150,7 @@ const MovieDetailPage = ({ slug }: { slug: string }) => {
                   </div> */}
                   {movie?.price && (<p className="product-price mb-1">
                     {/* <del className="old-price">$24.00</del> */}
-                    <ins className="new-price">Rp. {movie?.price?.toLocaleString()}</ins>
+                    <ins className="new-price">Rp. {(movie?.price / 100)?.toLocaleString()}</ins>
                   </p>)}
                   <div className="product-form product-unit pt-1">
                     <label>Jam Tayang</label>
@@ -228,7 +228,12 @@ const MovieDetailPage = ({ slug }: { slug: string }) => {
                         onClick={() => {
                           // addToCart(movie, state, dispatch);
                           if (selectedShowTime && selectedTicketType) {
-                            dispatch({ checkout: { ...movie, ...selectedShowTime, ...selectedTicketType, date: date, imageurl: movie?.imageurl } });
+                            dispatch({
+                              checkout: {
+                                ...movie, ...selectedShowTime, ...selectedTicketType, date: date, imageurl: movie?.imageurl
+                              },
+                              setSeat: null, seatSelected: null, allowedStep: 0, step: 0, addConcession: null,
+                            });
                             router.push('/checkout');
                           } else {
                             toast({
@@ -309,7 +314,7 @@ const MovieDetailPage = ({ slug }: { slug: string }) => {
           </div>
         </div>
       </SectionBuilder>
-    </main>
+    </main >
   );
 };
 
