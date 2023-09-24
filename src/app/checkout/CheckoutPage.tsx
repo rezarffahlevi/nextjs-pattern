@@ -3,12 +3,9 @@
 import { useAppContext } from "@/app/provider";
 import Image from "@/components/Loader";
 import { ErrorBuilder, SectionBuilder } from "@/components/Container/SectionBuilder";
-import Link from "next/link";
-import { deleteCart, updateCarts } from "@/components/NavBar/NavBar";
-import { useListCinema } from "@/services/useCinemaService";
 import { useEffect, useState } from "react";
 import './checkout.module.css';
-import { useAddConcessionItems, useSeatLayout, useSetSelectedSeat, useShowTime } from "@/services/useMovieService";
+import { useAddConcessionItems, useSeatLayout, useSetSelectedSeat } from "@/services/useMovieService";
 import { CartCard } from "./sections/CartCard";
 import moment from "moment";
 import { Box, Skeleton, useToast } from "@chakra-ui/react";
@@ -263,7 +260,6 @@ const CheckoutPage = () => {
                     </SectionBuilder >
                 )
                 break;
-
             case 2:
 
                 break;
@@ -321,13 +317,13 @@ const CheckoutPage = () => {
     }
 
     return (
-        <main className="container mt-7 mb-2 pb-12">
+        <main className="container order mt-7 mb-2 pb-12">
             <div className="step-by pr-4 pl-4 mb-8">
                 <h3 className={`title title-step${getClassStepActive(0)}`}><a onClick={allowedStep >= 0 ? () => setStep(0) : handleToastStep}>1. Pilih Kursi</a></h3>
                 <h3 className={`title title-step${getClassStepActive(1)}`}><a onClick={allowedStep >= 1 ? () => setStep(1) : handleToastStep}>2. Pilih Makanan</a></h3>
-                <h3 className={`title title-step${getClassStepActive(2)}`}><a onClick={allowedStep >= 2 ? () => setStep(2) : handleToastStep}>3. Summary</a></h3>
+                <h3 className={`title title-step${getClassStepActive(2)}`}><a onClick={allowedStep >= 2 ? () => setStep(2) : handleToastStep}>3. Order</a></h3>
             </div>
-            <div className="row">
+            {step < 2 && (<div className="row">
                 <div className="col-lg-8 col-md-12 pr-lg-6">
                     {renderStepActive()}
                 </div>
@@ -385,7 +381,117 @@ const CheckoutPage = () => {
                         </div>
                     </div>
                 </aside>
-            </div>
+            </div>)}
+            {step == 2 && (
+
+                <SectionBuilder
+                    loading={<CheckoutLoading />}
+                    isLoading={setSeatLoading}
+                    isError={setSeatIsError}
+                    error={<ErrorBuilder message={setSeatMessage} />}>
+                    <div className="container mt-7">
+                        <div className="order-message">
+                            <div className="icon-box d-inline-flex align-items-center">
+                                <div className="icon-box-icon mb-0">
+                                    <svg xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 50 50" enableBackground="new 0 0 50 50" xmlSpace="preserve">
+                                        <g>
+                                            <path fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="bevel" strokeMiterlimit="10" d="
+                                                    M33.3,3.9c-2.7-1.1-5.6-1.8-8.7-1.8c-12.3,0-22.4,10-22.4,22.4c0,12.3,10,22.4,22.4,22.4c12.3,0,22.4-10,22.4-22.4
+                                                    c0-0.7,0-1.4-0.1-2.1"></path>
+                                            <polyline fill="none" strokeWidth="3" strokeLinecap="round" strokeLinejoin="bevel" strokeMiterlimit="10" points="
+                                                    48,6.9 24.4,29.8 17.2,22.3 	"></polyline>
+                                        </g>
+                                    </svg>
+                                </div>
+                                <h3 className="icon-box-title">Thank you. Your Order has been received.</h3>
+                            </div>
+                        </div>
+                        <div className="order-results row cols-xl-6 cols-md-3 cols-sm-2 mt-10 pt-2 mb-4">
+                            <div className="overview-item">
+                                <span>Order number</span>
+                                <label>{state.addConcession?.OrderId}</label>
+                            </div>
+                            <div className="overview-item">
+                                <span>Status</span>
+                                <label>Pending Payment</label>
+                            </div>
+                            <div className="overview-item">
+                                <span>Date</span>
+                                <label>{moment(state.setSeat?.LastUpdated).format('ll')}</label>
+                            </div>
+                            <div className="overview-item">
+                                <span>Email:</span>
+                                <label>{state.user?.email}</label>
+                            </div>
+                            <div className="overview-item">
+                                <span>Total:</span>
+                                <label>Rp. {(state?.addConcession?.TotalValueCents / 100).toLocaleString()}</label>
+                            </div>
+                            <div className="overview-item">
+                                <span>Payment method:</span>
+                                <label>Transfer</label>
+                            </div>
+                        </div>
+                        <h2 className="detail-title mb-6">Order Details</h2>
+                        <div className="order-details">
+                            <table className="order-details-table">
+                                <thead>
+                                    <tr className="summary-subtotal">
+                                        <td>
+                                            <h3 className="summary-subtitle">Your Order</h3>
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td className="product-subtitle">Product</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr></tr>
+                                    <tr></tr>
+                                    <tr>
+                                        <td className="product-name">Tiket {state?.checkout?.title} <span><i className="p-icon-times"></i> {state?.checkout?.qty}</span>
+                                        </td>
+                                        <td className="product-price">Rp. {(state?.setSeat?.Order?.TotalValueCents / 100)?.toLocaleString()}</td>
+                                    </tr>
+                                    {
+                                        listConcession?.filter((ft: any) => ft?.selected == true)?.map((dt: any) =>
+                                            <tr key={'summary-con-' + dt?.id}>
+                                                <td className="product-name">{dt?.description}
+                                                    {' '}<span><i className="p-icon-times"></i>
+                                                        {' '}{dt?.qty ?? 1} </span>
+                                                </td>
+                                                <td className="product-price">Rp. {((dt?.qty ?? 1) * (dt?.priceincents / 100)).toLocaleString()}</td>
+                                            </tr>
+                                        )
+                                    }
+                                    <tr className="summary-subtotal">
+                                        <td>
+                                            <h4 className="summary-subtitle">Subtotal:</h4>
+                                        </td>
+                                        <td className="summary-value font-weight-normal">Rp. {(state?.addConcession?.TotalValueCents / 100).toLocaleString()}</td>
+                                    </tr>
+                                    <tr className="summary-subtotal">
+                                        <td>
+                                            <h4 className="summary-subtitle">Payment method:</h4>
+                                        </td>
+                                        <td className="summary-value">Transfer</td>
+                                    </tr>
+                                    <tr className="summary-subtotal">
+                                        <td>
+                                            <h4 className="summary-subtitle">Total:</h4>
+                                        </td>
+                                        <td>
+                                            <p className="summary-total-price">Rp. {(state?.addConcession?.TotalValueCents / 100).toLocaleString()}</p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </SectionBuilder >
+            )}
         </main >
     );
 };
