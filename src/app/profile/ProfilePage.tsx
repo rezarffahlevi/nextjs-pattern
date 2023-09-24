@@ -46,14 +46,12 @@ const ProfilePage = () => {
                         <div className="tab-content col-lg-9 col-md-8">
                             <div className="tab-pane active" id="dashboard">
                                 <p className="mb-0">
-                                    Hello <span className="font-weight-bold text-secondary">John Doe</span> (not <span className="font-weight-bold text-secondary">John Doe</span>? <a href="login.html" className="text-primary">Log
-                                        out</a>)
+                                    Hello <span className="font-weight-bold text-secondary">{state?.user?.name}</span>
                                 </p>
                                 <p className="">
                                     From your account dashboard you can view your
-                                    <a href="#orders" className="link-to-tab text-primary">recent orders</a>, manage your <a href="#address" className="link-to-tab text-primary"> shipping and billing
-                                        addresses</a>, and <a href="#account" className="link-to-tab text-primary">edit your
-                                            password and account details</a>.
+                                    <a href="#orders" className="link-to-tab text-primary">recent orders</a>, <a href="#account" className="link-to-tab text-primary">edit your
+                                        password and account details</a>.
                                 </p>
                                 <div className="row cols-lg-3 cols-xs-2 cols-1 nav">
                                     <div className="ib-wrapper mb-4">
@@ -74,17 +72,6 @@ const ProfilePage = () => {
                                             </span>
                                             <div className="icon-box-content">
                                                 <p>ACCOUNT DETAILS</p>
-                                            </div>
-                                        </a>
-                                        </div>
-                                    </div>
-                                    <div className="ib-wrapper mb-4">
-                                        <div className="icon-box text-center ib-border"><a href="wishlist.html" className="no-tab-item">
-                                            <span className="icon-box-icon">
-                                                <i className="p-icon-heart-solid"></i>
-                                            </span>
-                                            <div className="icon-box-content">
-                                                <p>WISHLIST</p>
                                             </div>
                                         </a>
                                         </div>
