@@ -228,13 +228,22 @@ const MovieDetailPage = ({ slug }: { slug: string }) => {
                         onClick={() => {
                           // addToCart(movie, state, dispatch);
                           if (selectedShowTime && selectedTicketType) {
-                            dispatch({
-                              checkout: {
-                                ...movie, ...selectedShowTime, ...selectedTicketType, date: date, imageurl: movie?.imageurl
-                              },
-                              setSeat: null, seatSelected: null, allowedStep: 0, step: 0, addConcession: null,
-                            });
-                            router.push('/checkout');
+                            if (state.token) {
+                              dispatch({
+                                checkout: {
+                                  ...movie, ...selectedShowTime, ...selectedTicketType, date: date, imageurl: movie?.imageurl
+                                },
+                                setSeat: null, seatSelected: null, allowedStep: 0, step: 0, addConcession: null,
+                              });
+                              router.push('/checkout');
+                            } else {
+                              toast({
+                                title: `Silahkan login terlebih dahulu`,
+                                status: 'error',
+                                isClosable: true,
+                              });
+                              document.getElementById('login-icon')?.click();
+                            }
                           } else {
                             toast({
                               title: `Pilih ${selectedShowTime ? `type ticket` : `jam tayang`} terlebih dahulu`,

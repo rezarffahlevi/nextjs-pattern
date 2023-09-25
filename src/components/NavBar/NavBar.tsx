@@ -440,7 +440,7 @@ const SectionLogin = ({ open, toggleOpenLogin }: any) => {
 
   return (
     <div className={`dropdown login-dropdown off-canvas${open ? ' opened' : ''}`}>
-      <a className="login-toggle" data-toggle="login-modal" onClick={() => {
+      <a id="login-icon" className="login-toggle" data-toggle="login-modal" onClick={() => {
         if (state.token == null) {
           toggleOpenLogin();
         } else {
@@ -614,11 +614,16 @@ const SectionLogin = ({ open, toggleOpenLogin }: any) => {
         </div>
       </div>
 
-      <Modal closeOnOverlayClick={false} isOpen={openOtp} onClose={() => setOpenOtp(false)}>
+      <Modal closeOnOverlayClick={false} isOpen={openOtp} onClose={() => {
+        setOpenOtp(false)
+      }}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Masukkan kode OTP</ModalHeader>
-          <ModalCloseButton bgColor={'white'} />
+          <ModalCloseButton bgColor={'white'} onClick={() => {
+            localStorage.removeItem('token');
+            dispatch({ user: null, token: null });
+          }} />
           <ModalBody pb={6}>
             <HStack>
               <PinInput onComplete={(val) => {
