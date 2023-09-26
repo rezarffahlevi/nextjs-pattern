@@ -362,6 +362,11 @@ const SectionLogin = ({ open, toggleOpenLogin }: any) => {
       })
       localStorage.setItem('token', login?.token);
       toggleOpenLogin();
+      toast({
+        title: 'Welcome ' + login?.data?.name,
+        status: 'success',
+        isClosable: true,
+      })
     }
 
     if (loginIsError) {

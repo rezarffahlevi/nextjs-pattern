@@ -4,7 +4,7 @@ import usePostData, { IPostData } from "@/hooks/usePostData";
 import { useEffect, useState } from "react";
 
 export const useCategories = () => {
-  const { postData, data, loading, status, error, isError } = usePostData();
+  const { postData, data, message, loading, status, error, isError } = usePostData();
 
   return {
     fetchCategories: ({ header, option, queryParams }: IPostData) =>
@@ -21,6 +21,7 @@ export const useCategories = () => {
         },
       }),
     categories: data?.genrelist,
+    categoriesMessage: message,
     categoriesLoading: loading,
     categoriesStatus: status,
     categoriesError: error,
@@ -56,7 +57,7 @@ export const useListNowPlaying = () => {
 };
 
 export const useMovieDetail = () => {
-  const { postData, data, loading, status, error, isError } = usePostData();
+  const { postData, data, message, loading, status, error, isError } = usePostData();
   const [movie, setMovie] = useState<any>(null);
 
 
@@ -87,6 +88,7 @@ export const useMovieDetail = () => {
     movie,
     setMovie,
     movieLoading: loading,
+    movieMessage: message,
     movieStatus: status,
     movieError: error || movie?.message,
     movieIsError: isError || movie?.status == '1',
@@ -94,7 +96,7 @@ export const useMovieDetail = () => {
 };
 
 export const useShowTime = () => {
-  const { postData, data, loading, status, error, isError } = usePostData();
+  const { postData, data, message, loading, status, error, isError } = usePostData();
 
   return {
     fetchShowTime: ({ header, option, queryParams, body }: IPostData) =>
@@ -122,7 +124,7 @@ export const useShowTime = () => {
 
 
 export const useTicketType = () => {
-  const { postData, data, loading, status, error, isError } = usePostData();
+  const { postData, data, message, loading, status, error, isError } = usePostData();
 
   return {
     fetchTicketType: ({ header, option, queryParams, body }: IPostData) =>
@@ -140,6 +142,7 @@ export const useTicketType = () => {
         },
       }),
     ticketType: data,
+    ticketTypeMessage: message,
     ticketTypeLoading: loading,
     ticketTypeStatus: status,
     ticketTypeError: error || data?.message,

@@ -83,6 +83,21 @@ const CheckoutPage = () => {
         }
     }, [state?.seatSelected]);
 
+    useEffect(() => {
+        if (listConcession) {
+            let subTicket = [state.checkout].reduce((a: any, b: any) => {
+                return a + (b?.price * b?.qty);
+            }, 0);
+            let sub = listConcession?.reduce((a: any, b: any) => {
+                if (b.selected == true) {
+                    return a + ((b?.priceincents) * (b?.qty ?? 1));
+                }
+                return a;
+            }, 0);
+            setSubTotal(subTicket + sub);
+        }
+    }, [listConcession]);
+
 
     const onChangeQtyConcession = (item: any, value: string | Number) => {
         let val = Number(value);
@@ -97,6 +112,15 @@ const CheckoutPage = () => {
 
     const onBuyClick = () => {
         if (step < 1) {
+            if (selected.length < state.checkout?.qty) {
+                return toast({
+                    title: `Pilih jumlah bangku sesuai qty Anda`,
+                    status: 'error',
+                    isClosable: true,
+                    duration: 2000
+                });
+            }
+
             if (!state?.setSeat)
                 fetchSetSelectedSeat({
                     body: {
@@ -116,23 +140,24 @@ const CheckoutPage = () => {
                 });
             setAllowedStep((prev) => prev > 1 ? prev : (prev + 1));
         } else if (step < 2) {
-            postAddConcessionItems({
-                body: {
-                    "sessionid": state.checkout?.sessionid,
-                    "cinemaid": state.cinema?.id,
-                    "orderid": seatLayout?.orderid,
-                    "tickettypename": state.checkout?.Price_strTicket_Type_Description,
-                    "deliverytype": "Deliver",
-                    "Concessions": listConcession?.filter((fd: any) => fd.selected == true)?.map((dt: any) => {
-                        return {
-                            "ItemId": dt?.id,
-                            "Quantity": dt?.qty ?? 1,
-                            "Name": dt?.description,
-                            "Price": dt?.priceincents
-                        }
-                    }),
-                }
-            });
+            if (!state?.addConcession)
+                postAddConcessionItems({
+                    body: {
+                        "sessionid": state.checkout?.sessionid,
+                        "cinemaid": state.cinema?.id,
+                        "orderid": seatLayout?.orderid,
+                        "tickettypename": state.checkout?.Price_strTicket_Type_Description,
+                        "deliverytype": "Deliver",
+                        "Concessions": listConcession?.filter((fd: any) => fd.selected == true)?.map((dt: any) => {
+                            return {
+                                "ItemId": dt?.id,
+                                "Quantity": dt?.qty ?? 1,
+                                "Name": dt?.description,
+                                "Price": dt?.priceincents
+                            }
+                        }),
+                    }
+                });
             setAllowedStep((prev) => prev > 2 ? prev : (prev + 1));
 
             dispatch({
@@ -211,23 +236,64 @@ const CheckoutPage = () => {
                                                     <div className="product-action">
                                                         <div className="product-quantity">
                                                             <button className="quantity-minus p-icon-minus-solid" onClick={() => {
+                                                                if (allowedStep > 1) {
+                                                                    return toast({
+                                                                        title: `Order sudah terbuat, tidak dapat merubah pesanan`,
+                                                                        status: 'error',
+                                                                        isClosable: true,
+                                                                        duration: 2000
+                                                                    });
+                                                                }
                                                                 onChangeQtyConcession(item, item?.qty == 1 || typeof item?.qty == 'undefined' ? 1 : (item?.qty ?? 1) - 1)
                                                             }}></button>
                                                             <input className="quantity form-control" type="number" min="1"
                                                                 max="1000" value={item?.qty ?? 1}
                                                                 onChange={(e) => {
+                                                                    if (allowedStep > 1) {
+                                                                        return toast({
+                                                                            title: `Order sudah terbuat, tidak dapat merubah pesanan`,
+                                                                            status: 'error',
+                                                                            isClosable: true,
+                                                                            duration: 2000
+                                                                        });
+                                                                    }
                                                                     let value = e.target.value;
                                                                     onChangeQtyConcession(item, value);
                                                                 }}
                                                                 onBlur={(e) => {
+                                                                    if (allowedStep > 1) {
+                                                                        return toast({
+                                                                            title: `Order sudah terbuat, tidak dapat merubah pesanan`,
+                                                                            status: 'error',
+                                                                            isClosable: true,
+                                                                            duration: 2000
+                                                                        });
+                                                                    }
                                                                     let value = e.target.value;
                                                                     onChangeQtyConcession(item, value == '' ? 1 : value);
                                                                 }} />
                                                             <button className="quantity-plus p-icon-plus-solid" onClick={() => {
+                                                                if (allowedStep > 1) {
+                                                                    return toast({
+                                                                        title: `Order sudah terbuat, tidak dapat merubah pesanan`,
+                                                                        status: 'error',
+                                                                        isClosable: true,
+                                                                        duration: 2000
+                                                                    });
+                                                                }
                                                                 onChangeQtyConcession(item, (item?.qty ?? 1) + 1)
                                                             }}></button>
                                                         </div>
                                                         <button onClick={() => {
+                                                            if (allowedStep > 1) {
+                                                                return toast({
+                                                                    title: `Order sudah terbuat, tidak dapat merubah pesanan`,
+                                                                    status: 'error',
+                                                                    isClosable: true,
+                                                                    duration: 2000
+                                                                });
+                                                            }
+
                                                             let newObject = { ...item };
                                                             newObject['selected'] = !(item?.selected ?? false);
                                                             let list: any = [];
@@ -289,7 +355,14 @@ const CheckoutPage = () => {
                                     seatLayout={seatLayout}
                                     subTotal={subTotal / 100}
                                     selected={selected}
-                                    setSelected={setSelected}
+                                    setSelected={allowedStep > 0 ? () => {
+                                        toast({
+                                            title: `Ticket sudah terbuat, tidak dapat merubah bangku`,
+                                            status: 'error',
+                                            isClosable: true,
+                                            duration: 2000
+                                        });
+                                    } : setSelected}
                                 />
                                 {/* );
                                     })} */}

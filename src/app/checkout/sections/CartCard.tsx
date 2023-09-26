@@ -15,11 +15,6 @@ export const CartCard = ({ movie, subTotal, selected, setSelected, seatLayout }:
     const [selectedTicketType, setSelectedTicketType] = useState<any>(null);
     const toast = useToast()
 
-
-    const { fetchShowTime, showTime, showTimeLoading, showTimeError, showTimeIsError } = useShowTime();
-    const { fetchTicketType, ticketType, ticketTypeLoading, ticketTypeError, ticketTypeIsError } = useTicketType();
-
-
     return (
         <div className="mb-6">
             <div className="flex w-full items-center">
@@ -84,13 +79,13 @@ export const CartCard = ({ movie, subTotal, selected, setSelected, seatLayout }:
                 <div className="product-price basis-3/12">
                     <span className="amount">Rp. {((movie?.price * movie?.qty) / 100).toLocaleString()}</span>
                 </div>
-                <div className="product-remove basis-1/12">
+                {/* <div className="product-remove basis-1/12">
                     <a href="#" className="btn-remove float-right" title="Remove this product" onClick={() => {
                         deleteCart(movie, state, dispatch);
                     }}>
                         <i className="p-icon-times"></i>
                     </a>
-                </div>
+                </div> */}
             </div>
             <div className="mt-3 font-semibold text-[14px]">
                 Time Remaining to complete booking - 09.51
