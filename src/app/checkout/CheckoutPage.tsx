@@ -3,18 +3,21 @@
 import { useAppContext } from "@/app/provider";
 import Image from "@/components/Loader";
 import { ErrorBuilder, SectionBuilder } from "@/components/Container/SectionBuilder";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import './checkout.module.css';
 import { useAddConcessionItems, useSeatLayout, useSetSelectedSeat } from "@/services/useMovieService";
 import { CartCard } from "./sections/CartCard";
 import moment from "moment";
 import { Box, Skeleton, useToast } from "@chakra-ui/react";
 import { MdDelete } from "react-icons/md";
+import { useOrderMicrosite } from "@/services/useOrderService";
 
 const CheckoutPage = () => {
     const { state, dispatch } = useAppContext();
 
     const [subTotal, setSubTotal] = useState(0);
+    const [ppn, setPpn] = useState(0);
+    const [grandTotal, setGrandTotal] = useState(0);
     const [step, setStep] = useState(0);
     const [allowedStep, setAllowedStep] = useState(0);
     const [selected, setSelected] = useState<any>([]);
@@ -25,8 +28,14 @@ const CheckoutPage = () => {
     const { fetchSeatLayout, seatLayout, seatLayoutLoading, seatLayoutMessage, seatLayoutError, seatLayoutIsError } = useSeatLayout();
     const { fetchSetSelectedSeat, setSeat, setSeatLoading, setSeatMessage, setSeatIsError, setSeatError } = useSetSelectedSeat();
     const { postAddConcessionItems, addConcession, addConcessionLoading, addConcessionMessage, addConcessionIsError, addConcessionError } = useAddConcessionItems();
+    const { postOrderMicrosite, orderMicrosite, orderMicrositeLoading, orderMicrositeMessage, orderMicrositeIsError, orderMicrositeError } = useOrderMicrosite();
 
     let init = true;
+    let serviceCharge = 8000;
+    let packagingCost = 5000;
+    // let ppn = (subTotal / 100) * 0.11;
+    // let grandTotal = (subTotal / 100) + (serviceCharge + packagingCost) + ppn;
+
 
     useEffect(() => {
         if (state.checkout && init) {
@@ -65,8 +74,17 @@ const CheckoutPage = () => {
     useEffect(() => {
         if (addConcession) {
             dispatch({ addConcession: addConcession, allowedStep: allowedStep, step: step });
+            setSubTotal(addConcession?.TotalValueCents);
+            setPpn((addConcession?.TotalValueCents / 100) * 0.11);
+            setGrandTotal((addConcession?.TotalValueCents / 100) + (serviceCharge + packagingCost) + ((addConcession?.TotalValueCents / 100) * 0.11));
         }
     }, [addConcession]);
+
+    useEffect(() => {
+        if (grandTotal) {
+            onBuyClick();
+        }
+    }, [ppn, subTotal, grandTotal])
 
     useEffect(() => {
         if (state?.setSeat && !setSeat) {
@@ -99,6 +117,15 @@ const CheckoutPage = () => {
     }, [listConcession]);
 
 
+    useEffect(() => {
+        if (orderMicrosite) {
+
+            window.open(orderMicrosite?.data?.xendit?.invoice_url,
+                'Popup', 'location,status,scrollbars,resizable,width=600, height=600');
+        }
+    }, [orderMicrosite]);
+
+
     const onChangeQtyConcession = (item: any, value: string | Number) => {
         let val = Number(value);
         val = isNaN(val) || val > item?.maxQty || val < 1 ? item.qty : val;
@@ -110,7 +137,7 @@ const CheckoutPage = () => {
         });
     }
 
-    const onBuyClick = () => {
+    const onBuyClick = useCallback(() => {
         if (step < 1) {
             if (selected.length < state.checkout?.qty) {
                 return toast({
@@ -139,6 +166,7 @@ const CheckoutPage = () => {
                     }
                 });
             setAllowedStep((prev) => prev > 1 ? prev : (prev + 1));
+            setStep((prev) => (prev + 1));
         } else if (step < 2) {
             if (!state?.addConcession)
                 postAddConcessionItems({
@@ -166,22 +194,43 @@ const CheckoutPage = () => {
                     ConcessionItems: listConcession
                 }
             })
+            setStep((prev) => (prev + 1));
         } else if (step < 3) {
-            const res = {
-                "BookingFeeValueCents": "0",
-                "OrderId": "5B2F87FA-94C5-490D-81C3-E37042C60A9F",
-                "TotalOrderCount": "3",
-                "TotalTicketFeeValueInCents": "",
-                "TotalValueCents": "14000000",
-                "VistaBookingNumber": "0",
-                "VistaTransactionNumber": "0",
-                "status": "0",
-                "message": ""
-            }
+            postOrderMicrosite({
+                body: {
+                    "sessionid": state.checkout?.sessionid,
+                    "cinemaid": state.cinema?.id,
+                    "order_id": seatLayout?.orderid,
+                    "tickettypename": state.checkout?.Price_strTicket_Type_Description,
+                    "deliverytype": "Deliver",
+                    "concessions": listConcession?.filter((fd: any) => fd.selected == true)?.map((dt: any) => {
+                        return {
+                            "ItemId": dt?.id,
+                            "Quantity": dt?.qty ?? 1,
+                            "Name": dt?.description,
+                            "Price": dt?.priceincents
+                        }
+                    }),
+                    "detail": {
+                        "name": state.user?.name,
+                        "phone": state.user?.phone,
+                        "email": state.user?.email
+                    },
+                    "note": "",
+                    "total_price": state?.setSeat?.Order?.TotalValueCents / 100,
+                    "kupon": "",
+                    "subtotal": subTotal / 100,
+                    "ppn": ppn,
+                    "service_charge": serviceCharge,
+                    "packaging_cost": packagingCost,
+                    "grand_total": grandTotal,
+                    "branch": "63a023a60824bd7863a8211c",
+                    "user_id": state?.user?._id,
+                    "set_selected_seat": state?.setSeat
+                }
+            });
         }
-
-        setStep((prev) => (prev + 1));
-    }
+    }, [subTotal, step, allowedStep, selected, state, ppn, grandTotal]);
 
     const getClassStepActive = (i: Number) => {
         return i == step ? ' active' : ''
@@ -455,15 +504,15 @@ const CheckoutPage = () => {
                     </div>
                 </aside>
             </div>)}
-            {step == 2 && (
 
+            {step == 2 && (
                 <SectionBuilder
                     loading={<CheckoutLoading />}
-                    isLoading={setSeatLoading}
+                    isLoading={setSeatLoading || orderMicrositeLoading}
                     isError={setSeatIsError}
                     error={<ErrorBuilder message={setSeatMessage} />}>
                     <div className="container mt-7">
-                        <div className="order-message">
+                        <div className="order-message" onClick={onBuyClick}>
                             <div className="icon-box d-inline-flex align-items-center">
                                 <div className="icon-box-icon mb-0">
                                     <svg xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 50 50" enableBackground="new 0 0 50 50" xmlSpace="preserve">
@@ -545,6 +594,18 @@ const CheckoutPage = () => {
                                         </td>
                                         <td className="summary-value font-weight-normal">Rp. {(state?.addConcession?.TotalValueCents / 100).toLocaleString()}</td>
                                     </tr>
+                                    <tr>
+                                        <td className="product-name">PPN</td>
+                                        <td className="product-price">Rp. {ppn?.toLocaleString()}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="product-name">Service Charge</td>
+                                        <td className="product-price">Rp. {serviceCharge?.toLocaleString()}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="product-name">Packaging Cost</td>
+                                        <td className="product-price">Rp. {packagingCost?.toLocaleString()}</td>
+                                    </tr>
                                     <tr className="summary-subtotal">
                                         <td>
                                             <h4 className="summary-subtitle">Payment method:</h4>
@@ -556,7 +617,7 @@ const CheckoutPage = () => {
                                             <h4 className="summary-subtitle">Total:</h4>
                                         </td>
                                         <td>
-                                            <p className="summary-total-price">Rp. {(state?.addConcession?.TotalValueCents / 100).toLocaleString()}</p>
+                                            <p className="summary-total-price">Rp. {(grandTotal).toLocaleString()}</p>
                                         </td>
                                     </tr>
                                 </tbody>
