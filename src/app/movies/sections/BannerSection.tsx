@@ -8,24 +8,36 @@ import { useEffect, useRef, useState } from "react";
 import { Container, Skeleton } from "@chakra-ui/react";
 import { SectionBuilder } from "@/components/Container/SectionBuilder";
 import Image from "@/components/Loader";
+import { useGetBanner } from "@/services/useBannerService";
 
 const BannerSection = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const { fetchBanner, banner, bannerLoading, bannerIsError, bannerMessage } = useGetBanner();
   let init = true;
 
   useEffect(() => {
     if (init) {
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 1000);
+      // setTimeout(() => {
+      //   setIsLoading(false);
+      // }, 1000);
+      fetchBanner({
+        queryParams: {
+          limit: 10,
+          page: 1,
+          order: 'name',
+          sort: 1,
+          field: 'name',
+          value: ''
+        }
+      });
       init = false;
     }
   }, []);
 
   return (
     <SectionBuilder
-      isError={false}
-      isLoading={isLoading}
+      isError={bannerIsError}
+      isLoading={bannerLoading}
       loading={<BannerLoading />}
     >
       <Swiper

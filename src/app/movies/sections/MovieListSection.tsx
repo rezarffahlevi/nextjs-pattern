@@ -23,6 +23,7 @@ const MovieListSection = () => {
     useListNowPlaying();
   const [openFilter, setOpenFilter] = useState("");
   const [filter, setFilter] = useState<any>([]);
+  const [sort, setSort] = useState<any>([]);
 
   let init = true;
 
@@ -58,9 +59,13 @@ const MovieListSection = () => {
               </a>
               <div className="toolbox-item toolbox-sort select-menu">
                 <label>Sort By :</label>
-                <select name="orderby">
+                <select name="orderby" onChange={
+                  (e) => {
+                    let val = e.target.value;
+                    setSort(val);
+                  }}>
                   <option defaultValue="default">Default Sorting</option>
-                  <option defaultValue="popularity">Sort By Popularity</option>
+                  {/* <option defaultValue="popularity">Sort By Popularity</option>
                   <option defaultValue="rating">Sort By The Latest</option>
                   <option defaultValue="date">Sort By Average Rating</option>
                   <option defaultValue="price-low">
@@ -68,7 +73,7 @@ const MovieListSection = () => {
                   </option>
                   <option defaultValue="price-high">
                     Sort By Price: High To Low
-                  </option>
+                  </option> */}
                 </select>
               </div>
             </div>

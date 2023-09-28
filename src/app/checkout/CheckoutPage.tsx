@@ -121,7 +121,7 @@ const CheckoutPage = () => {
         if (orderMicrosite) {
 
             window.open(orderMicrosite?.data?.xendit?.invoice_url,
-                'Popup', 'location,status,scrollbars,resizable,width=600, height=600');
+                '_blank', 'location,status,scrollbars,resizable,width=600, height=600');
         }
     }, [orderMicrosite]);
 
@@ -466,7 +466,7 @@ const CheckoutPage = () => {
                                 </tbody>
                             </table>
                             <div className="shipping-address">
-                                <label className="mb-4">Lokasi Teater *</label>
+                                {/* <label className="mb-4">Lokasi Teater *</label>
                                 <div className="select-box">
                                     <select name="country" className="form-control" onChange={(e) => {
                                         let val = e.target.value;
@@ -477,7 +477,7 @@ const CheckoutPage = () => {
                                                 <option value={dt?.id} key={'cnm' + dt?.id}>{dt?.name}</option>)
                                         }
                                     </select>
-                                </div>
+                                </div> */}
                                 {/* <label className="mb-4">Metode Pengiriman *</label>
                                         <div className="select-box">
                                             <select name="country" className="form-control">
@@ -487,7 +487,7 @@ const CheckoutPage = () => {
                                             </select>
                                         </div> */}
                             </div>
-                            <table className="total">
+                            {/* <table className="total">
                                 <tbody>
                                     <tr className="summary-subtotal">
                                         <td>
@@ -498,7 +498,7 @@ const CheckoutPage = () => {
                                         </td>
                                     </tr>
                                 </tbody>
-                            </table>
+                            </table> */}
                             <a onClick={onBuyClick} className="btn btn-dim btn-checkout btn-block">BELI</a>
                         </div>
                     </div>
