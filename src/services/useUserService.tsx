@@ -87,3 +87,24 @@ export const useVerifyOtp = () => {
         verifyOtpIsError: isError || data?.status == '1',
     };
 };
+
+
+export const useGetCurrentUser = () => {
+    const { fetchData, data, loading, message, status, error, isError } = useGetData();
+
+    return {
+        fetchCurrentUser: ({ header, option, queryParams }: IFetchData) =>
+            fetchData({
+                urlPath: "api/v1/customer/get-by-authid/",
+                header: header,
+                option: option,
+                queryParams: queryParams,
+            }),
+        currentUser: data,
+        currentUserLoading: loading,
+        currentUserMessage: message,
+        currentUserStatus: status,
+        currentUserError: error || data?.message,
+        currentUserIsError: isError || data?.status == '1',
+    };
+};

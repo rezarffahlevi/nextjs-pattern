@@ -4,10 +4,9 @@ import { useCategories } from "@/services/useMovieService";
 import { Box, Checkbox, Skeleton, Stack } from "@chakra-ui/react";
 import { ReactNode, useEffect, useState } from "react";
 
-const FilterSection = ({ toggleOpenFilter = () => { } }: any) => {
+const FilterSection = ({ toggleOpenFilter = () => { }, filter, setFilter }: any) => {
   const { fetchCategories, categories, categoriesLoading, categoriesIsError } =
     useCategories();
-  const [filter, setFilter] = useState<any>([]);
 
   let init = true;
 

@@ -19,10 +19,10 @@ import { FilterSection } from "./FilterSection";
 import { textToSlug } from "@/utils/utils";
 
 const MovieListSection = () => {
-  const size = useWindowSize();
   const { fetchListNowPlaying, listMovie, listMovieLoading, listMovieIsError, listMessage } =
     useListNowPlaying();
   const [openFilter, setOpenFilter] = useState("");
+  const [filter, setFilter] = useState<any>([]);
 
   let init = true;
 
@@ -39,7 +39,7 @@ const MovieListSection = () => {
 
   return (
     <div className={"row main-content-wrap" + openFilter}>
-      <FilterSection toggleOpenFilter={toggleOpenFilter} />
+      <FilterSection toggleOpenFilter={toggleOpenFilter} filter={filter} setFilter={setFilter} />
       <div className={"col-lg-9 main-content pl-lg-6"}>
         <SectionBuilder
           isError={listMovieIsError}
@@ -89,7 +89,7 @@ const MovieListSection = () => {
           </nav>
 
           <div className="row product-wrapper cols-md-3 cols-2">
-            {(listMovie ?? []).map((dt: any, i: any) => (
+            {(filter?.length > 0 ? listMovie?.filter((ft: any) => filter.some((sm: any) => sm == ft?.genres)) : (listMovie ?? [])).map((dt: any, i: any) => (
               <Link href={`movies/${dt?.scheduledfilmid}`} className="product-wrap" key={"movie-" + i}>
                 <div className="product shadow-media text-center">
                   <figure className="product-media">
@@ -167,7 +167,7 @@ const MovieListSection = () => {
           </div>
           <nav className="toolbox toolbox-pagination pt-2 pb-6">
             <p className="toolbox-item show-info">
-              Menampilkan <span>1-{listMovie?.movielist?.length} dari {listMovie?.movielist?.length}</span> Film
+              Menampilkan <span>{listMovie?.length}</span> Film
             </p>
             {/* <ul className="pagination">
             <li className="page-item disabled">
