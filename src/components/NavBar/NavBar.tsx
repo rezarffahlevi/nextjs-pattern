@@ -14,6 +14,9 @@ export const navOptions: { name: string; link?: string }[] = [
   {
     name: "BERANDA",
     link: "/",
+  }, {
+    name: "SHOW TIME",
+    link: "/showtime",
   },
   {
     name: "TENTANG KAMI",

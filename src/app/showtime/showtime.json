@@ -1,0 +1,1115 @@
+{
+    "status": "0",
+    "message": "",
+    "moviecinemascreen": [
+        {
+            "scheduledfilmid": "HO00001247",
+            "title": "A Haunting in Venice",
+            "cinemaid": "0000000003",
+            "cinemaname": "FLIX - Mall Of Indonesia",
+            "screennumber": "3",
+            "screenname": "HALL 3",
+            "runtime": "103",
+            "sessionlist": [
+                {
+                    "sessionid": "33270",
+                    "showtime": "11:30",
+                    "seatsavailable": "136",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                }
+            ]
+        },
+        {
+            "scheduledfilmid": "HO00001247",
+            "title": "A Haunting in Venice",
+            "cinemaid": "0000000003",
+            "cinemaname": "FLIX - Mall Of Indonesia",
+            "screennumber": "6",
+            "screenname": "HALL 6",
+            "runtime": "103",
+            "sessionlist": [
+                {
+                    "sessionid": "33198",
+                    "showtime": "14:00",
+                    "seatsavailable": "191",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                }
+            ]
+        },
+        {
+            "scheduledfilmid": "HO00001247",
+            "title": "A Haunting in Venice",
+            "cinemaid": "0000000003",
+            "cinemaname": "FLIX - Mall Of Indonesia",
+            "screennumber": "5",
+            "screenname": "HALL 5",
+            "runtime": "103",
+            "sessionlist": [
+                {
+                    "sessionid": "33171",
+                    "showtime": "17:15",
+                    "seatsavailable": "137",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                }
+            ]
+        },
+        {
+            "scheduledfilmid": "HO00001247",
+            "title": "A Haunting in Venice",
+            "cinemaid": "0000000003",
+            "cinemaname": "FLIX - Mall Of Indonesia",
+            "screennumber": "8",
+            "screenname": "HALL 8",
+            "runtime": "103",
+            "sessionlist": [
+                {
+                    "sessionid": "33249",
+                    "showtime": "19:30",
+                    "seatsavailable": "186",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "33298",
+                    "showtime": "21:45",
+                    "seatsavailable": "188",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                }
+            ]
+        },
+        {
+            "scheduledfilmid": "HO00001265",
+            "title": "A Man of Reason",
+            "cinemaid": "0000000001",
+            "cinemaname": "FLIX - PIK AVENUE",
+            "screennumber": "3",
+            "screenname": "HALL 3",
+            "runtime": "98",
+            "sessionlist": [
+                {
+                    "sessionid": "47370",
+                    "showtime": "13:30",
+                    "seatsavailable": "40",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "47372",
+                    "showtime": "18:00",
+                    "seatsavailable": "38",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                }
+            ]
+        },
+        {
+            "scheduledfilmid": "HO00001265",
+            "title": "A Man of Reason",
+            "cinemaid": "0000000003",
+            "cinemaname": "FLIX - Mall Of Indonesia",
+            "screennumber": "3",
+            "screenname": "HALL 3",
+            "runtime": "98",
+            "sessionlist": [
+                {
+                    "sessionid": "33269",
+                    "showtime": "13:40",
+                    "seatsavailable": "136",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "33116",
+                    "showtime": "18:15",
+                    "seatsavailable": "136",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                }
+            ]
+        },
+        {
+            "scheduledfilmid": "HO00001258",
+            "title": "Air Mata di Ujung Sajadah",
+            "cinemaid": "0000000002",
+            "cinemaname": "FLIX - Grand Galaxy Park",
+            "screennumber": "1",
+            "screenname": "HALL 1",
+            "runtime": "105",
+            "sessionlist": [
+                {
+                    "sessionid": "63294",
+                    "showtime": "12:45",
+                    "seatsavailable": "124",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "63295",
+                    "showtime": "15:00",
+                    "seatsavailable": "130",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "63296",
+                    "showtime": "17:10",
+                    "seatsavailable": "130",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "63297",
+                    "showtime": "19:20",
+                    "seatsavailable": "130",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                }
+            ]
+        },
+        {
+            "scheduledfilmid": "HO00001237",
+            "title": "Di Ambang Kematian",
+            "cinemaid": "0000000002",
+            "cinemaname": "FLIX - Grand Galaxy Park",
+            "screennumber": "2",
+            "screenname": "HALL 2",
+            "runtime": "97",
+            "sessionlist": [
+                {
+                    "sessionid": "63322",
+                    "showtime": "13:45",
+                    "seatsavailable": "128",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                }
+            ]
+        },
+        {
+            "scheduledfilmid": "HO00001237",
+            "title": "Di Ambang Kematian",
+            "cinemaid": "0000000002",
+            "cinemaname": "FLIX - Grand Galaxy Park",
+            "screennumber": "6",
+            "screenname": "HALL 6",
+            "runtime": "97",
+            "sessionlist": [
+                {
+                    "sessionid": "63324",
+                    "showtime": "17:30",
+                    "seatsavailable": "43",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                }
+            ]
+        },
+        {
+            "scheduledfilmid": "HO00001237",
+            "title": "Di Ambang Kematian",
+            "cinemaid": "0000000003",
+            "cinemaname": "FLIX - Mall Of Indonesia",
+            "screennumber": "5",
+            "screenname": "HALL 5",
+            "runtime": "97",
+            "sessionlist": [
+                {
+                    "sessionid": "33172",
+                    "showtime": "19:25",
+                    "seatsavailable": "137",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "33265",
+                    "showtime": "21:30",
+                    "seatsavailable": "137",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                }
+            ]
+        },
+        {
+            "scheduledfilmid": "HO00001266",
+            "title": "Flora and Son",
+            "cinemaid": "0000000003",
+            "cinemaname": "FLIX - Mall Of Indonesia",
+            "screennumber": "6",
+            "screenname": "HALL 6",
+            "runtime": "97",
+            "sessionlist": [
+                {
+                    "sessionid": "33267",
+                    "showtime": "11:55",
+                    "seatsavailable": "191",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "33199",
+                    "showtime": "19:00",
+                    "seatsavailable": "189",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                }
+            ]
+        },
+        {
+            "scheduledfilmid": "HO00001266",
+            "title": "Flora and Son",
+            "cinemaid": "0000000004",
+            "cinemaname": "FLIX - ASHTA",
+            "screennumber": "3",
+            "screenname": "HALL 3",
+            "runtime": "97",
+            "sessionlist": [
+                {
+                    "sessionid": "14622",
+                    "showtime": "12:30",
+                    "seatsavailable": "40",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "14624",
+                    "showtime": "17:30",
+                    "seatsavailable": "40",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                }
+            ]
+        },
+        {
+            "scheduledfilmid": "HO00001266",
+            "title": "Flora and Son",
+            "cinemaid": "0000000002",
+            "cinemaname": "FLIX - Grand Galaxy Park",
+            "screennumber": "5",
+            "screenname": "HALL 5",
+            "runtime": "97",
+            "sessionlist": [
+                {
+                    "sessionid": "63412",
+                    "showtime": "18:45",
+                    "seatsavailable": "31",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                }
+            ]
+        },
+        {
+            "scheduledfilmid": "HO00001266",
+            "title": "Flora and Son",
+            "cinemaid": "0000000001",
+            "cinemaname": "FLIX - PIK AVENUE",
+            "screennumber": "1",
+            "screenname": "HALL 1",
+            "runtime": "97",
+            "sessionlist": [
+                {
+                    "sessionid": "47312",
+                    "showtime": "19:00",
+                    "seatsavailable": "70",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                }
+            ]
+        },
+        {
+            "scheduledfilmid": "HO00001267",
+            "title": "Fukrey 3",
+            "cinemaid": "0000000003",
+            "cinemaname": "FLIX - Mall Of Indonesia",
+            "screennumber": "2",
+            "screenname": "HALL 2",
+            "runtime": "147",
+            "sessionlist": [
+                {
+                    "sessionid": "33291",
+                    "showtime": "19:15",
+                    "seatsavailable": "102",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                }
+            ]
+        },
+        {
+            "scheduledfilmid": "HO00001232",
+            "title": "Kisah Tanah Jawa Pocong Gundul",
+            "cinemaid": "0000000002",
+            "cinemaname": "FLIX - Grand Galaxy Park",
+            "screennumber": "6",
+            "screenname": "HALL 6",
+            "runtime": "107",
+            "sessionlist": [
+                {
+                    "sessionid": "63464",
+                    "showtime": "12:30",
+                    "seatsavailable": "41",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                }
+            ]
+        },
+        {
+            "scheduledfilmid": "HO00001232",
+            "title": "Kisah Tanah Jawa Pocong Gundul",
+            "cinemaid": "0000000002",
+            "cinemaname": "FLIX - Grand Galaxy Park",
+            "screennumber": "2",
+            "screenname": "HALL 2",
+            "runtime": "107",
+            "sessionlist": [
+                {
+                    "sessionid": "63462",
+                    "showtime": "16:00",
+                    "seatsavailable": "141",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "63413",
+                    "showtime": "18:15",
+                    "seatsavailable": "144",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "63463",
+                    "showtime": "20:30",
+                    "seatsavailable": "144",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                }
+            ]
+        },
+        {
+            "scheduledfilmid": "HO00001264",
+            "title": "No More Bets",
+            "cinemaid": "0000000001",
+            "cinemaname": "FLIX - PIK AVENUE",
+            "screennumber": "3",
+            "screenname": "HALL 3",
+            "runtime": "129",
+            "sessionlist": [
+                {
+                    "sessionid": "47371",
+                    "showtime": "15:30",
+                    "seatsavailable": "35",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "47373",
+                    "showtime": "20:15",
+                    "seatsavailable": "24",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                }
+            ]
+        },
+        {
+            "scheduledfilmid": "HO00001264",
+            "title": "No More Bets",
+            "cinemaid": "0000000003",
+            "cinemaname": "FLIX - Mall Of Indonesia",
+            "screennumber": "3",
+            "screenname": "HALL 3",
+            "runtime": "129",
+            "sessionlist": [
+                {
+                    "sessionid": "33113",
+                    "showtime": "15:40",
+                    "seatsavailable": "136",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "33115",
+                    "showtime": "20:15",
+                    "seatsavailable": "136",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                }
+            ]
+        },
+        {
+            "scheduledfilmid": "HO00001264",
+            "title": "No More Bets",
+            "cinemaid": "0000000001",
+            "cinemaname": "FLIX - PIK AVENUE",
+            "screennumber": "1",
+            "screenname": "HALL 1",
+            "runtime": "129",
+            "sessionlist": [
+                {
+                    "sessionid": "47449",
+                    "showtime": "21:00",
+                    "seatsavailable": "70",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                }
+            ]
+        },
+        {
+            "scheduledfilmid": "HO00001253",
+            "title": "PAW Patrol: The Mighty Movie",
+            "cinemaid": "0000000003",
+            "cinemaname": "FLIX - Mall Of Indonesia",
+            "screennumber": "5",
+            "screenname": "HALL 5",
+            "runtime": "93",
+            "sessionlist": [
+                {
+                    "sessionid": "33266",
+                    "showtime": "11:20",
+                    "seatsavailable": "94",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "33169",
+                    "showtime": "13:15",
+                    "seatsavailable": "137",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "33170",
+                    "showtime": "15:15",
+                    "seatsavailable": "129",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                }
+            ]
+        },
+        {
+            "scheduledfilmid": "HO00001253",
+            "title": "PAW Patrol: The Mighty Movie",
+            "cinemaid": "0000000001",
+            "cinemaname": "FLIX - PIK AVENUE",
+            "screennumber": "3",
+            "screenname": "HALL 3",
+            "runtime": "93",
+            "sessionlist": [
+                {
+                    "sessionid": "47443",
+                    "showtime": "11:30",
+                    "seatsavailable": "40",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                }
+            ]
+        },
+        {
+            "scheduledfilmid": "HO00001253",
+            "title": "PAW Patrol: The Mighty Movie",
+            "cinemaid": "0000000002",
+            "cinemaname": "FLIX - Grand Galaxy Park",
+            "screennumber": "5",
+            "screenname": "HALL 5",
+            "runtime": "93",
+            "sessionlist": [
+                {
+                    "sessionid": "63380",
+                    "showtime": "12:15",
+                    "seatsavailable": "31",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "63381",
+                    "showtime": "14:30",
+                    "seatsavailable": "31",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "63382",
+                    "showtime": "16:45",
+                    "seatsavailable": "31",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                }
+            ]
+        },
+        {
+            "scheduledfilmid": "HO00001253",
+            "title": "PAW Patrol: The Mighty Movie",
+            "cinemaid": "0000000001",
+            "cinemaname": "FLIX - PIK AVENUE",
+            "screennumber": "1",
+            "screenname": "HALL 1",
+            "runtime": "93",
+            "sessionlist": [
+                {
+                    "sessionid": "47310",
+                    "showtime": "12:45",
+                    "seatsavailable": "60",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "47311",
+                    "showtime": "14:45",
+                    "seatsavailable": "70",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "47448",
+                    "showtime": "16:45",
+                    "seatsavailable": "58",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                }
+            ]
+        },
+        {
+            "scheduledfilmid": "HO00001260",
+            "title": "Petualangan Sherina 2",
+            "cinemaid": "0000000002",
+            "cinemaname": "FLIX - Grand Galaxy Park",
+            "screennumber": "4",
+            "screenname": "HALL 4",
+            "runtime": "126",
+            "sessionlist": [
+                {
+                    "sessionid": "63438",
+                    "showtime": "12:00",
+                    "seatsavailable": "120",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "63439",
+                    "showtime": "14:45",
+                    "seatsavailable": "116",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "63440",
+                    "showtime": "17:15",
+                    "seatsavailable": "122",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "63441",
+                    "showtime": "19:45",
+                    "seatsavailable": "116",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                }
+            ]
+        },
+        {
+            "scheduledfilmid": "HO00001260",
+            "title": "Petualangan Sherina 2",
+            "cinemaid": "0000000003",
+            "cinemaname": "FLIX - Mall Of Indonesia",
+            "screennumber": "8",
+            "screenname": "HALL 8",
+            "runtime": "126",
+            "sessionlist": [
+                {
+                    "sessionid": "33268",
+                    "showtime": "12:00",
+                    "seatsavailable": "186",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "33247",
+                    "showtime": "14:30",
+                    "seatsavailable": "172",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "33248",
+                    "showtime": "17:00",
+                    "seatsavailable": "186",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                }
+            ]
+        },
+        {
+            "scheduledfilmid": "HO00001260",
+            "title": "Petualangan Sherina 2",
+            "cinemaid": "0000000001",
+            "cinemaname": "FLIX - PIK AVENUE",
+            "screennumber": "4",
+            "screenname": "HALL 4",
+            "runtime": "126",
+            "sessionlist": [
+                {
+                    "sessionid": "47398",
+                    "showtime": "13:00",
+                    "seatsavailable": "99",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "47399",
+                    "showtime": "15:45",
+                    "seatsavailable": "97",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "47400",
+                    "showtime": "18:15",
+                    "seatsavailable": "99",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "47401",
+                    "showtime": "20:45",
+                    "seatsavailable": "99",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                }
+            ]
+        },
+        {
+            "scheduledfilmid": "HO00001260",
+            "title": "Petualangan Sherina 2",
+            "cinemaid": "0000000002",
+            "cinemaname": "FLIX - Grand Galaxy Park",
+            "screennumber": "3",
+            "screenname": "HALL 3",
+            "runtime": "126",
+            "sessionlist": [
+                {
+                    "sessionid": "63350",
+                    "showtime": "13:00",
+                    "seatsavailable": "122",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "63351",
+                    "showtime": "15:45",
+                    "seatsavailable": "141",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "63352",
+                    "showtime": "18:30",
+                    "seatsavailable": "165",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "63353",
+                    "showtime": "21:00",
+                    "seatsavailable": "161",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                }
+            ]
+        },
+        {
+            "scheduledfilmid": "HO00001260",
+            "title": "Petualangan Sherina 2",
+            "cinemaid": "0000000003",
+            "cinemaname": "FLIX - Mall Of Indonesia",
+            "screennumber": "7",
+            "screenname": "HALL 7",
+            "runtime": "126",
+            "sessionlist": [
+                {
+                    "sessionid": "33225",
+                    "showtime": "13:00",
+                    "seatsavailable": "196",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "33226",
+                    "showtime": "15:30",
+                    "seatsavailable": "197",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "33227",
+                    "showtime": "18:00",
+                    "seatsavailable": "193",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "33228",
+                    "showtime": "20:40",
+                    "seatsavailable": "197",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                }
+            ]
+        },
+        {
+            "scheduledfilmid": "HO00001260",
+            "title": "Petualangan Sherina 2",
+            "cinemaid": "0000000004",
+            "cinemaname": "FLIX - ASHTA",
+            "screennumber": "2",
+            "screenname": "HALL 2",
+            "runtime": "126",
+            "sessionlist": [
+                {
+                    "sessionid": "14640",
+                    "showtime": "13:30",
+                    "seatsavailable": "43",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "14595",
+                    "showtime": "16:15",
+                    "seatsavailable": "37",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "14596",
+                    "showtime": "18:45",
+                    "seatsavailable": "40",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "14597",
+                    "showtime": "21:15",
+                    "seatsavailable": "55",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                }
+            ]
+        },
+        {
+            "scheduledfilmid": "HO00001260",
+            "title": "Petualangan Sherina 2",
+            "cinemaid": "0000000004",
+            "cinemaname": "FLIX - ASHTA",
+            "screennumber": "4",
+            "screenname": "HALL 4",
+            "runtime": "126",
+            "sessionlist": [
+                {
+                    "sessionid": "14647",
+                    "showtime": "14:15",
+                    "seatsavailable": "32",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "14648",
+                    "showtime": "17:15",
+                    "seatsavailable": "32",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "14649",
+                    "showtime": "20:00",
+                    "seatsavailable": "32",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                }
+            ]
+        },
+        {
+            "scheduledfilmid": "HO00001260",
+            "title": "Petualangan Sherina 2",
+            "cinemaid": "0000000002",
+            "cinemaname": "FLIX - Grand Galaxy Park",
+            "screennumber": "1",
+            "screenname": "HALL 1",
+            "runtime": "126",
+            "sessionlist": [
+                {
+                    "sessionid": "63465",
+                    "showtime": "21:30",
+                    "seatsavailable": "130",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                }
+            ]
+        },
+        {
+            "scheduledfilmid": "HO00001250",
+            "title": "The Creator",
+            "cinemaid": "0000000001",
+            "cinemaname": "FLIX - PIK AVENUE",
+            "screennumber": "2",
+            "screenname": "HALL 2",
+            "runtime": "133",
+            "sessionlist": [
+                {
+                    "sessionid": "47342",
+                    "showtime": "11:45",
+                    "seatsavailable": "24",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "47343",
+                    "showtime": "14:30",
+                    "seatsavailable": "24",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "47344",
+                    "showtime": "17:15",
+                    "seatsavailable": "24",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "47345",
+                    "showtime": "20:00",
+                    "seatsavailable": "24",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                }
+            ]
+        },
+        {
+            "scheduledfilmid": "HO00001250",
+            "title": "The Creator",
+            "cinemaid": "0000000003",
+            "cinemaname": "FLIX - Mall Of Indonesia",
+            "screennumber": "4",
+            "screenname": "HALL 4",
+            "runtime": "133",
+            "sessionlist": [
+                {
+                    "sessionid": "33141",
+                    "showtime": "12:15",
+                    "seatsavailable": "26",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "33142",
+                    "showtime": "15:00",
+                    "seatsavailable": "26",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "33143",
+                    "showtime": "17:45",
+                    "seatsavailable": "26",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "33144",
+                    "showtime": "20:30",
+                    "seatsavailable": "26",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                }
+            ]
+        },
+        {
+            "scheduledfilmid": "HO00001250",
+            "title": "The Creator",
+            "cinemaid": "0000000004",
+            "cinemaname": "FLIX - ASHTA",
+            "screennumber": "1",
+            "screenname": "HALL 1",
+            "runtime": "133",
+            "sessionlist": [
+                {
+                    "sessionid": "14566",
+                    "showtime": "13:00",
+                    "seatsavailable": "55",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "14567",
+                    "showtime": "15:45",
+                    "seatsavailable": "55",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "14568",
+                    "showtime": "18:30",
+                    "seatsavailable": "55",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "14569",
+                    "showtime": "21:30",
+                    "seatsavailable": "55",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                }
+            ]
+        },
+        {
+            "scheduledfilmid": "HO00001250",
+            "title": "The Creator",
+            "cinemaid": "0000000001",
+            "cinemaname": "FLIX - PIK AVENUE",
+            "screennumber": "5",
+            "screenname": "HALL 5",
+            "runtime": "133",
+            "sessionlist": [
+                {
+                    "sessionid": "47426",
+                    "showtime": "13:15",
+                    "seatsavailable": "183",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "47427",
+                    "showtime": "16:00",
+                    "seatsavailable": "183",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "47428",
+                    "showtime": "18:45",
+                    "seatsavailable": "183",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "47429",
+                    "showtime": "21:30",
+                    "seatsavailable": "183",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                }
+            ]
+        },
+        {
+            "scheduledfilmid": "HO00001250",
+            "title": "The Creator",
+            "cinemaid": "0000000004",
+            "cinemaname": "FLIX - ASHTA",
+            "screennumber": "3",
+            "screenname": "HALL 3",
+            "runtime": "133",
+            "sessionlist": [
+                {
+                    "sessionid": "14623",
+                    "showtime": "14:45",
+                    "seatsavailable": "40",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "14625",
+                    "showtime": "19:45",
+                    "seatsavailable": "40",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                }
+            ]
+        },
+        {
+            "scheduledfilmid": "HO00001250",
+            "title": "The Creator",
+            "cinemaid": "0000000002",
+            "cinemaname": "FLIX - Grand Galaxy Park",
+            "screennumber": "6",
+            "screenname": "HALL 6",
+            "runtime": "133",
+            "sessionlist": [
+                {
+                    "sessionid": "63414",
+                    "showtime": "14:50",
+                    "seatsavailable": "43",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "63415",
+                    "showtime": "19:30",
+                    "seatsavailable": "42",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                }
+            ]
+        },
+        {
+            "scheduledfilmid": "HO00001250",
+            "title": "The Creator",
+            "cinemaid": "0000000003",
+            "cinemaname": "FLIX - Mall Of Indonesia",
+            "screennumber": "6",
+            "screenname": "HALL 6",
+            "runtime": "133",
+            "sessionlist": [
+                {
+                    "sessionid": "33197",
+                    "showtime": "16:15",
+                    "seatsavailable": "191",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                },
+                {
+                    "sessionid": "33200",
+                    "showtime": "21:00",
+                    "seatsavailable": "191",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                }
+            ]
+        },
+        {
+            "scheduledfilmid": "HO00001250",
+            "title": "The Creator",
+            "cinemaid": "0000000002",
+            "cinemaname": "FLIX - Grand Galaxy Park",
+            "screennumber": "5",
+            "screenname": "HALL 5",
+            "runtime": "133",
+            "sessionlist": [
+                {
+                    "sessionid": "63323",
+                    "showtime": "20:45",
+                    "seatsavailable": "30",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                }
+            ]
+        },
+        {
+            "scheduledfilmid": "HO00001268",
+            "title": "The Vaccine War",
+            "cinemaid": "0000000003",
+            "cinemaname": "FLIX - Mall Of Indonesia",
+            "screennumber": "2",
+            "screenname": "HALL 2",
+            "runtime": "161",
+            "sessionlist": [
+                {
+                    "sessionid": "33292",
+                    "showtime": "16:00",
+                    "seatsavailable": "102",
+                    "sessionattributesnames": "[]",
+                    "tickettypelist": null
+                }
+            ]
+        }
+    ]
+}
