@@ -61,9 +61,10 @@ export const ShowtimePage = () => {
                                                                                 paddingBottom: 14,
                                                                                 borderBottomWidth: (j < dt?.sessionlist?.length - 1) ? 1 : 0,
                                                                             }}
+                                                                            key={'time-' + i + time?.sessionid}
                                                                         >
                                                                             <div className="w-[200px]">
-                                                                                <div key={'time-' + i + time?.sessionid} className={"tag cursor-pointer my-4 mb-0 h-14" + (dt?.sessionid == 'selectedShowTime?.sessionid' ? ' btn-dim' : '')} onClick={() => { }}>
+                                                                                <div className={"tag cursor-pointer my-4 mb-0 h-14" + (dt?.sessionid == 'selectedShowTime?.sessionid' ? ' btn-dim' : '')} onClick={() => { }}>
                                                                                     {time?.showtime}
                                                                                 </div>
                                                                             </div>
