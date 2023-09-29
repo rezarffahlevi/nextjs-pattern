@@ -50,7 +50,7 @@ const ProfilePage = () => {
                                 </p>
                                 <p className="">
                                     From your account dashboard you can view your
-                                    <a href="#orders" className="link-to-tab text-primary">recent orders</a>, <a href="#account" className="link-to-tab text-primary">edit your
+                                    <a href="#orders" className="link-to-tab text-primary"> recent orders</a>, <a href="#account" className="link-to-tab text-primary">edit your
                                         password and account details</a>.
                                 </p>
                                 <div className="row cols-lg-3 cols-xs-2 cols-1 nav">

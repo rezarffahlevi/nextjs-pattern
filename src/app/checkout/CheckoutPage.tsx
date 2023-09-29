@@ -421,7 +421,7 @@ const CheckoutPage = () => {
                                 <Link href="/" className="btn btn-dim btn-icon-left mr-4 mb-4"><i
                                     className="p-icon-arrow-long-left"></i>Continue Shopping</Link>
                             </div> */}
-                        <div className="cart-coupon-box pt-5 pb-8">
+                        {/* <div className="cart-coupon-box pt-5 pb-8">
                             <h4 className="title coupon-title text-capitalize mb-4">Coupon Discount</h4>
                             <form action="#">
                                 <input type="text" name="coupon_code" className="input-text mb-6" id="coupon_code"
@@ -429,7 +429,7 @@ const CheckoutPage = () => {
                                 <button type="submit" className="btn btn-dark btn-outline" style={{ backgroundColor: 'transparent' }}>Apply
                                     Coupon</button>
                             </form>
-                        </div>
+                        </div> */}
                     </>
                 </SectionBuilder>
             )
