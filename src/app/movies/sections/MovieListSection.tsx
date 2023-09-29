@@ -38,6 +38,8 @@ const MovieListSection = () => {
   const toggleOpenFilter = () =>
     setOpenFilter((prev) => (prev == "" ? " sidebar-active" : ""));
 
+  const movieList = (filter?.length > 0 ? listMovie?.filter((ft: any) => filter.some((sm: any) => sm == ft?.genres)) : (listMovie ?? []));
+
   return (
     <div className={"row main-content-wrap" + openFilter}>
       <FilterSection toggleOpenFilter={toggleOpenFilter} filter={filter} setFilter={setFilter} />
@@ -94,7 +96,7 @@ const MovieListSection = () => {
           </nav>
 
           <div className="row product-wrapper cols-md-3 cols-2">
-            {(filter?.length > 0 ? listMovie?.filter((ft: any) => filter.some((sm: any) => sm == ft?.genres)) : (listMovie ?? [])).map((dt: any, i: any) => (
+            {movieList.map((dt: any, i: any) => (
               <Link href={`movies/${dt?.scheduledfilmid}`} className="product-wrap" key={"movie-" + i}>
                 <div className="product shadow-media text-center">
                   <figure className="product-media">
@@ -172,7 +174,7 @@ const MovieListSection = () => {
           </div>
           <nav className="toolbox toolbox-pagination pt-2 pb-6">
             <p className="toolbox-item show-info">
-              Menampilkan <span>{listMovie?.length}</span> Film
+              Menampilkan <span>{movieList?.length}</span> Film
             </p>
             {/* <ul className="pagination">
             <li className="page-item disabled">
