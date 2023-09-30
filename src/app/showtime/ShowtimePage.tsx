@@ -59,6 +59,7 @@ export const ShowtimePage = () => {
                                                                             className="flex"
                                                                             style={{
                                                                                 paddingBottom: 14,
+                                                                                paddingTop: 6,
                                                                                 borderBottomWidth: (j < dt?.sessionlist?.length - 1) ? 1 : 0,
                                                                             }}
                                                                             key={'time-' + i + time?.sessionid}
