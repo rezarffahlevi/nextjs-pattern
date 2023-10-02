@@ -1,4 +1,8 @@
+"use client";
+import { useAppContext } from "../provider";
+
 const AboutPage = () => {
+    const { state, dispatch } = useAppContext();
     return (<main className="main">
         <div className="page-header" style={{ backgroundColor: '#f9f8f4' }}>
             <h1 className="page-title text-8xl">About Us</h1>
@@ -12,7 +16,9 @@ const AboutPage = () => {
             </div>
         </nav> */}
         <div className="page-content about-page">
-            <div className="container">
+            <div className="container py-10" dangerouslySetInnerHTML={{ __html: state?.account?.about_us }}>
+            </div>
+            {/* <div className="container">
                 <section className="row align-items-center">
                     <div className="col-lg-6">
                         <figure>
@@ -163,7 +169,7 @@ const AboutPage = () => {
                         </div>
                     </div>
                 </div>
-            </section>
+            </section> */}
         </div>
     </main>)
 }

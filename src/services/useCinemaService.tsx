@@ -28,6 +28,25 @@ export const useListCinema = () => {
     };
 };
 
+export const useGetCinema = () => {
+    const { fetchData, data, message, loading, status, error, isError } = useGetData();
+
+    return {
+        fetchCinema: ({ header, option, queryParams }: IFetchData) =>
+            fetchData({
+                urlPath: "api/v1/product/get-by-username/flixcinema",
+                header: header,
+                option: option,
+                queryParams: queryParams,
+            }),
+        cinema: data,
+        cinemaMessage: message,
+        cinemaLoading: loading,
+        cinemaStatus: status,
+        cinemaError: error || data?.message,
+        cinemaIsError: isError,
+    };
+};
 
 export const useCinemaDetail = () => {
     const { postData, data, loading, status, error, isError } = usePostData();

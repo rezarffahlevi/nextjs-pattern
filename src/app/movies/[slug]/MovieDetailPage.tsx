@@ -4,7 +4,7 @@ import { useAppContext } from "@/app/provider";
 import Image from "@/components/Loader";
 import { addToCart } from "@/components/NavBar/NavBar";
 import { ErrorBuilder, SectionBuilder } from "@/components/Container/SectionBuilder";
-import { useListNowPlaying, useMovieDetail, useShowTime, useTicketType } from "@/services/useMovieService";
+import { useMovieDetail, useShowTime, useTicketType } from "@/services/useMovieService";
 import { textToSlug } from "@/utils/utils";
 import {
   Box,

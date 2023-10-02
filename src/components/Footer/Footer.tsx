@@ -45,21 +45,21 @@ export const Footer = () => {
                 <li>
                   <a href="tel:#" className="footer-icon-box">
                     <i className="p-icon-phone-solid"></i>
-                    <span>{state.cinema?.phonenumber}</span>
+                    <span>{state.cinema?.admin?.phone}</span>
                   </a>
                 </li>
                 <li>
                   <a href="#" className="">
                     <i className="p-icon-map"></i>
                     <span>
-                      {state.cinema?.address}
+                      {state.cinema?.admin?.address}
                     </span>
                   </a>
                 </li>
                 <li>
-                  <a href={`mailto:${state.cinema?.emailaddress}`} className="">
+                  <a href={`mailto:${state.cinema?.admin?.email}`} className="">
                     <i className="p-icon-message"></i>
-                    <span>{state.cinema?.emailaddress}</span>
+                    <span>{state.cinema?.admin?.email}</span>
                   </a>
                 </li>
               </ul>

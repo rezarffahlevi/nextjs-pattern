@@ -73,7 +73,7 @@ const CheckoutPage = () => {
 
     useEffect(() => {
         if (addConcession) {
-            dispatch({ addConcession: addConcession, allowedStep: allowedStep, step: step });
+            dispatch({ addConcession: addConcession, allowedStep: allowedStep, step: step, ppn: (addConcession?.TotalValueCents / 100) * 0.11, subTotal: addConcession?.TotalValueCents, grandTotal: (addConcession?.TotalValueCents / 100) + (serviceCharge + packagingCost) + ((addConcession?.TotalValueCents / 100) * 0.11) });
             setSubTotal(addConcession?.TotalValueCents);
             setPpn((addConcession?.TotalValueCents / 100) * 0.11);
             setGrandTotal((addConcession?.TotalValueCents / 100) + (serviceCharge + packagingCost) + ((addConcession?.TotalValueCents / 100) * 0.11));
@@ -98,6 +98,9 @@ const CheckoutPage = () => {
             setSelected(state?.seatSelected);
             setAllowedStep(state?.allowedStep);
             setStep(state?.step);
+            setPpn(state?.ppn);
+            setSubTotal(state?.subTotal);
+            setGrandTotal(state?.grandTotal);
         }
     }, [state?.seatSelected]);
 
@@ -224,7 +227,7 @@ const CheckoutPage = () => {
                     "service_charge": serviceCharge,
                     "packaging_cost": packagingCost,
                     "grand_total": grandTotal,
-                    "branch": "63a023a60824bd7863a8211c",
+                    "branch": "63a023a60824bd7863a8211c" ?? state?.account?._id,
                     "user_id": state?.user?._id,
                     "set_selected_seat": state?.setSeat
                 }
@@ -617,7 +620,7 @@ const CheckoutPage = () => {
                                             <h4 className="summary-subtitle">Total:</h4>
                                         </td>
                                         <td>
-                                            <p className="summary-total-price">Rp. {(grandTotal).toLocaleString()}</p>
+                                            <p className="summary-total-price">Rp. {(grandTotal)?.toLocaleString()}</p>
                                         </td>
                                     </tr>
                                 </tbody>

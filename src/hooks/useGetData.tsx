@@ -53,7 +53,7 @@ export const useGetData = () => {
       option: option,
     })
       .then((response) => {
-        const value = response?.data?.data?.data;
+        const value = response?.data?.data;
         setResult((prevData) => {
           return {
             ...prevData,
@@ -79,7 +79,7 @@ export const useGetData = () => {
   };
 
   return {
-    data: result?.data,
+    data: result.data,
     message: result?.message,
     error: result?.error,
     status: result?.status,

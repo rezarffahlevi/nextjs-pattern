@@ -35,12 +35,12 @@ const topRow = (state: any) => {
         <div className="header-left">
           <a href="tel:#" className="call">
             <i className="p-icon-phone-solid"></i>
-            <span>{state.cinema?.phonenumber}</span>
+            <span>{state.cinema?.admin?.phone}</span>
           </a>
           <span className="divider"></span>
           <a href="#" className="contact">
             <i className="p-icon-map"></i>
-            <span>{state.cinema?.address}</span>
+            <span>{state.cinema?.admin?.address}</span>
           </a>
         </div>
         <div className="header-right">
@@ -188,11 +188,11 @@ const NavBar = () => {
             <div className="select-box mr-4 w-[20rem]">
               <select name="country" className="form-control" onChange={(e) => {
                 let val = e.target.value;
-                dispatch({ cinema: state.listCinema?.find((fd: any) => fd?.id == val) });
-              }}>
+                dispatch({ cinema: { ...state.cinema, ...state.listCinema?.find((fd: any) => fd?._id == val) } });
+              }} value={state.cinema?._id}>
                 {
                   (state.listCinema ?? []).map((dt: any) =>
-                    <option value={dt?.id} key={'cnmx' + dt?.id}>{dt?.name}</option>)
+                    <option value={dt?._id} key={'cnmx' + dt?._id}>{dt?.name}</option>)
                 }
               </select>
             </div>

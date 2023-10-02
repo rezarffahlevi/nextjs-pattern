@@ -17,8 +17,10 @@ import { ReactNode, useEffect, useState } from "react";
 import { MdFilterList } from "react-icons/md";
 import { FilterSection } from "./FilterSection";
 import { textToSlug } from "@/utils/utils";
+import { useAppContext } from "@/app/provider";
 
 const MovieListSection = () => {
+  const { state, dispatch } = useAppContext();
   const { fetchListNowPlaying, listMovie, listMovieLoading, listMovieIsError, listMessage } =
     useListNowPlaying();
   const [openFilter, setOpenFilter] = useState("");
@@ -28,11 +30,15 @@ const MovieListSection = () => {
   let init = true;
 
   useEffect(() => {
-    if (init) {
-      fetchListNowPlaying({});
+    if (init && state.cinema?.id) {
+      fetchListNowPlaying({
+        body: {
+          cinemaid: state.cinema?.id,
+        }
+      });
       init = false;
     }
-  }, []);
+  }, [state.cinema]);
 
 
   const toggleOpenFilter = () =>

@@ -33,7 +33,7 @@ export const useListNowPlaying = () => {
   const { postData, data, loading, status, error, isError, message } = usePostData();
 
   return {
-    fetchListNowPlaying: ({ header, option, queryParams }: IPostData) =>
+    fetchListNowPlaying: ({ header, option, queryParams, body }: IPostData) =>
       postData({
         urlPath: "api/v1/flix/Movies/GetNowPlayingList",
         header: header,
@@ -44,7 +44,7 @@ export const useListNowPlaying = () => {
           ipaddress: "192:1.1.1",
           apikey: process.env.NEXT_PUBLIC_API_KEY,
           signature: process.env.NEXT_PUBLIC_SIGNATURE,
-          cinemaid: "0000000001",
+          ...body
         },
       }),
     listMovie: data,

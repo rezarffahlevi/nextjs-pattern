@@ -9,7 +9,7 @@ export const useGetBanner = () => {
     return {
         fetchBanner: ({ header, option, queryParams }: IFetchData) =>
             fetchData({
-                urlPath: "api/v1/banner/get",
+                urlPath: "api/v1/banner/get-banner-by-username/flixcinema",
                 header: header,
                 option: option,
                 queryParams: queryParams,
