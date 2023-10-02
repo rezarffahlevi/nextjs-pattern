@@ -233,7 +233,7 @@ const MovieDetailPage = ({ slug }: { slug: string }) => {
                                 checkout: {
                                   ...movie, ...selectedShowTime, ...selectedTicketType, date: date, imageurl: movie?.imageurl
                                 },
-                                setSeat: null, seatSelected: null, allowedStep: 0, step: 0, addConcession: null,
+                                setSeat: null, seatSelected: null, allowedStep: 0, step: 0, addConcession: null, ppn: 0, subtotal: 0, grandTotal: 0
                               });
                               router.push('/checkout');
                             } else {

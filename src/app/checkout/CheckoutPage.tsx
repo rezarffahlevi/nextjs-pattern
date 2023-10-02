@@ -81,10 +81,10 @@ const CheckoutPage = () => {
     }, [addConcession]);
 
     useEffect(() => {
-        if (grandTotal) {
+        if (allowedStep >= 2 && grandTotal > 0) {
             onBuyClick();
         }
-    }, [ppn, subTotal, grandTotal])
+    }, [allowedStep, grandTotal])
 
     useEffect(() => {
         if (state?.setSeat && !setSeat) {
@@ -119,15 +119,11 @@ const CheckoutPage = () => {
         }
     }, [listConcession]);
 
-
     useEffect(() => {
         if (orderMicrosite) {
-
-            window.open(orderMicrosite?.data?.xendit?.invoice_url,
-                '_blank', 'location,status,scrollbars,resizable,width=600, height=600');
+            document.getElementById('show-xendit')?.click();
         }
     }, [orderMicrosite]);
-
 
     const onChangeQtyConcession = (item: any, value: string | Number) => {
         let val = Number(value);
@@ -226,7 +222,8 @@ const CheckoutPage = () => {
                     "ppn": ppn,
                     "service_charge": serviceCharge,
                     "packaging_cost": packagingCost,
-                    "grand_total": grandTotal,
+                    // "grand_total": grandTotal,
+                    "grand_total": null,
                     "branch": "63a023a60824bd7863a8211c" ?? state?.account?._id,
                     "user_id": state?.user?._id,
                     "set_selected_seat": state?.setSeat
@@ -627,9 +624,14 @@ const CheckoutPage = () => {
                             </table>
                         </div>
                     </div>
-                </SectionBuilder >
+                    <a className={'btn btn-dim btn-checkout btn-block mt-8'} id="show-xendit" onClick={(e) => {
+                        e.preventDefault();
+                        window.open(orderMicrosite?.data?.xendit?.invoice_url,
+                            'popup', 'location,status,scrollbars,resizable,width=600, height=600');
+                    }}>LIHAT CARA PEMBAYARAN</a>
+                </SectionBuilder>
             )}
-        </main >
+        </main>
     );
 };
 

@@ -14,7 +14,7 @@ const ContactPage = () => {
         {
           state.listCinema?.map((dt: any, i: any) => {
             return (
-              <div className="py-8">
+              <div className="py-8" key={'cu-' + dt?._id}>
                 <h3 className="font-bold">{dt?.name}</h3>
 
                 <p>{dt?.admin?.suburb_name}</p>
