@@ -74,9 +74,11 @@ const BannerSection = () => {
         {
           banner?.results?.map((dt: any) => {
             return (
-              <SwiperSlide style={{
-                height: isMobile ? '24rem' : '60rem'
-              }}>
+              <SwiperSlide
+                key={'banner' + dt?._id}
+                style={{
+                  height: isMobile ? '24rem' : '60rem'
+                }}>
                 <Image
                   src={`data:image/png;base64,${dt?.image}`}
                   alt="banner 1"
