@@ -4,7 +4,7 @@ import { useAppContext } from "@/app/provider";
 import Image from "@/components/Loader";
 import { addToCart } from "@/components/NavBar/NavBar";
 import { ErrorBuilder, SectionBuilder } from "@/components/Container/SectionBuilder";
-import { useMovieDetail, useShowTime, useTicketType } from "@/services/useMovieService";
+import { useGetShowTime, useMovieDetail, useShowTime, useTicketType } from "@/services/useMovieService";
 import { textToSlug } from "@/utils/utils";
 import {
   Box,
@@ -33,7 +33,7 @@ const MovieDetailPage = ({ slug }: { slug: string }) => {
   const { state, dispatch } = useAppContext();
   const { fetchMovieDetail, movie, setMovie, movieLoading, movieIsError, movieError } =
     useMovieDetail();
-  const { fetchShowTime, showTime, showTimeLoading, showTimeError, showTimeIsError } = useShowTime();
+  const { fetchShowTime, showTime, showTimeLoading, showTimeError, showTimeIsError } = useGetShowTime();
   const { fetchTicketType, ticketType, ticketTypeLoading, ticketTypeError, ticketTypeIsError } = useTicketType();
 
   const [date, setDate] = useState<any>(moment().format('YYYY/MM/DD'));

@@ -95,7 +95,7 @@ export const useGetCurrentUser = () => {
     return {
         fetchCurrentUser: ({ header, option, queryParams }: IFetchData) =>
             fetchData({
-                urlPath: "api/v1/customer/get-by-authid/",
+                urlPath: "api/v1/customer/get/" + queryParams?.id,
                 header: header,
                 option: option,
                 queryParams: queryParams,

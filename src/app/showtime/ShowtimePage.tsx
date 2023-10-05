@@ -6,6 +6,7 @@ import { initialState, useAppContext } from "../provider";
 import { TicketTypeSection } from "./TicketTypeSection";
 import { useShowTime } from "@/services/useMovieService";
 import { useEffect } from "react";
+import moment from "moment";
 
 export const ShowtimePage = () => {
     const router = useRouter();
@@ -18,7 +19,7 @@ export const ShowtimePage = () => {
             init = false;
             fetchShowTime({
                 body: {
-                    "showdate": "2023/10/05",
+                    "showdate": moment().format('YYYY/MM/DD'),
                 }
             })
         }

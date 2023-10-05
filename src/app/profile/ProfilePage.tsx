@@ -2,11 +2,31 @@
 
 import { useRouter } from "next/navigation";
 import { initialState, useAppContext } from "../provider";
+import { useEffect, useState } from "react";
+import { useGetCurrentUser } from "@/services/useUserService";
+import { useGetOrderHistory } from "@/services/useOrderService";
 
 const ProfilePage = () => {
     const router = useRouter();
     const { state, dispatch } = useAppContext();
+    const [tab, setTab] = useState('dashboard');
 
+    const { fetchCurrentUser, currentUser, currentUserLoading, currentUserError, currentUserIsError } = useGetCurrentUser();
+    const { fetchOrderHistory, orderHistory, orderHistoryLoading, orderHistoryError, orderHistoryIsError } = useGetOrderHistory();
+
+    let init = true;
+
+    useEffect(() => {
+        if (init && state?.user) {
+            init = false;
+            fetchCurrentUser({ queryParams: { id: state?.user?._id } });
+            fetchOrderHistory({
+                queryParams: {
+                    id: state?.user?._id,
+                }
+            });
+        }
+    }, [state?.user]);
     const onLogout = () => {
         dispatch({ token: null, user: null });
         localStorage.removeItem('token');
@@ -30,21 +50,21 @@ const ProfilePage = () => {
                 <div className="container">
                     <div className="tab tab-vertical gutter-lg">
                         <ul className="nav nav-tabs mb-8 col-lg-3 col-md-4">
-                            <li className="nav-item">
-                                <a className="nav-link active" href="#dashboard">Dashboard</a>
+                            <li className="nav-item" onClick={() => setTab('dashboard')}>
+                                <a className={"nav-link" + (tab == 'dashboard' ? ' active' : '')}>Dashboard</a>
                             </li>
-                            <li className="nav-item">
-                                <a className="nav-link" href="#orders">Orders</a>
+                            <li className="nav-item" onClick={() => setTab('orders')}>
+                                <a className={"nav-link" + (tab == 'orders' ? ' active' : '')}>Orders</a>
                             </li>
-                            <li className="nav-item">
-                                <a className="nav-link" href="#account">Account details</a>
+                            <li className="nav-item" onClick={() => setTab('account')}>
+                                <a className={"nav-link" + (tab == 'account' ? ' active' : '')}>Account details</a>
                             </li>
-                            <li className="nav-item">
-                                <a className="nav-link no-tab-item" onClick={onLogout} >Logout</a>
+                            <li className="nav-item" onClick={onLogout}>
+                                <a className="nav-link no-tab-item">Logout</a>
                             </li>
                         </ul>
                         <div className="tab-content col-lg-9 col-md-8">
-                            <div className="tab-pane active" id="dashboard">
+                            <div className={`tab-pane ${tab == 'dashboard' ? ' active' : ''}`} id="dashboard">
                                 <p className="mb-0">
                                     Hello <span className="font-weight-bold text-secondary">{state?.user?.name}</span>
                                 </p>
@@ -54,7 +74,7 @@ const ProfilePage = () => {
                                         password and account details</a>.
                                 </p>
                                 <div className="row cols-lg-3 cols-xs-2 cols-1 nav">
-                                    <div className="ib-wrapper mb-4">
+                                    <div className="ib-wrapper mb-4" onClick={() => setTab('orders')}>
                                         <div className="icon-box text-center ib-border"><a href="#orders">
                                             <span className="icon-box-icon">
                                                 <i className="p-icon-orders"></i>
@@ -65,7 +85,7 @@ const ProfilePage = () => {
                                         </a>
                                         </div>
                                     </div>
-                                    <div className="ib-wrapper mb-4">
+                                    <div className="ib-wrapper mb-4" onClick={() => setTab('account')}>
                                         <div className="icon-box text-center ib-border"><a href="#account">
                                             <span className="icon-box-icon">
                                                 <i className="p-icon-user-solid"></i>
@@ -76,9 +96,9 @@ const ProfilePage = () => {
                                         </a>
                                         </div>
                                     </div>
-                                    <div className="ib-wrapper mb-4">
+                                    <div className="ib-wrapper mb-4" onClick={onLogout} >
                                         <div className="icon-box text-center ib-border">
-                                            <a onClick={onLogout} className="no-tab-item">
+                                            <a className="no-tab-item">
                                                 <span className="icon-box-icon">
                                                     <i className="p-icon-logout"></i>
                                                 </span>
@@ -90,7 +110,7 @@ const ProfilePage = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="tab-pane" id="orders">
+                            <div className={`tab-pane ${tab == 'orders' ? ' active' : ''}`} id="orders">
                                 <table className="order-table">
                                     <thead>
                                         <tr>
@@ -107,7 +127,7 @@ const ProfilePage = () => {
                                             <td className="order-date"><span>September 23, 2021</span></td>
                                             <td className="order-status"><span>On hold</span></td>
                                             <td className="order-total"><span>$147.00 for 4 items</span></td>
-                                            <td className="order-action"><a href="#orders-view" className="btn btn-secondary btn-outline btn-block btn-rounded btn-sm">View</a>
+                                            <td className="order-action"><a onClick={() => setTab('orders-view')} className="btn btn-secondary btn-outline btn-block btn-rounded btn-sm">View</a>
                                             </td>
                                         </tr>
                                         <tr>
@@ -115,7 +135,7 @@ const ProfilePage = () => {
                                             <td className="order-date"><span>February 21, 2021</span></td>
                                             <td className="order-status"><span>On hold</span></td>
                                             <td className="order-total"><span>$290.00 for 2 items</span></td>
-                                            <td className="order-action"><a href="#orders-view" className="btn btn-secondary btn-outline btn-block btn-rounded btn-sm">View</a>
+                                            <td className="order-action"><a onClick={() => setTab('orders-view')} className="btn btn-secondary btn-outline btn-block btn-rounded btn-sm">View</a>
                                             </td>
                                         </tr>
                                         <tr>
@@ -123,7 +143,7 @@ const ProfilePage = () => {
                                             <td className="order-date"><span>January 4, 2021</span></td>
                                             <td className="order-status"><span>On hold</span></td>
                                             <td className="order-total"><span>$480.00 for 8 items</span></td>
-                                            <td className="order-action"><a href="#orders-view" className="btn btn-secondary btn-outline btn-block btn-rounded btn-sm">View</a>
+                                            <td className="order-action"><a onClick={() => setTab('orders-view')} className="btn btn-secondary btn-outline btn-block btn-rounded btn-sm">View</a>
                                             </td>
                                         </tr>
                                         <tr>
@@ -131,7 +151,7 @@ const ProfilePage = () => {
                                             <td className="order-date"><span>January 19, 2021</span></td>
                                             <td className="order-status"><span>On hold</span></td>
                                             <td className="order-total"><span>$680.00 for 5 items</span></td>
-                                            <td className="order-action"><a href="#orders-view" className="btn btn-secondary btn-outline btn-block btn-rounded btn-sm">View</a>
+                                            <td className="order-action"><a onClick={() => setTab('orders-view')} className="btn btn-secondary btn-outline btn-block btn-rounded btn-sm">View</a>
                                             </td>
                                         </tr>
                                         <tr>
@@ -139,7 +159,7 @@ const ProfilePage = () => {
                                             <td className="order-date"><span>Jun 6, 2021</span></td>
                                             <td className="order-status"><span>On hold</span></td>
                                             <td className="order-total"><span>$564.00 for 3 items</span></td>
-                                            <td className="order-action"><a href="#orders-view" className="btn btn-secondary btn-outline btn-block btn-rounded btn-sm">View</a>
+                                            <td className="order-action"><a onClick={() => setTab('orders-view')} className="btn btn-secondary btn-outline btn-block btn-rounded btn-sm">View</a>
                                             </td>
                                         </tr>
                                         <tr>
@@ -147,13 +167,13 @@ const ProfilePage = () => {
                                             <td className="order-date"><span>Jun 19, 2021</span></td>
                                             <td className="order-status"><span>On hold</span></td>
                                             <td className="order-total"><span>$123.00 for 8 items</span></td>
-                                            <td className="order-action"><a href="#orders-view" className="btn btn-secondary btn-outline btn-block btn-rounded btn-sm">View</a>
+                                            <td className="order-action"><a onClick={() => setTab('orders-view')} className="btn btn-secondary btn-outline btn-block btn-rounded btn-sm">View</a>
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
-                            <div className="tab-pane order" id="orders-view">
+                            <div className={`tab-pane order ${tab == 'orders-view' ? ' active' : ''}`} id="orders-view">
                                 <h2 className="title text-left pb-1">Order Details</h2>
                                 <div className="order-details">
                                     <table className="order-details-table">
@@ -230,40 +250,7 @@ const ProfilePage = () => {
                                 <hr className="mt-0 mb-6" />
                                 <a href="#orders" className="btn btn-dark btn-sm back-order"><i className="p-icon-arrow-long-left ml-0 mr-1"></i>Back to list</a>
                             </div>
-                            <div className="tab-pane" id="downloads">
-                                <p className="mb-4 text-body">No downloads available yet.</p>
-                                <a href="shop.html" className="btn btn-dark">Go to Shop<i className="p-icon-arrow-long-right"></i></a>
-                            </div>
-                            <div className="tab-pane" id="address">
-                                <p>The following addresses will be used on the checkout page by default.
-                                </p>
-                                <div className="row">
-                                    <div className="col-sm-6 mb-4">
-                                        <div className="card card-address">
-                                            <div className="card-body">
-                                                <h5 className="card-title lh-2 mb-2">Billing Address</h5>
-                                                <p>John Doe<br />
-                                                    Panda Company<br />
-                                                    Steven street<br />
-                                                    El Carjon, CA 92020
-                                                </p>
-                                                <a href="#" className="btn btn-link btn-primary btn-underline">Edit your
-                                                    billing address<i className="p-icon-arrow-long-right"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-sm-6 mb-4">
-                                        <div className="card card-address">
-                                            <div className="card-body">
-                                                <h5 className="card-title lh-2 mb-2">Shipping Address</h5>
-                                                <p>You have not set up this type of address yet.</p>
-                                                <a href="#" className="btn btn-link btn-primary btn-underline">Add <i className="p-icon-arrow-long-right"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="tab-pane" id="account">
+                            <div className={`tab-pane order ${tab == 'account' ? ' active' : ''}`} id="account">
                                 <form action="#">
                                     <div className="row">
                                         <div className="col-sm-6 mb-4">

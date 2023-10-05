@@ -84,3 +84,32 @@ export const useOrderMicrosite = () => {
         orderMicrositeIsError: isError || data?.status == '1',
     };
 };
+
+
+export const useGetOrderHistory = () => {
+    const { fetchData, data, message, loading, status, error, isError } = useGetData();
+
+    return {
+        fetchOrderHistory: ({ header, option, queryParams, body }: IPostData) =>
+            fetchData({
+                urlPath: "api/v1/customer/order-history/" + queryParams?.id,
+                header: header,
+                option: option,
+                queryParams: {
+                    // order: '_id',
+                    sort: -1,
+                    limit: 20,
+                    page: 1,
+                    field: 'name',
+                    value: null,
+                    ...queryParams
+                },
+            }),
+        orderHistory: data,
+        orderHistoryMessage: message,
+        orderHistoryLoading: loading,
+        orderHistoryStatus: status,
+        orderHistoryError: error || data?.message,
+        orderHistoryIsError: isError || data?.status == '1',
+    };
+};
