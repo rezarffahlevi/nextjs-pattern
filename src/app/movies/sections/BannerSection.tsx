@@ -9,8 +9,11 @@ import { Container, Skeleton } from "@chakra-ui/react";
 import { SectionBuilder } from "@/components/Container/SectionBuilder";
 import Image from "@/components/Loader";
 import { useGetBanner } from "@/services/useBannerService";
+import useMobileDeviceDetection from "@/hooks/useMobileDetection";
 
 const BannerSection = () => {
+  const { height, width } = useWindowSize();
+  const isMobile = useMobileDeviceDetection();
   const [isLoading, setIsLoading] = useState(true);
   const { fetchBanner, banner, bannerLoading, bannerIsError, bannerMessage } = useGetBanner();
   let init = true;
@@ -68,31 +71,28 @@ const BannerSection = () => {
         slideClass="swiper-slide"
         slideActiveClass="swiper-slide-active"
       >
-        <SwiperSlide>
-          <Image
-            src={
-              "https://asset.tix.id/microsite_v2/1f385f1d-ce8e-4870-810f-9560e2b95894.jpeg"
-              // "https://fcprod.azurewebsites.net/uploads/Banner/2305/19091738.jpg"
-            }
-            alt="banner 1"
-            width={0}
-            height={0}
-            sizes="100vw"
-            style={{ width: "100%", height: "auto" }}
-          />
-        </SwiperSlide>
-        <SwiperSlide>
-          <Image
-            src={
-              "https://asset.tix.id/microsite_v2/a7a26122-475a-4e9d-b575-ff4459992e71.jpeg"
-            }
-            alt="banner 2"
-            width={0}
-            height={0}
-            sizes="100vw"
-            style={{ width: "100%", height: "auto" }}
-          />
-        </SwiperSlide>
+        {
+          banner?.results?.map((dt: any) => {
+            return (
+              <SwiperSlide style={{
+                height: isMobile ? '24rem' : '60rem'
+              }}>
+                <Image
+                  src={`data:image/png;base64,${dt?.image}`}
+                  alt="banner 1"
+                  width={0}
+                  height={0}
+                  sizes="100vw"
+                  style={{
+                    width: "100%",
+                    height: isMobile ? '24rem' : '60rem',
+                    objectFit: "contain"
+                  }}
+                />
+              </SwiperSlide>
+            )
+          })
+        }
       </Swiper>
 
       {/* <section className="intro-section">

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-// import ua from 'ua-parser-js'
+import ua from 'ua-parser-js'
+
 const useMobileDeviceDetection: () => boolean = () => {
   const [isMobile, setIsMobile] = useState<boolean>(false)
   useEffect(() => {
@@ -9,16 +10,16 @@ const useMobileDeviceDetection: () => boolean = () => {
   }, [])
 
   const deviceTypeHandler: () => void = () => {
-    // switch (ua.UAParser().device.type) {
-    //   case ua.DEVICE.MOBILE:
-    //     setIsMobile(true)
-    //     break
-    //   case ua.DEVICE.TABLET:
-    //     setIsMobile(true)
-    //     break
-    //   default:
+    switch (ua.UAParser().device.type) {
+      case ua.DEVICE.MOBILE:
+        setIsMobile(true)
+        break
+      case ua.DEVICE.TABLET:
+        setIsMobile(true)
+        break
+      default:
         setIsMobile(false)
-    // }
+    }
   }
   return isMobile
 }
