@@ -30,10 +30,10 @@ const MovieListSection = () => {
   let init = true;
 
   useEffect(() => {
-    if (init && state.cinema?.id) {
+    if (init && state.cinema?.store_code) {
       fetchListNowPlaying({
         body: {
-          cinemaid: state.cinema?.id,
+          cinemaid: state.cinema?.store_code,
         }
       });
       init = false;

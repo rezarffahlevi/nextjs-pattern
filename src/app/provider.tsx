@@ -51,13 +51,13 @@ export function Providers({ children }: { children: React.ReactNode }) {
       if (localData) {
         localData = JSON.parse(localData);
         if (localData?.length < 1) {
-          fetchListCinema({});
+          // fetchListCinema({});
           fetchCinema({});
         }
         dispatch({ ...localData, init: false });
       }
       else {
-        fetchListCinema({});
+        // fetchListCinema({});
         fetchCinema({});
       }
     }
@@ -81,8 +81,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
 
   useEffect(() => {
-    if (cinema && listCinema?.cinemalist) {
-      dispatch({ listCinema: cinema?.data_branch, cinema: { ...cinema?.data_branch[0], ...listCinema?.cinemalist[0] }, account: cinema?.data_account });
+    // if (cinema && listCinema?.cinemalist) {
+    if (cinema) {
+      // dispatch({ listCinema: cinema?.data_branch, cinema: { ...cinema?.data_branch[0], ...listCinema?.cinemalist[0] }, account: cinema?.data_account });
+      dispatch({ listCinema: cinema?.data_branch, cinema: { ...cinema?.data_branch[0] }, account: cinema?.data_account });
     }
 
   }, [cinema, listCinema])

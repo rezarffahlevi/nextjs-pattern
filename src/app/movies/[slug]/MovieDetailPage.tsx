@@ -58,7 +58,7 @@ const MovieDetailPage = ({ slug }: { slug: string }) => {
       fetchShowTime({
         body: {
           "scheduledFilmId": slug,
-          "cinemaid": state.cinema?.id,
+          "cinemaid": state.cinema?.store_code,
           "showdate": date,
         }
       });
@@ -70,7 +70,7 @@ const MovieDetailPage = ({ slug }: { slug: string }) => {
     if (selectedShowTime) {
       fetchTicketType({
         body: {
-          "cinemaid": state.cinema?.id,
+          "cinemaid": state.cinema?.store_code,
           "sessionid": selectedShowTime?.sessionid,
         }
       });

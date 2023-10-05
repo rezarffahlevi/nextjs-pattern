@@ -44,7 +44,7 @@ const CheckoutPage = () => {
             init = false;
             fetchSeatLayout({
                 body: {
-                    "cinemaid": state.cinema?.id,
+                    "cinemaid": state.cinema?.store_code,
                     "sessionid": state.checkout?.Session_strID,
                     "areacategorycode": state.checkout?.AreaCat_strCode,
                     "tickettypecode": state.checkout?.Price_strTicket_Type_Code,
@@ -153,7 +153,7 @@ const CheckoutPage = () => {
                 fetchSetSelectedSeat({
                     body: {
                         "sessionid": state.checkout?.sessionid,
-                        "cinemaid": state.cinema?.id,
+                        "cinemaid": state.cinema?.store_code,
                         "orderid": seatLayout?.orderid,
                         "tickettypename": state.checkout?.Price_strTicket_Type_Description,
                         "SelectedSeats": selected.map((dt: any) => {
@@ -173,7 +173,7 @@ const CheckoutPage = () => {
                 postAddConcessionItems({
                     body: {
                         "sessionid": state.checkout?.sessionid,
-                        "cinemaid": state.cinema?.id,
+                        "cinemaid": state.cinema?.store_code,
                         "orderid": seatLayout?.orderid,
                         "tickettypename": state.checkout?.Price_strTicket_Type_Description,
                         "deliverytype": "Deliver",
@@ -200,7 +200,7 @@ const CheckoutPage = () => {
             postOrderMicrosite({
                 body: {
                     "sessionid": state.checkout?.sessionid,
-                    "cinemaid": state.cinema?.id,
+                    "cinemaid": state.cinema?.store_code,
                     "order_id": seatLayout?.orderid,
                     "tickettypename": state.checkout?.Price_strTicket_Type_Description,
                     "deliverytype": "Deliver",

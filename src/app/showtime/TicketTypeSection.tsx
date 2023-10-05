@@ -17,7 +17,7 @@ export const TicketTypeSection = ({ data, movie, selectedShowTime, setSelectedSh
     useEffect(() => {
         fetchTicketType({
             body: {
-                "cinemaid": state.cinema?.id,
+                "cinemaid": state.cinema?.store_code,
                 "sessionid": data?.sessionid,
             }
         });
