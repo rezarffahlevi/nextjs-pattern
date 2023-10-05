@@ -24,7 +24,8 @@ export const initialState = {
   addCartPopup: null,
   checkout: null,
   user: null,
-  token: null
+  token: null,
+  search: '',
 };
 const AppContext = createContext<any>(null);
 const reducer = (current: any, update: any) => {

@@ -95,7 +95,7 @@ export const useMovieDetail = () => {
   };
 };
 
-export const useShowTime = () => {
+export const useGetShowTime = () => {
   const { postData, data, message, loading, status, error, isError } = usePostData();
 
   return {
@@ -122,6 +122,33 @@ export const useShowTime = () => {
   };
 };
 
+
+export const useShowTime = () => {
+  const { postData, data, message, loading, status, error, isError } = usePostData();
+
+  return {
+    fetchShowTime: ({ header, option, queryParams, body }: IPostData) =>
+      postData({
+        urlPath: "api/v1/flix/Movies/ShowTime",
+        header: header,
+        option: option,
+        queryParams: queryParams,
+        body: {
+          actionby: process.env.NEXT_PUBLIC_ACTION_BY,
+          ipaddress: "192:1.1.1",
+          apikey: process.env.NEXT_PUBLIC_API_KEY,
+          signature: process.env.NEXT_PUBLIC_SIGNATURE,
+          cinemaid: "",
+          ...body,
+        },
+      }),
+    showTime: data,
+    showTimeLoading: loading,
+    showTimeStatus: status,
+    showTimeError: error || data?.message,
+    showTimeIsError: isError || data?.status == '1',
+  };
+};
 
 export const useTicketType = () => {
   const { postData, data, message, loading, status, error, isError } = usePostData();

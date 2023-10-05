@@ -2,20 +2,35 @@
 
 import { useRouter } from "next/navigation";
 import { initialState, useAppContext } from "../provider";
-import showTime from './showtime.json';
+// import showTime from './showtime.json';
 import { TicketTypeSection } from "./TicketTypeSection";
+import { useShowTime } from "@/services/useMovieService";
+import { useEffect } from "react";
 
 export const ShowtimePage = () => {
     const router = useRouter();
     const { state, dispatch } = useAppContext();
+    const { fetchShowTime, showTime, showTimeLoading, showTimeError, showTimeIsError } = useShowTime();
 
-    const onLogout = () => {
-        dispatch({ token: null, user: null });
-        localStorage.removeItem('token');
-        router.push('/');
+    let init = true;
+    useEffect(() => {
+        if (init) {
+            init = false;
+            fetchShowTime({
+                body: {
+                    "showdate": "2023/10/05",
+                }
+            })
+        }
+    }, []);
+
+
+    const movieList = () => {
+        let list = (showTime?.moviecinemascreen ?? []);
+        if (state.search != '')
+            list = list.filter((ft: any) => ft?.title?.toLowerCase()?.includes(state.search));
+        return list;
     }
-
-    console.log(showTime?.moviecinemascreen);
 
     return (
         <main className="main account-page">
@@ -46,7 +61,7 @@ export const ShowtimePage = () => {
                                     </thead>
                                     <tbody>
                                         {
-                                            showTime?.moviecinemascreen?.map((dt: any, i: any) => {
+                                            movieList()?.map((dt: any, i: any) => {
                                                 return (
                                                     <tr key={'order-' + i}>
                                                         <td className="order-number"><a href="#">{dt?.title}</a></td>

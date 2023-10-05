@@ -12,9 +12,8 @@ export const TicketTypeSection = ({ data }: any) => {
     useEffect(() => {
         fetchTicketType({
             body: {
-                // "cinemaid": state.cinema?.id,
-                // "sessionid": data?.sessionid,
-                "cinemaid": "0000000001", "sessionid": "42188"
+                "cinemaid": state.cinema?.id,
+                "sessionid": data?.sessionid,
             }
         });
     }, []);

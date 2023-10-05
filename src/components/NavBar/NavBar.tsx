@@ -205,7 +205,11 @@ const NavBar = () => {
                   type="search"
                   autoComplete="off"
                   placeholder="Search in..."
-                  required
+                  value={state.search}
+                  onChange={(e) => {
+                    let val = e.target.value;
+                    dispatch({ search: val });
+                  }}
                 />
                 <button className="btn btn-search" type="submit">
                   <i className="p-icon-search-solid"></i>

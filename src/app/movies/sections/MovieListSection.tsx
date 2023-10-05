@@ -44,7 +44,12 @@ const MovieListSection = () => {
   const toggleOpenFilter = () =>
     setOpenFilter((prev) => (prev == "" ? " sidebar-active" : ""));
 
-  const movieList = (filter?.length > 0 ? listMovie?.filter((ft: any) => filter.some((sm: any) => sm == ft?.genres)) : (listMovie ?? []));
+  const movieList = () => {
+    let list = (filter?.length > 0 ? listMovie?.filter((ft: any) => filter.some((sm: any) => sm == ft?.genres)) : (listMovie ?? []));
+    if (state.search != '')
+      list = list.filter((ft: any) => ft?.title?.toLowerCase()?.includes(state.search));
+    return list;
+  }
 
   return (
     <div className={"row main-content-wrap" + openFilter}>
@@ -89,9 +94,9 @@ const MovieListSection = () => {
               <div className="toolbox-item toolbox-show select-box">
                 <label>Show :</label>
                 <select name="count">
-                  <option defaultValue="12">12</option>
-                  <option defaultValue="24">24</option>
-                  <option defaultValue="36">36</option>
+                  <option defaultValue="50">50</option>
+                  <option defaultValue="100">100</option>
+                  <option defaultValue="200">200</option>
                 </select>
               </div>
               {/* <div className="toolbox-item toolbox-layout">
@@ -102,8 +107,8 @@ const MovieListSection = () => {
           </nav>
 
           <div className="row product-wrapper cols-md-3 cols-2">
-            {movieList.map((dt: any, i: any) => (
-              <Link href={`movies/${dt?.scheduledfilmid}`} className="product-wrap" key={"movie-" + i}>
+            {movieList().map((dt: any, i: any) => (
+              <Link href={`movies/${dt?.scheduledfilmid}`} className="product-wrap" key={`movie-${dt?.scheduledfilmid}-${i}`}>
                 <div className="product shadow-media text-center">
                   <figure className="product-media">
                     <div>
