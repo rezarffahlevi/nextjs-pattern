@@ -5,7 +5,7 @@ import { initialState, useAppContext } from "../provider";
 // import showTime from './showtime.json';
 import { TicketTypeSection } from "./TicketTypeSection";
 import { useShowTime } from "@/services/useMovieService";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import moment from "moment";
 
 export const ShowtimePage = () => {
@@ -13,7 +13,10 @@ export const ShowtimePage = () => {
     const { state, dispatch } = useAppContext();
     const { fetchShowTime, showTime, showTimeLoading, showTimeError, showTimeIsError } = useShowTime();
 
+    const [selectedShowTime, setSelectedShowTime] = useState<any>(null);
+    const [selectedTicketType, setSelectedTicketType] = useState<any>(null);
     let init = true;
+
     useEffect(() => {
         if (init) {
             init = false;
@@ -81,11 +84,18 @@ export const ShowtimePage = () => {
                                                                             key={'time-' + i + time?.sessionid}
                                                                         >
                                                                             <div className="w-[200px]">
-                                                                                <div className={"tag cursor-pointer my-4 mb-0 h-14" + (dt?.sessionid == 'selectedShowTime?.sessionid' ? ' btn-dim' : '')} onClick={() => { }}>
+                                                                                <div className={"tag cursor-pointer my-4 mb-0 h-14" + (time?.sessionid == selectedShowTime?.sessionid ? ' btn-dim' : '')} onClick={() => { setSelectedShowTime(time); setSelectedTicketType(null) }}>
                                                                                     {time?.showtime}
                                                                                 </div>
                                                                             </div>
-                                                                            <TicketTypeSection data={time} />
+                                                                            <TicketTypeSection
+                                                                                data={time}
+                                                                                movie={dt}
+                                                                                setSelectedTicketType={setSelectedTicketType}
+                                                                                selectedTicketType={selectedTicketType}
+                                                                                selectedShowTime={selectedShowTime}
+                                                                                setSelectedShowTime={setSelectedShowTime}
+                                                                            />
                                                                         </div>
                                                                     )
                                                                 })

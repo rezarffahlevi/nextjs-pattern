@@ -11,9 +11,11 @@ import moment from "moment";
 import { Box, Skeleton, useToast } from "@chakra-ui/react";
 import { MdDelete } from "react-icons/md";
 import { useOrderMicrosite } from "@/services/useOrderService";
+import { useRouter } from "next/navigation";
 
 const CheckoutPage = () => {
     const { state, dispatch } = useAppContext();
+    const router = useRouter();
 
     const [subTotal, setSubTotal] = useState(0);
     const [ppn, setPpn] = useState(0);
@@ -626,8 +628,17 @@ const CheckoutPage = () => {
                     </div>
                     <a className={'btn btn-dim btn-checkout btn-block mt-8'} id="show-xendit" onClick={(e) => {
                         e.preventDefault();
-                        window.open(orderMicrosite?.data?.xendit?.invoice_url,
-                            'popup', 'location,status,scrollbars,resizable,width=600, height=600');
+                        let popup = window.open(orderMicrosite?.data?.xendit?.invoice_url,
+                            'popup', 'toolbar=0,location,status,scrollbars,resizable,width=600, height=600');
+                        var timer = setInterval(checkChild, 500);
+
+                        function checkChild() {
+                            if (popup?.closed) {
+                                clearInterval(timer);
+                                router.push('/profile?page=orders')
+                            }
+                        }
+
                     }}>LIHAT CARA PEMBAYARAN</a>
                 </SectionBuilder>
             )}
