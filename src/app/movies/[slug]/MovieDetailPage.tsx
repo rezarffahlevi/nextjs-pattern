@@ -394,16 +394,16 @@ const MovieDetailLoading = () => {
   return (
     <Box className="w-full items-center justify-between">
       <div className="md:px-4 md:py-4 md:flex">
-        <Skeleton className="m-2 sm:basis-6/12 md:basis-7/12 h-72" />
+        <Skeleton className="m-2 sm:basis-6/12 md:basis-7/12 h-92" />
         <div className="m-2 basis-12/12 md:basis-5/12">
-          <Skeleton className="h-8" />
-          <Skeleton className="my-2 h-1" />
-          <Skeleton className="w-6/12 h-8" />
+          <Skeleton className="h-18" />
+          <Skeleton className="my-2 h-11" />
+          <Skeleton className="w-6/12 h-18" />
           <div className="my-2 flex">
-            <Skeleton className="w-4/12 h-8 mr-2" />
-            <Skeleton className="w-8/12 h-8" />
+            <Skeleton className="w-4/12 h-18 mr-2" />
+            <Skeleton className="w-8/12 h-18" />
           </div>
-          <SkeletonText mt="4" noOfLines={7} spacing="4" skeletonHeight="2" />
+          <SkeletonText mt="4" noOfLines={7} spacing="4" skeletonHeight="4" />
         </div>
       </div>
     </Box>
