@@ -143,7 +143,7 @@ const ModalCart = ({ onClose, isOpen, data, selectedShowTime, setSelectedShowTim
                 </ModalBody>
                 <ModalFooter>
                     <Button
-                        className="bg-orange-400 hover:bg-neutral-800 chakra-button rounded-none text-white font-body ml-2 w-full"
+                        className="bg-orange-400 hover:bg-neutral-800 chakra-button rounded-none text-white font-body w-full"
                         onClick={() => {
 
                             if (selectedShowTime && selectedTicketType) {
