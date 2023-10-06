@@ -97,7 +97,7 @@ export const useGetOrderHistory = () => {
                 option: option,
                 queryParams: {
                     // order: '_id',
-                    sort: -1,
+                    sort: 1,
                     limit: 20,
                     page: 1,
                     field: 'name',

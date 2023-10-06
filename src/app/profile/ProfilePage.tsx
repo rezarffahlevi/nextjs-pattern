@@ -40,6 +40,7 @@ const ProfilePage = () => {
         router.push('/');
     }
 
+    const orderHistories = Object.assign([], orderHistory?.data);
     return (
         <main className="main account-page">
             <div className="page-header" style={{ backgroundColor: '#f9f8f4' }}>
@@ -129,8 +130,7 @@ const ProfilePage = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {orderHistory?.data?.map((dt: any) => {
-
+                                        {orderHistories?.reverse().map((dt: any) => {
                                             return (
                                                 <tr key={'order-list-' + dt?._id}>
                                                     <td className="order-number"><a href="#">{dt?.order_id}</a></td>
@@ -196,6 +196,24 @@ const ProfilePage = () => {
                                                         e.preventDefault();
                                                         let popup = window.open(orderDetail?.xendit?.invoice_url,
                                                             'popup', 'toolbar=0,location,status,scrollbars,resizable,width=600, height=600');
+
+                                                        if (orderDetail?.xendit?.status != 'PAID') {
+                                                            var timer = setInterval(checkChild, 500);
+                                                        }
+                                                        function checkChild() {
+                                                            if (orderDetail?.xendit?.status != 'PAID') {
+                                                                if (popup?.closed) {
+                                                                    clearInterval(timer);
+                                                                    router.push('/profile');
+                                                                    setTab('orders')
+                                                                    fetchOrderHistory({
+                                                                        queryParams: {
+                                                                            id: state?.user?._id,
+                                                                        }
+                                                                    });
+                                                                }
+                                                            }
+                                                        }
                                                     }}>
                                                         {orderDetail?.xendit?.status} - LIHAT INVOICE</a>
                                                 </td>

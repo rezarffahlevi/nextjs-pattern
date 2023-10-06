@@ -71,7 +71,19 @@ const CheckoutPage = () => {
             setListConcession(setSeat?.ConcessionItems ?? []);
             dispatch({ setSeat: setSeat, seatSelected: selected, allowedStep: allowedStep, step: step });
         }
-    }, [setSeat]);
+
+        if (setSeatIsError) {
+            setAllowedStep(0);
+            setStep(0);
+            toast({
+                title: setSeatMessage,
+                status: 'error',
+                isClosable: true,
+                duration: 2000
+            });
+        }
+
+    }, [setSeat, setSeatIsError, setSeatMessage]);
 
     useEffect(() => {
         if (addConcession) {
