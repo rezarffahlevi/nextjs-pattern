@@ -64,7 +64,7 @@ export const useOrderMicrosite = () => {
     return {
         postOrderMicrosite: ({ header, option, queryParams, body }: IPostData) =>
             postData({
-                urlPath: "api/v1/order/create-flix-order/fishvillagestore",
+                urlPath: "api/v1/order/create-flix-order/flixcinema",
                 header: header,
                 option: option,
                 queryParams: queryParams,

@@ -41,14 +41,6 @@ export const ShowtimePage = () => {
             <div className="page-header" style={{ backgroundColor: '#f9f8f4' }}>
                 <h1 className="page-title text-4xl">Show Time</h1>
             </div>
-            <nav className="breadcrumb-nav has-border">
-                <div className="container">
-                    <ul className="breadcrumb">
-                        <li><a href="#">Home</a></li>
-                        <li>My account</li>
-                    </ul>
-                </div>
-            </nav>
             <div className="page-content mt-4 mb-10 pb-6">
                 <div className="container">
                     <div className="tab tab-vertical gutter-lg">

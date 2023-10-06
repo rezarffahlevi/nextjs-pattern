@@ -5,11 +5,13 @@ import { initialState, useAppContext } from "../provider";
 import { useEffect, useState } from "react";
 import { useGetCurrentUser } from "@/services/useUserService";
 import { useGetOrderHistory } from "@/services/useOrderService";
+import moment from "moment";
 
 const ProfilePage = () => {
     const router = useRouter();
     const { state, dispatch } = useAppContext();
     const [tab, setTab] = useState('dashboard');
+    const [orderDetail, setOrderDetail] = useState<any>(null);
 
     const { fetchCurrentUser, currentUser, currentUserLoading, currentUserError, currentUserIsError } = useGetCurrentUser();
     const { fetchOrderHistory, orderHistory, orderHistoryLoading, orderHistoryError, orderHistoryIsError } = useGetOrderHistory();
@@ -127,54 +129,22 @@ const ProfilePage = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td className="order-number"><a href="#">#3596</a></td>
-                                            <td className="order-date"><span>September 23, 2021</span></td>
-                                            <td className="order-status"><span>On hold</span></td>
-                                            <td className="order-total"><span>$147.00 for 4 items</span></td>
-                                            <td className="order-action"><a onClick={() => setTab('orders-view')} className="btn btn-secondary btn-outline btn-block btn-rounded btn-sm">View</a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="order-number"><a href="#">#3593</a></td>
-                                            <td className="order-date"><span>February 21, 2021</span></td>
-                                            <td className="order-status"><span>On hold</span></td>
-                                            <td className="order-total"><span>$290.00 for 2 items</span></td>
-                                            <td className="order-action"><a onClick={() => setTab('orders-view')} className="btn btn-secondary btn-outline btn-block btn-rounded btn-sm">View</a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="order-number"><a href="#">#2547</a></td>
-                                            <td className="order-date"><span>January 4, 2021</span></td>
-                                            <td className="order-status"><span>On hold</span></td>
-                                            <td className="order-total"><span>$480.00 for 8 items</span></td>
-                                            <td className="order-action"><a onClick={() => setTab('orders-view')} className="btn btn-secondary btn-outline btn-block btn-rounded btn-sm">View</a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="order-number"><a href="#">#2549</a></td>
-                                            <td className="order-date"><span>January 19, 2021</span></td>
-                                            <td className="order-status"><span>On hold</span></td>
-                                            <td className="order-total"><span>$680.00 for 5 items</span></td>
-                                            <td className="order-action"><a onClick={() => setTab('orders-view')} className="btn btn-secondary btn-outline btn-block btn-rounded btn-sm">View</a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="order-number"><a href="#">#4523</a></td>
-                                            <td className="order-date"><span>Jun 6, 2021</span></td>
-                                            <td className="order-status"><span>On hold</span></td>
-                                            <td className="order-total"><span>$564.00 for 3 items</span></td>
-                                            <td className="order-action"><a onClick={() => setTab('orders-view')} className="btn btn-secondary btn-outline btn-block btn-rounded btn-sm">View</a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="order-number"><a href="#">#4526</a></td>
-                                            <td className="order-date"><span>Jun 19, 2021</span></td>
-                                            <td className="order-status"><span>On hold</span></td>
-                                            <td className="order-total"><span>$123.00 for 8 items</span></td>
-                                            <td className="order-action"><a onClick={() => setTab('orders-view')} className="btn btn-secondary btn-outline btn-block btn-rounded btn-sm">View</a>
-                                            </td>
-                                        </tr>
+                                        {orderHistory?.data?.map((dt: any) => {
+
+                                            return (
+                                                <tr key={'order-list-' + dt?._id}>
+                                                    <td className="order-number"><a href="#">{dt?.order_id}</a></td>
+                                                    <td className="order-date"><span>{moment(dt?.created_at).format('LLLL')}</span></td>
+                                                    <td className="order-status"><span>{dt?.xendit?.status}</span></td>
+                                                    <td className="order-total"><span>Rp. {(dt?.xendit?.amount).toLocaleString()}</span></td>
+                                                    <td className="order-action">
+                                                        <a onClick={() => {
+                                                            setTab('orders-view');
+                                                            setOrderDetail(dt);
+                                                        }} className="btn btn-secondary btn-outline btn-block btn-rounded btn-sm">View</a>
+                                                    </td>
+                                                </tr>)
+                                        })}
                                     </tbody>
                                 </table>
                             </div>
@@ -196,39 +166,52 @@ const ProfilePage = () => {
                                                 <td></td>
                                             </tr>
                                             <tr>
-                                                <td className="product-name">Juice <span><i className="p-icon-times"></i>
-                                                    1</span></td>
-                                                <td className="product-price">$129.99</td>
+                                                <td className="product-name">{(orderDetail?.set_selected_seat?.Order?.Sessions ?? [{}])[0]?.FilmTitle} <span><i className="p-icon-times"></i>
+                                                    {orderDetail?.set_selected_seat?.Order.TotalOrderCount}</span></td>
+                                                <td className="product-price">Rp. {(orderDetail?.set_selected_seat?.Order?.TotalValueCents / 100).toLocaleString()}</td>
                                             </tr>
-                                            <tr>
-                                                <td className="product-name">Greenhouse Cherry <span><i className="p-icon-times"></i>
-                                                    2</span></td>
-                                                <td className="product-price">$98.00</td>
-                                            </tr>
+                                            {
+                                                orderDetail?.concessions?.map((concess: any) => {
+                                                    return (
+                                                        <tr>
+                                                            <td className="product-name">{concess?.Name} <span><i className="p-icon-times"></i>
+                                                                {concess?.Quantity}</span></td>
+                                                            <td className="product-price">Rp. {((concess?.Price / 100) * concess?.Quantity)?.toLocaleString()}</td>
+                                                        </tr>
+                                                    )
+                                                })
+                                            }
                                             <tr className="summary-subtotal">
                                                 <td>
                                                     <h4 className="summary-subtitle">Subtotal:</h4>
                                                 </td>
-                                                <td className="summary-value font-weight-normal">$325.99</td>
+                                                <td className="summary-value font-weight-normal">Rp. {(orderDetail?.subtotal)?.toLocaleString()}</td>
                                             </tr>
                                             <tr className="summary-subtotal">
                                                 <td>
-                                                    <h4 className="summary-subtitle">Payment method:</h4>
+                                                    <h4 className="summary-subtitle">Payment Status:</h4>
                                                 </td>
-                                                <td className="summary-value">Cash on delivery</td>
+                                                <td className="summary-value">
+                                                    <a className={'link ml-8'} id="show-xendit" onClick={(e) => {
+                                                        e.preventDefault();
+                                                        let popup = window.open(orderDetail?.xendit?.invoice_url,
+                                                            'popup', 'toolbar=0,location,status,scrollbars,resizable,width=600, height=600');
+                                                    }}>
+                                                        {orderDetail?.xendit?.status} - LIHAT INVOICE</a>
+                                                </td>
                                             </tr>
                                             <tr className="summary-subtotal">
                                                 <td>
                                                     <h4 className="summary-subtitle">Total:</h4>
                                                 </td>
                                                 <td>
-                                                    <p className="summary-total-price">$325.99</p>
+                                                    <p className="summary-total-price">Rp. {(orderDetail?.grand_total)?.toLocaleString()}</p>
                                                 </td>
                                             </tr>
                                         </tbody>
                                     </table>
                                 </div>
-                                <div className="row mt-9">
+                                {/* <div className="row mt-9">
                                     <div className="col-sm-6">
                                         <div className="card card-address">
                                             <div className="card-body">
@@ -250,10 +233,10 @@ const ProfilePage = () => {
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> */}
 
                                 <hr className="mt-0 mb-6" />
-                                <a href="#orders" className="btn btn-dark btn-sm back-order"><i className="p-icon-arrow-long-left ml-0 mr-1"></i>Back to list</a>
+                                <a onClick={() => setTab('orders')} className="btn btn-dark btn-sm back-order"><i className="p-icon-arrow-long-left ml-0 mr-1"></i>Back to list</a>
                             </div>
                             <div className={`tab-pane order ${tab == 'account' ? ' active' : ''}`} id="account">
                                 <form action="#">

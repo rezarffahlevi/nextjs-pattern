@@ -121,11 +121,11 @@ const CheckoutPage = () => {
         }
     }, [listConcession]);
 
-    useEffect(() => {
-        if (orderMicrosite) {
-            document.getElementById('show-xendit')?.click();
-        }
-    }, [orderMicrosite]);
+    // useEffect(() => {
+    //     if (orderMicrosite) {
+    //         document.getElementById('show-xendit')?.click();
+    //     }
+    // }, [orderMicrosite]);
 
     const onChangeQtyConcession = (item: any, value: string | Number) => {
         let val = Number(value);
@@ -226,7 +226,7 @@ const CheckoutPage = () => {
                     // "packaging_cost": packagingCost,
                     // "grand_total": grandTotal,
                     // "grand_total": null,
-                    "branch": "63a023a60824bd7863a8211c" ?? state?.account?._id,
+                    "branch": state?.cinema?._id,
                     "user_id": state?.user?._id,
                     "set_selected_seat": state?.setSeat
                 }
