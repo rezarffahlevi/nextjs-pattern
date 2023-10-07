@@ -316,6 +316,7 @@ const NavBar = () => {
                 toggleOpenMenu();
                 toggleOpenLogin();
               } else {
+                toggleOpenMenu();
                 router.push('/profile');
               }
             }}>
