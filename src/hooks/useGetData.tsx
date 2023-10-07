@@ -114,7 +114,7 @@ const fetchDataHooks = async ({
     };
     const response = await instance(params);
 
-    console.log(urlPath, response);
+    // console.log(urlPath, response);
 
     if (response.status === 401) {
       // logout

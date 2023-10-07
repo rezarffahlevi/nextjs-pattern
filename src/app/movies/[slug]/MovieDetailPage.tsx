@@ -99,7 +99,7 @@ const MovieDetailPage = ({ slug }: { slug: string }) => {
 
   const videoId = movie?.trailerurl?.split('?v=')[1];
   return (
-    <main className="flex min-h-screen flex-col items-center">
+    <main className="min-h-screen flex-col items-center">
       <SectionBuilder
         loading={<MovieDetailLoading />}
         isLoading={movieLoading}

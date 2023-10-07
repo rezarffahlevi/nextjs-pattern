@@ -31,7 +31,7 @@ const AppContext = createContext<any>(null);
 const reducer = (current: any, update: any) => {
   const state = { ...current, ...update };
   localStorage.setItem("state", JSON.stringify(state));
-  console.log('dispatch', current, update, { ...current, ...update });
+  // console.log('dispatch', current, update, { ...current, ...update });
 
   return { ...current, ...update };
 };
