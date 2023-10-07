@@ -29,7 +29,7 @@ export const TicketTypeSection = ({ data, movie, selectedShowTime, setSelectedSh
             {
                 ticketType?.TicketTypes?.map((dt: any, i: any) => {
                     return (
-                        <div key={'time-' + i + dt?.sessionid + Math.random()} className={"tag cursor-pointer my-4 mb-0 h-14" + ((dt?.Price_strTicket_Type_Code == selectedTicketType?.Price_strTicket_Type_Code && selectedTicketType?.Session_strID == data?.sessionid) ? ' btn-dim' : '')} onClick={() => {
+                        <div key={'time-' + i + dt?.sessionid + Math.random()} className={"tag cursor-pointer my-4 mb-0 min-h-14" + ((dt?.Price_strTicket_Type_Code == selectedTicketType?.Price_strTicket_Type_Code && selectedTicketType?.Session_strID == data?.sessionid) ? ' btn-dim' : '')} onClick={() => {
                             setSelectedShowTime(data);
                             setSelectedTicketType(dt);
                             setShowModal(true);

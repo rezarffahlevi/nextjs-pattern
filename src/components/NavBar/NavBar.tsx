@@ -68,6 +68,7 @@ const NavBar = () => {
     action: null
   });
 
+  const router = useRouter();
 
   let init = true;
   let timer: any = null;
@@ -309,6 +310,17 @@ const NavBar = () => {
                 </li>
               );
             })}
+
+            <li onClick={() => {
+              if (state.token == null) {
+                toggleOpenMenu();
+                toggleOpenLogin();
+              } else {
+                router.push('/profile');
+              }
+            }}>
+              <Link href={'#'}>Akun</Link>
+            </li>
           </ul>
         </div>
       </div>

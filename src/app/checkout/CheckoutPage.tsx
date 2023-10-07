@@ -563,7 +563,7 @@ const CheckoutPage = () => {
                                     </tr>
                                 </tbody>
                             </table> */}
-                            <a onClick={onBuyClick} className="btn btn-dim btn-checkout btn-block">BELI</a>
+                            <a onClick={onBuyClick} href="#" className="btn btn-dim btn-checkout btn-block">BELI</a>
                         </div>
                     </div>
                 </aside>
