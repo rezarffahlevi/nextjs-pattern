@@ -31,9 +31,23 @@ const ProfilePage = () => {
             const myParam = urlParams.get('page');
             if (myParam) {
                 setTab(myParam);
+
+                dispatch({
+                    checkout: null,
+                    setSeat: null,
+                    seatSelected: null,
+                    allowedStep: 0,
+                    step: 0,
+                    addConcession: null,
+                    ppn: 0,
+                    subtotal: 0,
+                    grandTotal: 0,
+                    orderMicrosite: null
+                });
             }
         }
     }, [state?.user]);
+
     const onLogout = () => {
         dispatch({ token: null, user: null });
         localStorage.removeItem('token');

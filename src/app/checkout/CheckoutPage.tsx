@@ -33,7 +33,7 @@ const CheckoutPage = () => {
     const { postOrderMicrosite, orderMicrosite, orderMicrositeLoading, orderMicrositeMessage, orderMicrositeIsError, orderMicrositeError } = useOrderMicrosite();
 
     let init = true;
-    let serviceCharge = 8000;
+    let serviceCharge = 2500;
     let packagingCost = 5000;
     // let ppn = (subTotal / 100) * 0.11;
     // let grandTotal = (subTotal / 100) + (serviceCharge + packagingCost) + ppn;
@@ -94,11 +94,11 @@ const CheckoutPage = () => {
         }
     }, [addConcession]);
 
-    useEffect(() => {
-        if (allowedStep >= 2 && grandTotal > 0) {
-            onBuyClick();
-        }
-    }, [allowedStep, grandTotal])
+    // useEffect(() => {
+    //     if (allowedStep >= 2 && grandTotal > 0) {
+    //         onBuyClick();
+    //     }
+    // }, [allowedStep, grandTotal])
 
     useEffect(() => {
         if (state?.setSeat && !setSeat) {
@@ -133,11 +133,25 @@ const CheckoutPage = () => {
         }
     }, [listConcession]);
 
-    // useEffect(() => {
-    //     if (orderMicrosite) {
-    //         document.getElementById('show-xendit')?.click();
-    //     }
-    // }, [orderMicrosite]);
+    useEffect(() => {
+        if (orderMicrosite) {
+            dispatch({
+                grandTotal: orderMicrosite?.data?.grand_total,
+                step: step,
+                subtotal: orderMicrosite?.data?.subtotal,
+                orderMicrosite: orderMicrosite
+            });
+        }
+    }, [orderMicrosite]);
+
+    
+    useEffect(() => {
+        if (state.orderMicrosite) {
+            serviceCharge = state.orderMicrosite?.data?.service_charge;
+            setSubTotal(state.orderMicrosite?.data?.subtotal)
+            setGrandTotal(state.orderMicrosite?.data?.grand_total)
+        }
+    }, [state.orderMicrosite]);
 
     const onChangeQtyConcession = (item: any, value: string | Number) => {
         let val = Number(value);
@@ -181,24 +195,59 @@ const CheckoutPage = () => {
             setAllowedStep((prev) => prev > 1 ? prev : (prev + 1));
             setStep((prev) => (prev + 1));
         } else if (step < 2) {
-            if (!state?.addConcession)
-                postAddConcessionItems({
-                    body: {
-                        "sessionid": state.checkout?.sessionid,
-                        "cinemaid": state.cinema?.store_code,
-                        "orderid": seatLayout?.orderid,
-                        "tickettypename": state.checkout?.Price_strTicket_Type_Description,
-                        "deliverytype": "Deliver",
-                        "Concessions": listConcession?.filter((fd: any) => fd.selected == true)?.map((dt: any) => {
-                            return {
-                                "ItemId": dt?.id,
-                                "Quantity": dt?.qty ?? 1,
-                                "Name": dt?.description,
-                                "Price": dt?.priceincents
-                            }
-                        }),
-                    }
-                });
+            // if (!state?.addConcession)
+            //     postAddConcessionItems({
+            //         body: {
+            //             "sessionid": state.checkout?.sessionid,
+            //             "cinemaid": state.cinema?.store_code,
+            //             "orderid": seatLayout?.orderid,
+            //             "tickettypename": state.checkout?.Price_strTicket_Type_Description,
+            //             "deliverytype": "Deliver",
+            //             "Concessions": listConcession?.filter((fd: any) => fd.selected == true)?.map((dt: any) => {
+            //                 return {
+            //                     "ItemId": dt?.id,
+            //                     "Quantity": dt?.qty ?? 1,
+            //                     "Name": dt?.description,
+            //                     "Price": dt?.priceincents
+            //                 }
+            //             }),
+            //         }
+            //     });
+
+            postOrderMicrosite({
+                body: {
+                    "sessionid": state.checkout?.sessionid,
+                    "cinemaid": state.cinema?.store_code,
+                    "order_id": seatLayout?.orderid,
+                    "tickettypename": state.checkout?.Price_strTicket_Type_Description,
+                    "deliverytype": "Deliver",
+                    "concessions": listConcession?.filter((fd: any) => fd.selected == true)?.map((dt: any) => {
+                        return {
+                            "ItemId": dt?.id,
+                            "Quantity": dt?.qty ?? 1,
+                            "Name": dt?.description,
+                            "Price": dt?.priceincents
+                        }
+                    }),
+                    "detail": {
+                        "name": state.user?.name,
+                        "phone": state.user?.phone,
+                        "email": state.user?.email
+                    },
+                    "note": "",
+                    // "total_price": state?.setSeat?.Order?.TotalValueCents / 100,
+                    "kupon": "",
+                    // "subtotal": subTotal / 100,
+                    // "ppn": ppn,
+                    // "service_charge": serviceCharge,
+                    // "packaging_cost": packagingCost,
+                    // "grand_total": grandTotal,
+                    // "grand_total": null,
+                    "branch": state?.cinema?._id,
+                    "user_id": state?.user?._id,
+                    "set_selected_seat": state?.setSeat
+                }
+            });
             setAllowedStep((prev) => prev > 2 ? prev : (prev + 1));
 
             dispatch({
@@ -209,6 +258,7 @@ const CheckoutPage = () => {
             })
             setStep((prev) => (prev + 1));
         } else if (step < 3) {
+
             postOrderMicrosite({
                 body: {
                     "sessionid": state.checkout?.sessionid,
@@ -244,7 +294,7 @@ const CheckoutPage = () => {
                 }
             });
         }
-    }, [subTotal, step, allowedStep, selected, state, ppn, grandTotal]);
+    }, [subTotal, step, seatLayout, allowedStep, selected, state, ppn, grandTotal]);
 
     const getClassStepActive = (i: Number) => {
         return i == step ? ' active' : ''
@@ -396,7 +446,7 @@ const CheckoutPage = () => {
                 <SectionBuilder
                     loading={<CheckoutLoading />}
                     isLoading={seatLayoutLoading}
-                    isError={seatLayoutIsError}
+                    isError={seatLayoutIsError || state?.checkout == null}
                     error={<ErrorBuilder message={seatLayoutMessage} />}>
                     <>
                         <div className="shop-table cart-table">
@@ -455,9 +505,9 @@ const CheckoutPage = () => {
     return (
         <main className="container order mt-7 mb-2 pb-12">
             <div className="step-by pr-4 pl-4 mb-8">
-                <h3 className={`title title-step${getClassStepActive(0)}`}><a onClick={allowedStep >= 0 ? () => setStep(0) : handleToastStep}>1. Pilih Kursi</a></h3>
-                <h3 className={`title title-step${getClassStepActive(1)}`}><a onClick={allowedStep >= 1 ? () => setStep(1) : handleToastStep}>2. Pilih Makanan</a></h3>
-                <h3 className={`title title-step${getClassStepActive(2)}`}><a onClick={allowedStep >= 2 ? () => setStep(2) : handleToastStep}>3. Order</a></h3>
+                <h3 className={`title title-step${getClassStepActive(0)}`}><a onClick={(allowedStep >= 0 && !orderMicrositeLoading) ? () => setStep(0) : handleToastStep}>1. Pilih Kursi</a></h3>
+                <h3 className={`title title-step${getClassStepActive(1)}`}><a onClick={(allowedStep >= 1 && !orderMicrositeLoading) ? () => setStep(1) : handleToastStep}>2. Pilih Makanan</a></h3>
+                <h3 className={`title title-step${getClassStepActive(2)}`}><a onClick={(allowedStep >= 2 && !orderMicrositeLoading) ? () => setStep(2) : handleToastStep}>3. Order</a></h3>
             </div>
             {step < 2 && (<div className="row">
                 <div className="col-lg-8 col-md-12 pr-lg-6">
@@ -561,7 +611,8 @@ const CheckoutPage = () => {
                             </div>
                             <div className="overview-item">
                                 <span>Total:</span>
-                                <label>Rp. {(state?.addConcession?.TotalValueCents / 100).toLocaleString()}</label>
+                                {/* <label>Rp. {(state?.addConcession?.TotalValueCents / 100).toLocaleString()}</label> */}
+                                <label>Rp. {(grandTotal).toLocaleString()}</label>
                             </div>
                             <div className="overview-item">
                                 <span>Payment method:</span>
@@ -606,20 +657,21 @@ const CheckoutPage = () => {
                                         <td>
                                             <h4 className="summary-subtitle">Subtotal:</h4>
                                         </td>
-                                        <td className="summary-value font-weight-normal">Rp. {(state?.addConcession?.TotalValueCents / 100).toLocaleString()}</td>
+                                        {/* <td className="summary-value font-weight-normal">Rp. {(state?.addConcession?.TotalValueCents / 100).toLocaleString()}</td> */}
+                                        <td className="summary-value font-weight-normal">Rp. {(subTotal).toLocaleString()}</td>
                                     </tr>
-                                    <tr>
+                                    {/* <tr>
                                         <td className="product-name">PPN</td>
                                         <td className="product-price">Rp. {ppn?.toLocaleString()}</td>
-                                    </tr>
+                                    </tr> */}
                                     <tr>
                                         <td className="product-name">Service Charge</td>
                                         <td className="product-price">Rp. {serviceCharge?.toLocaleString()}</td>
                                     </tr>
-                                    <tr>
+                                    {/* <tr>
                                         <td className="product-name">Packaging Cost</td>
                                         <td className="product-price">Rp. {packagingCost?.toLocaleString()}</td>
-                                    </tr>
+                                    </tr> */}
                                     <tr className="summary-subtotal">
                                         <td>
                                             <h4 className="summary-subtitle">Payment method:</h4>
@@ -647,7 +699,7 @@ const CheckoutPage = () => {
                         function checkChild() {
                             if (popup?.closed) {
                                 clearInterval(timer);
-                                router.push('/profile?page=orders')
+                                router.push('/profile?page=orders');
                             }
                         }
 

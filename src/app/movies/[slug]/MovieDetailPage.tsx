@@ -231,9 +231,19 @@ const MovieDetailPage = ({ slug }: { slug: string }) => {
                             if (state.token) {
                               dispatch({
                                 checkout: {
-                                  ...movie, ...selectedShowTime, ...selectedTicketType, date: date, imageurl: movie?.imageurl
+                                  ...movie, ...selectedShowTime, ...selectedTicketType,
+                                  date: date,
+                                  imageurl: movie?.imageurl
                                 },
-                                setSeat: null, seatSelected: null, allowedStep: 0, step: 0, addConcession: null, ppn: 0, subtotal: 0, grandTotal: 0
+                                setSeat: null,
+                                seatSelected: null,
+                                allowedStep: 0,
+                                step: 0,
+                                addConcession: null,
+                                ppn: 0,
+                                subtotal: 0,
+                                grandTotal: 0,
+                                orderMicrosite: null
                               });
                               router.push('/checkout');
                             } else {
