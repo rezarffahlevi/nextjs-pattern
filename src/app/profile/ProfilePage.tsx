@@ -212,6 +212,10 @@ const ProfilePage = () => {
                                                     </td>
                                                     <td className="summary-value font-weight-normal">Rp. {(orderDetail?.subtotal)?.toLocaleString()}</td>
                                                 </tr>
+                                                <tr>
+                                                    <td className="summary-subtitle">Service Charge</td>
+                                                    <td className="summary-value font-weight-normal">Rp. {orderDetail?.service_charge?.toLocaleString()}</td>
+                                                </tr>
                                                 <tr className="summary-subtotal">
                                                     <td>
                                                         <h4 className="summary-subtitle">Payment Status:</h4>
