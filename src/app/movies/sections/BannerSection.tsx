@@ -1,8 +1,8 @@
-import { Swiper, SwiperSlide } from "swiper/react";
-import { type Swiper as SwiperRef } from "swiper";
-import { Pagination } from "swiper/modules";
+import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
+import { Autoplay, Controller, EffectFade, Navigation, Pagination, Parallax } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
+import 'swiper/css/navigation';
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { useEffect, useRef, useState } from "react";
 import { Container, Skeleton } from "@chakra-ui/react";
@@ -16,7 +16,14 @@ const BannerSection = () => {
   const isMobile = useMobileDeviceDetection();
   const [isLoading, setIsLoading] = useState(true);
   const { fetchBanner, banner, bannerLoading, bannerIsError, bannerMessage } = useGetBanner();
+  const progressCircle = useRef<any>(null);
+  const progressContent = useRef<any>(null);
+  const onAutoplayTimeLeft = (s: any, time: any, progress: any) => {
+    progressCircle.current.style.setProperty('--progress', 1 - progress);
+    progressContent.current.textContent = `${Math.ceil(time / 1000)}s`;
+  };
   let init = true;
+
 
   useEffect(() => {
     if (init) {
@@ -35,6 +42,7 @@ const BannerSection = () => {
       });
       init = false;
     }
+
   }, []);
 
   return (
@@ -44,32 +52,21 @@ const BannerSection = () => {
       loading={<BannerLoading />}
     >
       <Swiper
-        breakpoints={{
-          300: {
-            spaceBetween: 10,
-          },
-          640: {
-            spaceBetween: 20,
-          },
-          768: {
-            spaceBetween: 40,
-          },
-          1024: {
-            spaceBetween: 50,
-          },
-        }}
+        slidesPerView={1}
+        navigation={true}
+        className="mySwiper"
         loop={true}
+        autoplay={
+          {
+            delay: 2500,
+            disableOnInteraction: false,
+          }
+        }
+        cssMode={true}
         pagination={{
           clickable: true,
-          type: "bullets",
-          clickableClass: "swiper-pagination",
-          bulletClass: "swiper-pagination-bullet",
-          bulletActiveClass: "swiper-pagination-bullet-active",
         }}
-        direction="horizontal"
-        modules={[Pagination]}
-        slideClass="swiper-slide"
-        slideActiveClass="swiper-slide-active"
+        modules={[Pagination, Autoplay, Navigation]}
       >
         {
           banner?.results?.map((dt: any) => {
@@ -81,7 +78,7 @@ const BannerSection = () => {
                 }}>
                 <Image
                   src={`data:image/png;base64,${dt?.image}`}
-                  alt="banner 1"
+                  alt="banner flix"
                   width={0}
                   height={0}
                   sizes="100vw"

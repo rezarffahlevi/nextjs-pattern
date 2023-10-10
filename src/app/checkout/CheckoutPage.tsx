@@ -1,6 +1,6 @@
 "use client";
 
-import { useAppContext } from "@/app/provider";
+import { initialState, useAppContext } from "@/app/provider";
 import Image from "@/components/Loader";
 import { ErrorBuilder, SectionBuilder } from "@/components/Container/SectionBuilder";
 import { useCallback, useEffect, useState } from "react";
@@ -33,6 +33,7 @@ const CheckoutPage = () => {
     const { postOrderMicrosite, orderMicrosite, orderMicrositeLoading, orderMicrositeMessage, orderMicrositeIsError, orderMicrositeError } = useOrderMicrosite();
 
     let init = true;
+    let interval: any;
     let serviceCharge = 2500;
     let packagingCost = 5000;
     // let ppn = (subTotal / 100) * 0.11;
@@ -144,7 +145,7 @@ const CheckoutPage = () => {
         }
     }, [orderMicrosite]);
 
-    
+
     useEffect(() => {
         if (state.orderMicrosite) {
             serviceCharge = state.orderMicrosite?.data?.service_charge;
@@ -152,6 +153,32 @@ const CheckoutPage = () => {
             setGrandTotal(state.orderMicrosite?.data?.grand_total)
         }
     }, [state.orderMicrosite]);
+
+    useEffect(() => {
+        interval = setTimeout(() => {
+            dispatch({ timeRemains: state.timeRemains - 1000 });
+        }, 1000);
+
+        if (state.timeRemains <= 0) {
+            dispatch({
+                checkout: null,
+                setSeat: null,
+                seatSelected: null,
+                allowedStep: 0,
+                step: 0,
+                addConcession: null,
+                ppn: 0,
+                subtotal: 0,
+                grandTotal: 0,
+                orderMicrosite: null,
+                timeRemains: initialState.timeRemains
+            });
+            router.push('/');
+        }
+
+        return () => clearTimeout(interval);
+
+    }, [state.timeRemains])
 
     const onChangeQtyConcession = (item: any, value: string | Number) => {
         let val = Number(value);
@@ -245,7 +272,11 @@ const CheckoutPage = () => {
                     // "grand_total": null,
                     "branch": state?.cinema?._id,
                     "user_id": state?.user?._id,
-                    "set_selected_seat": state?.setSeat
+                    "set_selected_seat": {
+                        ...state?.setSeat,
+                        date: state.checkout?.date,
+                        showtime: state.checkout?.showtime,
+                    }
                 }
             });
             setAllowedStep((prev) => prev > 2 ? prev : (prev + 1));
@@ -502,6 +533,7 @@ const CheckoutPage = () => {
 
     }
 
+
     return (
         <main className="container order mt-7 mb-2 pb-12">
             <div className="step-by pr-4 pl-4 mb-8">
@@ -639,6 +671,14 @@ const CheckoutPage = () => {
                                     <tr></tr>
                                     <tr>
                                         <td className="product-name">Tiket {state?.checkout?.title} <span><i className="p-icon-times"></i> {state?.checkout?.qty}</span>
+
+                                            <br />
+                                            {moment(state?.checkout?.date).format('ll')} {state.checkout?.showtime}
+                                            <br />
+                                            {state?.checkout?.Price_strTicket_Type_Description}
+                                            <br />
+                                            Kursi: {(state?.setSeat?.Order?.Sessions ?? [{}])[0]?.Tickets?.map((dt: any) => dt?.SeatData).join(', ')}
+
                                         </td>
                                         <td className="product-price">Rp. {(state?.setSeat?.Order?.TotalValueCents / 100)?.toLocaleString()}</td>
                                     </tr>
@@ -712,7 +752,7 @@ const CheckoutPage = () => {
 
 const CheckoutLoading = ({ children }: any) => {
     return (
-        <Box className="w-full mt-4">
+        <Box className="w-full mt-4 mb-4">
             <div className="flex flex justify-between">
                 <Skeleton className="basis-3/12 h-6" />
                 <Skeleton className="basis-1/12 h-6" />

@@ -26,6 +26,7 @@ export const initialState = {
   user: null,
   token: null,
   search: '',
+  timeRemains: 10 * (1000 * 60) + 5000
 };
 const AppContext = createContext<any>(null);
 const reducer = (current: any, update: any) => {

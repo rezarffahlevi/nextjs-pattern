@@ -1,6 +1,6 @@
 "use client";
 
-import { useAppContext } from "@/app/provider";
+import { initialState, useAppContext } from "@/app/provider";
 import Image from "@/components/Loader";
 import { addToCart } from "@/components/NavBar/NavBar";
 import { ErrorBuilder, SectionBuilder } from "@/components/Container/SectionBuilder";
@@ -243,7 +243,8 @@ const MovieDetailPage = ({ slug }: { slug: string }) => {
                                 ppn: 0,
                                 subtotal: 0,
                                 grandTotal: 0,
-                                orderMicrosite: null
+                                orderMicrosite: null,
+                                timeRemains: initialState.timeRemains
                               });
                               router.push('/checkout');
                             } else {

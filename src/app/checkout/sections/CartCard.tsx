@@ -15,6 +15,9 @@ export const CartCard = ({ movie, subTotal, selected, setSelected, seatLayout }:
     const [selectedTicketType, setSelectedTicketType] = useState<any>(null);
     const toast = useToast()
 
+
+    const duration = moment.duration(state.timeRemains);
+
     return (
         <div className="mb-6">
             <div className="flex w-full items-center">
@@ -88,7 +91,7 @@ export const CartCard = ({ movie, subTotal, selected, setSelected, seatLayout }:
                 </div> */}
             </div>
             <div className="mt-3 font-semibold text-[14px]">
-                Time Remaining to complete booking - 09.51
+                Time Remaining to complete booking - {duration.minutes()}:{duration.seconds()}
             </div>
             <Card className="mt-4">
                 <CardBody className="flex justify-between overflow-auto">
@@ -102,7 +105,7 @@ export const CartCard = ({ movie, subTotal, selected, setSelected, seatLayout }:
                     <div className="max-md:px-6 max-md:min-w-[10rem]">
                         <p className="text-[12px]">When</p>
                         <span className="font-bold text-[13px]">
-                            {new Date(movie?.date).toDateString()}
+                            {moment(movie?.date).format('ll')} {movie?.showtime}
                         </span>
                     </div>
                     <div className="max-md:px-6 max-md:min-w-[10rem]">

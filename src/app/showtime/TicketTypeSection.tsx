@@ -1,6 +1,6 @@
 import { useTicketType } from "@/services/useMovieService";
 import { useEffect, useState } from "react";
-import { useAppContext } from "../provider";
+import { initialState, useAppContext } from "../provider";
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useToast } from "@chakra-ui/react";
 import Image from "@/components/Loader";
 import { useRouter } from "next/navigation";
@@ -152,7 +152,8 @@ const ModalCart = ({ onClose, isOpen, data, selectedShowTime, setSelectedShowTim
                                         checkout: {
                                             ...movie, ...selectedShowTime, ...selectedTicketType, date: moment().format('YYYY/MM/DD'), imageurl: movie?.imageurl
                                         },
-                                        setSeat: null, seatSelected: null, allowedStep: 0, step: 0, addConcession: null, ppn: 0, subtotal: 0, grandTotal: 0
+                                        setSeat: null, seatSelected: null, allowedStep: 0, step: 0, addConcession: null, ppn: 0, subtotal: 0, grandTotal: 0,
+                                        timeRemains: initialState.timeRemains
                                     });
                                     router.push('/checkout');
                                 } else {
