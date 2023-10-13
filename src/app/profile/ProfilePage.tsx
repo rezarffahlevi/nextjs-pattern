@@ -219,7 +219,7 @@ const ProfilePage = () => {
                                                     orderDetail?.concessions?.map((concess: any) => {
                                                         return (
                                                             <tr key={'order-detail-' + concess?.ItemId}>
-                                                                <td className="product-name">{concess?.Name} <span><i className="p-icon-times"></i>
+                                                                <td className="product-name"><b>{concess?.Name}</b> <span><i className="p-icon-times"></i>
                                                                     {concess?.Quantity}</span></td>
                                                                 <td className="product-price">Rp. {((concess?.Price / 100) * concess?.Quantity)?.toLocaleString()}</td>
                                                             </tr>

@@ -7,26 +7,26 @@ import { TicketTypeSection } from "./TicketTypeSection";
 import { useShowTime } from "@/services/useMovieService";
 import { useEffect, useState } from "react";
 import moment from "moment";
+import { useToast } from "@chakra-ui/react";
 
 export const ShowtimePage = () => {
     const router = useRouter();
     const { state, dispatch } = useAppContext();
     const { fetchShowTime, showTime, showTimeLoading, showTimeError, showTimeIsError } = useShowTime();
+    const toast = useToast()
 
     const [selectedShowTime, setSelectedShowTime] = useState<any>(null);
     const [selectedTicketType, setSelectedTicketType] = useState<any>(null);
+    const [date, setDate] = useState<any>(moment().format('YYYY/MM/DD'));
     let init = true;
 
     useEffect(() => {
-        if (init) {
-            init = false;
             fetchShowTime({
                 body: {
-                    "showdate": moment().format('YYYY/MM/DD'),
+                    "showdate": moment(date).format('YYYY/MM/DD'),
                 }
             })
-        }
-    }, []);
+    }, [date]);
 
 
     const movieList = () => {
@@ -44,7 +44,24 @@ export const ShowtimePage = () => {
             <div className="page-content mt-4 mb-10 pb-6">
                 <div className="container">
                     <div className="tab tab-vertical gutter-lg">
-                        <div className="tab-content col-lg-9 col-md-8">
+                        <div className="tab-content col-lg-9 col-md-8"><div className="product-form product-unit mb-2 pt-1 flex">
+                            <input type="date" value={date?.replaceAll('/', '-')} onChange={(e) => {
+                                let value = e.target.value;
+                                if (moment(value).isBefore(moment(), 'D')) {
+                                    toast({
+                                        title: `Tidak bisa memilih tanggal sebelumnya`,
+                                        status: 'error',
+                                        isClosable: true,
+                                    })
+                                } else {
+                                    setDate(moment(value).format('YYYY/MM/DD'));
+                                }
+                            }} className="inputan mr-2 h-14" style={{
+                                fontWeight: 'bold',
+                                fontSize: '1.4rem',
+                                color: 'black',
+                            }} />
+                        </div>
                             <div className="tab-pane active" id="orders">
                                 <table className="order-table">
                                     <thead>
@@ -56,11 +73,14 @@ export const ShowtimePage = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        {showTimeLoading && (<tr>
+                                            <td className="order-number">Loading...</td>
+                                        </tr>)}
                                         {
                                             movieList()?.map((dt: any, i: any) => {
                                                 return (
                                                     <tr key={'order-' + i}>
-                                                        <td className="order-number"><a href="#">{dt?.title}</a></td>
+                                                        <td className="order-number"><a href="#"><b>{dt?.title}</b></a></td>
                                                         <td className="order-date"><span>{dt?.cinemaname}{'\n'}{dt?.screenname}</span></td>
                                                         <td className="order-status">
                                                             {
@@ -76,7 +96,7 @@ export const ShowtimePage = () => {
                                                                             key={'time-' + i + time?.sessionid}
                                                                         >
                                                                             <div className="w-[200px]">
-                                                                                <div className={"tag cursor-pointer my-4 mb-0 h-14" + (time?.sessionid == selectedShowTime?.sessionid ? ' btn-dim' : '')} onClick={() => { setSelectedShowTime(time); setSelectedTicketType(null) }}>
+                                                                                <div className={"tag cursor-pointer my-4 mb-0 h-14 text-[1.4rem]" + (time?.sessionid == selectedShowTime?.sessionid ? ' btn-dim' : '')} onClick={() => { setSelectedShowTime(time); setSelectedTicketType(null) }}>
                                                                                     {time?.showtime}
                                                                                 </div>
                                                                             </div>

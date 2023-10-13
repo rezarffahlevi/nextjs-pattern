@@ -27,6 +27,7 @@ const usePostData = () => {
     setResult((prevData) => {
       return {
         ...prevData,
+        data: null,
         loading: true,
         message: null,
         errorData: null,
