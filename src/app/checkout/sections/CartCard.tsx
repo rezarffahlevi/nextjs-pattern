@@ -39,10 +39,11 @@ export const CartCard = ({ movie, subTotal, selected, setSelected, seatLayout }:
                 </div>
                 <div className="product-name basis-4/12">
                     <div className="product-name-section">
-                        <Link href={"/movies/" + movie?.scheduledfilmid}>{movie?.title}</Link>
+                        <Link href={"/movies/" + movie?.scheduledfilmid} className="font-bold">{movie?.title}</Link>
                     </div>
                 </div>
                 <div className="product-subtotal basis-2/12">
+                    <div className="text-[1.4rem] mb-2">Harga Per Tiket</div>
                     <span className="amount">Rp. {(movie?.price / 100)?.toLocaleString()}</span>
                 </div>
                 <div className="product-quantity basis-1/12">
@@ -80,6 +81,7 @@ export const CartCard = ({ movie, subTotal, selected, setSelected, seatLayout }:
                     <p className="mt-1">Stok = {movie?.maxQty}</p>
                 </div> */}
                 <div className="product-price basis-3/12">
+                    <div className="text-[1.4rem] mb-2">Sub-total</div>
                     <span className="amount">Rp. {((movie?.price * movie?.qty) / 100).toLocaleString()}</span>
                 </div>
                 {/* <div className="product-remove basis-1/12">
@@ -95,10 +97,10 @@ export const CartCard = ({ movie, subTotal, selected, setSelected, seatLayout }:
             </div>
             <Card className="mt-4">
                 <CardBody className="flex justify-between overflow-auto">
-                    <span className="self-center font-bold mr-4 text-[14px]">
+                    <span className="self-center font-bold mr-2 text-[14px]">
                         Tickets
                     </span>
-                    <div className="max-md:px-6 max-md:min-w-[10rem]">
+                    <div className="max-md:px-6 max-md:min-w-[11rem]">
                         <p className="text-[12px]">Movie</p>
                         <span className="font-bold text-[13px]">{movie?.title}</span>
                     </div>
@@ -122,7 +124,7 @@ export const CartCard = ({ movie, subTotal, selected, setSelected, seatLayout }:
                         <p className="text-[12px]">Class</p>
                         <span className="font-bold text-[13px]">{movie?.Price_strTicket_Type_Description}</span>
                     </div>
-                    <div className="max-md:px-6 max-md:min-w-[14rem]">
+                    <div className="max-md:px-6 max-md:min-w-[17rem]">
                         <span className="text-[12px]">
                             Ticket Total : <span className="font-bold">Rp. {subTotal?.toLocaleString()}</span>
                         </span>

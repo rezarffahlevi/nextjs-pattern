@@ -6,12 +6,16 @@ import { useEffect, useState } from "react";
 import { useGetCurrentUser } from "@/services/useUserService";
 import { useGetOrderHistory } from "@/services/useOrderService";
 import moment from "moment";
+import { useQRCode } from 'next-qrcode';
+import { Modal, ModalBody, ModalContent, ModalOverlay, useToast } from "@chakra-ui/react";
 
 const ProfilePage = () => {
+    const { Canvas } = useQRCode();
     const router = useRouter();
     const { state, dispatch } = useAppContext();
     const [tab, setTab] = useState('dashboard');
     const [orderDetail, setOrderDetail] = useState<any>(null);
+    const [showModal, setShowModal] = useState(false);
 
     const { fetchCurrentUser, currentUser, currentUserLoading, currentUserError, currentUserIsError } = useGetCurrentUser();
     const { fetchOrderHistory, orderHistory, orderHistoryLoading, orderHistoryError, orderHistoryIsError } = useGetOrderHistory();
@@ -177,20 +181,36 @@ const ProfilePage = () => {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td className="product-subtitle">Product</td>
-                                                    <td></td>
-                                                </tr>
+                                                {orderDetail?.xendit?.status == 'PAID' && (<tr>
+                                                    <td>
+                                                        <Canvas
+                                                            text={state.orderMicrosite?.data?.add_concession_item?.OrderId ?? '123'}
+                                                            options={{
+                                                                errorCorrectionLevel: 'M',
+                                                                margin: 3,
+                                                                scale: 4,
+                                                                width: 200,
+                                                                color: {
+                                                                    dark: '#54524d',
+                                                                    light: '#ffdd36',
+                                                                },
+                                                            }}
+                                                        />
+                                                    </td>
+                                                </tr>)}
+                                                {orderDetail?.xendit?.status == 'PAID' && (<tr>
+                                                    <td className="product-name">Order Number: <b>{orderDetail?.order_id}</b></td>
+                                                </tr>)}
                                                 <tr>
                                                     <td className="product-name">
-                                                        {orderSession?.FilmTitle} <span><i className="p-icon-times"></i>
+                                                        <span className="font-bold">{orderSession?.FilmTitle}</span> <span><i className="p-icon-times"></i>
                                                             {orderDetail?.set_selected_seat?.Order.TotalOrderCount}</span>
                                                         <br />
-                                                        {moment(orderDetail?.set_selected_seat?.date).format('ll')} {orderDetail?.set_selected_seat?.showtime}
+                                                        <span className="font-bold">{moment(orderDetail?.set_selected_seat?.date).format('ll')} {orderDetail?.set_selected_seat?.showtime}</span>
                                                         <br />
                                                         {(orderSession?.Tickets ?? [{}])[0]?.Description}
                                                         <br />
-                                                        Kursi: {orderSession?.Tickets?.map((dt: any) => dt?.SeatData).join(', ')}
+                                                        Kursi: <span className="font-bold">{orderSession?.Tickets?.map((dt: any) => dt?.SeatData).join(', ')}</span>
 
                                                     </td>
                                                     <td className="product-price">Rp. {(orderDetail?.set_selected_seat?.Order?.TotalValueCents / 100).toLocaleString()}</td>
@@ -221,30 +241,8 @@ const ProfilePage = () => {
                                                         <h4 className="summary-subtitle">Payment Status:</h4>
                                                     </td>
                                                     <td className="summary-value">
-                                                        <a className={'link ml-8'} id="show-xendit" onClick={(e) => {
-                                                            e.preventDefault();
-                                                            let popup = window.open(orderDetail?.xendit?.invoice_url,
-                                                                'popup', 'toolbar=0,location,status,scrollbars,resizable,width=600, height=600');
-
-                                                            if (orderDetail?.xendit?.status != 'PAID') {
-                                                                var timer = setInterval(checkChild, 500);
-                                                            }
-                                                            function checkChild() {
-                                                                if (orderDetail?.xendit?.status != 'PAID') {
-                                                                    if (popup?.closed) {
-                                                                        clearInterval(timer);
-                                                                        router.push('/profile');
-                                                                        setTab('orders')
-                                                                        fetchOrderHistory({
-                                                                            queryParams: {
-                                                                                id: state?.user?._id,
-                                                                            }
-                                                                        });
-                                                                    }
-                                                                }
-                                                            }
-                                                        }}>
-                                                            {orderDetail?.xendit?.status} - LIHAT INVOICE</a>
+                                                        <div className={'link ml-8'}>
+                                                            {orderDetail?.xendit?.status}</div>
                                                     </td>
                                                 </tr>
                                                 <tr className="summary-subtotal">
@@ -256,6 +254,17 @@ const ProfilePage = () => {
                                                     </td>
                                                 </tr>
                                             </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td></td>
+                                                    <td align="right">
+                                                        <a onClick={() => setShowModal(true)} className="btn btn-dark btn-sm back-order mb-4">LIHAT INVOICE</a>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td></td>
+                                                </tr>
+                                            </tfoot>
                                         </table>
                                     </div>
                                     {/* <div className="row mt-9">
@@ -326,9 +335,47 @@ const ProfilePage = () => {
                     </div>
                 </div>
             </div>
+            <ModalXendit
+                isOpen={showModal}
+                data={orderDetail?.xendit}
+                onClose={() => setShowModal(false)}
+            />
         </main>
 
     )
 }
+
+const ModalXendit = ({ onClose, isOpen, data, selectedShowTime, }: any) => {
+    const router = useRouter();
+    const { state, dispatch } = useAppContext();
+    const toast = useToast()
+
+
+    return (
+        <Modal onClose={onClose} size={"3xl"} isOpen={isOpen} closeOnOverlayClick>
+            <ModalOverlay />
+            <ModalContent className="rounded-none">
+                {/* <ModalHeader className="text-center font-body">
+
+                </ModalHeader> */}
+                {/* <ModalCloseButton /> */}
+                <ModalBody>
+                    <iframe className="w-full h-[60rem]" src={data?.invoice_url}>
+                    </iframe>
+                </ModalBody>
+                {/* <ModalFooter>
+                    <Button
+                        className="bg-orange-400 hover:bg-neutral-800 chakra-button rounded-none text-white font-body w-full"
+                        onClick={() => {
+                            onClose();
+                        }}
+                    >
+                        CHECK OUT
+                    </Button>
+                </ModalFooter> */}
+            </ModalContent>
+        </Modal>
+    );
+};
 
 export default ProfilePage;

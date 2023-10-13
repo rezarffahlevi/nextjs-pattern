@@ -8,7 +8,7 @@ import './checkout.module.css';
 import { useAddConcessionItems, useSeatLayout, useSetSelectedSeat } from "@/services/useMovieService";
 import { CartCard } from "./sections/CartCard";
 import moment from "moment";
-import { Box, Skeleton, useToast } from "@chakra-ui/react";
+import { Box, Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Skeleton, useToast } from "@chakra-ui/react";
 import { MdDelete } from "react-icons/md";
 import { useOrderMicrosite } from "@/services/useOrderService";
 import { useRouter } from "next/navigation";
@@ -24,6 +24,7 @@ const CheckoutPage = () => {
     const [allowedStep, setAllowedStep] = useState(0);
     const [selected, setSelected] = useState<any>([]);
     const [listConcession, setListConcession] = useState<any>([]);
+    const [showModal, setShowModal] = useState(false);
     const toast = useToast()
 
 
@@ -142,6 +143,7 @@ const CheckoutPage = () => {
                 subtotal: orderMicrosite?.data?.subtotal,
                 orderMicrosite: orderMicrosite
             });
+            setShowModal(true);
         }
     }, [orderMicrosite]);
 
@@ -155,9 +157,13 @@ const CheckoutPage = () => {
     }, [state.orderMicrosite]);
 
     useEffect(() => {
-        interval = setTimeout(() => {
-            dispatch({ timeRemains: state.timeRemains - 1000 });
-        }, 1000);
+        if (step > 1) {
+            clearTimeout(interval);
+        } else {
+            interval = setTimeout(() => {
+                dispatch({ timeRemains: state.timeRemains - 1000 });
+            }, 1000);
+        }
 
         if (state.timeRemains <= 0) {
             dispatch({
@@ -240,7 +246,7 @@ const CheckoutPage = () => {
             //             }),
             //         }
             //     });
-
+            clearTimeout(interval)
             postOrderMicrosite({
                 body: {
                     "sessionid": state.checkout?.sessionid,
@@ -533,7 +539,6 @@ const CheckoutPage = () => {
 
     }
 
-
     return (
         <main className="container order mt-7 mb-2 pb-12">
             <div className="step-by pr-4 pl-4 mb-8">
@@ -551,9 +556,35 @@ const CheckoutPage = () => {
                             <h3 className="summary-title">Total Pembelian</h3>
                             <table className="shipping mb-2">
                                 <tbody>
+                                    {state?.checkout && (<tr>
+                                        <td>
+                                            <br />
+                                            Tiket {state?.checkout?.title} <span><i className="p-icon-times"></i> {state?.checkout?.qty}</span>
+
+                                            <br />
+                                            {moment(state?.checkout?.date).format('ll')} {state.checkout?.showtime}
+                                            <br />
+                                            {state?.checkout?.Price_strTicket_Type_Description}
+                                            <br />
+                                            {state.setSeat && (<>Kursi: {(state?.setSeat?.Order?.Sessions ?? [{}])[0]?.Tickets?.map((dt: any) => dt?.SeatData).join(', ')}</>)}
+
+                                        </td>
+                                        <td className="product-price">Rp. {(state?.checkout?.qty * state?.checkout?.price / 100)?.toLocaleString()}</td>
+                                    </tr>)}
+                                    {
+                                        listConcession?.filter((ft: any) => ft?.selected == true)?.map((dt: any) =>
+                                            <tr key={'summary-con-' + dt?.id}>
+                                                <td className="product-name">{dt?.description}
+                                                    {' '}<span><i className="p-icon-times"></i>
+                                                        {' '}{dt?.qty ?? 1} </span>
+                                                </td>
+                                                <td className="product-price">Rp. {((dt?.qty ?? 1) * (dt?.priceincents / 100)).toLocaleString()}</td>
+                                            </tr>
+                                        )
+                                    }
                                     <tr className="summary-subtotal">
                                         <td>
-                                            <h4 className="summary-subtitle">Subtotal</h4>
+                                            <h4 className="summary-subtitle">Sub-total</h4>
                                         </td>
                                         <td>
                                             <p className="summary-subtotal-price">Rp. {(subTotal / 100)?.toLocaleString()}</p>
@@ -624,10 +655,12 @@ const CheckoutPage = () => {
                                 <h3 className="icon-box-title">Thank you. Your Order has been received.</h3>
                             </div>
                         </div>
-                        <div className="order-results row cols-xl-6 cols-md-3 cols-sm-2 mt-10 pt-2 mb-4">
+                        <div className="order-results row cols-xl-5 cols-md-3 cols-sm-2 mt-10 pt-2 mb-4">
                             <div className="overview-item">
                                 <span>Order number</span>
-                                <label>{state.addConcession?.OrderId}</label>
+                                <label style={{
+                                    fontSize: 14
+                                }} className="font-bold">{state.orderMicrosite?.data?.add_concession_item?.OrderId}</label>
                             </div>
                             <div className="overview-item">
                                 <span>Status</span>
@@ -646,10 +679,10 @@ const CheckoutPage = () => {
                                 {/* <label>Rp. {(state?.addConcession?.TotalValueCents / 100).toLocaleString()}</label> */}
                                 <label>Rp. {(grandTotal).toLocaleString()}</label>
                             </div>
-                            <div className="overview-item">
+                            {/* <div className="overview-item">
                                 <span>Payment method:</span>
                                 <label>Transfer</label>
-                            </div>
+                            </div> */}
                         </div>
                         <h2 className="detail-title mb-6">Order Details</h2>
                         <div className="order-details">
@@ -670,14 +703,14 @@ const CheckoutPage = () => {
                                     <tr></tr>
                                     <tr></tr>
                                     <tr>
-                                        <td className="product-name">Tiket {state?.checkout?.title} <span><i className="p-icon-times"></i> {state?.checkout?.qty}</span>
+                                        <td className="product-name">Tiket <b>{state?.checkout?.title}</b> <span><i className="p-icon-times"></i> {state?.checkout?.qty}</span>
 
                                             <br />
-                                            {moment(state?.checkout?.date).format('ll')} {state.checkout?.showtime}
+                                            <b>{moment(state?.checkout?.date).format('ll')} {state.checkout?.showtime}</b>
                                             <br />
                                             {state?.checkout?.Price_strTicket_Type_Description}
                                             <br />
-                                            Kursi: {(state?.setSeat?.Order?.Sessions ?? [{}])[0]?.Tickets?.map((dt: any) => dt?.SeatData).join(', ')}
+                                            Kursi: <b>{(state?.setSeat?.Order?.Sessions ?? [{}])[0]?.Tickets?.map((dt: any) => dt?.SeatData).join(', ')}</b>
 
                                         </td>
                                         <td className="product-price">Rp. {(state?.setSeat?.Order?.TotalValueCents / 100)?.toLocaleString()}</td>
@@ -685,7 +718,7 @@ const CheckoutPage = () => {
                                     {
                                         listConcession?.filter((ft: any) => ft?.selected == true)?.map((dt: any) =>
                                             <tr key={'summary-con-' + dt?.id}>
-                                                <td className="product-name">{dt?.description}
+                                                <td className="product-name"><b>{dt?.description}</b>
                                                     {' '}<span><i className="p-icon-times"></i>
                                                         {' '}{dt?.qty ?? 1} </span>
                                                 </td>
@@ -695,10 +728,10 @@ const CheckoutPage = () => {
                                     }
                                     <tr className="summary-subtotal">
                                         <td>
-                                            <h4 className="summary-subtitle">Subtotal:</h4>
+                                            <h4 className="summary-subtitle">Sub-total:</h4>
                                         </td>
                                         {/* <td className="summary-value font-weight-normal">Rp. {(state?.addConcession?.TotalValueCents / 100).toLocaleString()}</td> */}
-                                        <td className="summary-value font-weight-normal">Rp. {(subTotal).toLocaleString()}</td>
+                                        <td className="summary-value font-weight-normal">Rp. {(state.orderMicrosite?.data?.subtotal)?.toLocaleString()}</td>
                                     </tr>
                                     {/* <tr>
                                         <td className="product-name">PPN</td>
@@ -712,12 +745,12 @@ const CheckoutPage = () => {
                                         <td className="product-name">Packaging Cost</td>
                                         <td className="product-price">Rp. {packagingCost?.toLocaleString()}</td>
                                     </tr> */}
-                                    <tr className="summary-subtotal">
+                                    {/* <tr className="summary-subtotal">
                                         <td>
                                             <h4 className="summary-subtitle">Payment method:</h4>
                                         </td>
                                         <td className="summary-value">Transfer</td>
-                                    </tr>
+                                    </tr> */}
                                     <tr className="summary-subtotal">
                                         <td>
                                             <h4 className="summary-subtitle">Total:</h4>
@@ -731,19 +764,25 @@ const CheckoutPage = () => {
                         </div>
                     </div>
                     <a className={'btn btn-dim btn-checkout btn-block mt-8'} id="show-xendit" onClick={(e) => {
-                        e.preventDefault();
-                        let popup = window.open(orderMicrosite?.data?.xendit?.invoice_url,
-                            'popup', 'toolbar=0,location,status,scrollbars,resizable,width=600, height=600');
-                        var timer = setInterval(checkChild, 500);
+                        // e.preventDefault();
+                        // let popup = window.open(state?.orderMicrosite?.data?.xendit?.invoice_url,
+                        //     'popup', 'toolbar=0,location,status,scrollbars,resizable,width=600, height=600');
+                        // var timer = setInterval(checkChild, 500);
 
-                        function checkChild() {
-                            if (popup?.closed) {
-                                clearInterval(timer);
-                                router.push('/profile?page=orders');
-                            }
-                        }
+                        // function checkChild() {
+                        //     if (popup?.closed) {
+                        //         clearInterval(timer);
+                        //         router.push('/profile?page=orders');
+                        //     }
+                        // }
+                        setShowModal(true);
 
                     }}>LIHAT CARA PEMBAYARAN</a>
+                    <ModalXendit
+                        isOpen={showModal}
+                        data={state?.orderMicrosite?.data?.xendit}
+                        onClose={() => setShowModal(false)}
+                    />
                 </SectionBuilder>
             )}
         </main>
@@ -763,6 +802,40 @@ const CheckoutLoading = ({ children }: any) => {
             </div>
             <Skeleton className="h-8 mt-4 w-16" />
         </Box>
+    );
+};
+
+
+const ModalXendit = ({ onClose, isOpen, data, selectedShowTime, }: any) => {
+    const router = useRouter();
+    const { state, dispatch } = useAppContext();
+    const toast = useToast()
+
+
+    return (
+        <Modal onClose={onClose} size={"3xl"} isOpen={isOpen} closeOnOverlayClick>
+            <ModalOverlay />
+            <ModalContent className="rounded-none">
+                {/* <ModalHeader className="text-center font-body">
+
+                </ModalHeader> */}
+                {/* <ModalCloseButton /> */}
+                <ModalBody>
+                    <iframe className="w-full h-[60rem]" src={data?.invoice_url}>
+                    </iframe>
+                </ModalBody>
+                {/* <ModalFooter>
+                    <Button
+                        className="bg-orange-400 hover:bg-neutral-800 chakra-button rounded-none text-white font-body w-full"
+                        onClick={() => {
+                            onClose();
+                        }}
+                    >
+                        CHECK OUT
+                    </Button>
+                </ModalFooter> */}
+            </ModalContent>
+        </Modal>
     );
 };
 

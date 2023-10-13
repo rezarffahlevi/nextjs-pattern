@@ -30,7 +30,12 @@ export const navOptions: { name: string; link?: string }[] = [
 
 const topRow = (state: any) => {
   return (
-    <div className="header-top">
+    <div className="header-top" style={{
+      backgroundColor: '#ffdd36',
+      // color: '#8d8e8a',
+      color: 'white',
+      fontWeight: 'bold',
+    }}>
       <div className="container">
         <div className="header-left">
           <a href="tel:#" className="call">
@@ -47,7 +52,7 @@ const topRow = (state: any) => {
           <span className="divider"></span>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 

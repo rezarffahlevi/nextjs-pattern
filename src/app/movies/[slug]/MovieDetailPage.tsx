@@ -139,7 +139,7 @@ const MovieDetailPage = ({ slug }: { slug: string }) => {
               </div>
               <div className="col-md-5">
                 <div className="product-details">
-                  <h1 className="product-name">{movie?.title}</h1>
+                  <h1 className="product-name font-bold">{movie?.title}</h1>
                   {/* <div className="ratings-container">
                     <div className="ratings-full">
                       <span className="ratings" style={{ width: '60%' }}></span>
@@ -168,11 +168,22 @@ const MovieDetailPage = ({ slug }: { slug: string }) => {
                         needFetch = true;
                         setDate(moment(value).format('YYYY/MM/DD'));
                       }
-                    }} className="inputan mr-2 h-14" />
+                    }} className="inputan mr-2 h-14" style={{
+                      fontWeight: 'bold',
+                      fontSize: '1.4rem',
+                      color: 'black',
+                    }} />
                     {
                       showTime?.moviecinemascreen?.map((dt: any, i: any) => {
                         return (
-                          <div key={'time-' + i + dt?.sessionid} className={"tag cursor-pointer mt-0 mb-0 h-14" + (dt?.sessionid == selectedShowTime?.sessionid ? ' btn-dim' : '')} onClick={() => { setSelectedShowTime(dt); setSelectedTicketType(null) }}>
+                          <div
+                            key={'time-' + i + dt?.sessionid}
+                            className={"tag cursor-pointer mt-0 mb-0 h-14 text-[1.4rem]" + (dt?.sessionid == selectedShowTime?.sessionid ? ' btn-dim' : '')}
+                            onClick={() => { setSelectedShowTime(dt); setSelectedTicketType(null) }}
+                            style={{
+                              fontWeight: 500,
+                            }}
+                          >
                             {dt?.showtime}
                           </div>
                         )

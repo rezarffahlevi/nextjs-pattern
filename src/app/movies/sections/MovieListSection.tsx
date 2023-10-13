@@ -172,7 +172,7 @@ const MovieListSection = () => {
                     </a>
                   </div> */}
                     <h5 className="product-name">
-                      <div>{dt?.title}</div>
+                      <div className="font-bold">{dt?.title}</div>
                     </h5>
                     {/* <span className="product-price">
                     <del className="old-price">$28.00</del>
@@ -185,7 +185,7 @@ const MovieListSection = () => {
           </div>
           <nav className="toolbox toolbox-pagination pt-2 pb-6">
             <p className="toolbox-item show-info">
-              Menampilkan <span>{movieList?.length}</span> Film
+              Menampilkan <span>{movieList()?.length}</span> Film
             </p>
             {/* <ul className="pagination">
             <li className="page-item disabled">
