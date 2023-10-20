@@ -19,10 +19,10 @@ const customLoader = (props: any): any => {
 export default function Image(props: any) {
     const [src, setSrc] = useState(props?.src ?? '');
     return (
-        <NextImage
+        <img
             {...props}
             src={src}
-            loader={customLoader}
+            // loader={customLoader}
             onError={(e: any) => {
                 setSrc('/assets/images/demos/demo1/banner/banner1.jpg');
                 // setMovie(object);
