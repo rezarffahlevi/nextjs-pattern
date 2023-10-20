@@ -8,6 +8,7 @@ import { useShowTime } from "@/services/useMovieService";
 import { useEffect, useState } from "react";
 import moment from "moment";
 import { useToast } from "@chakra-ui/react";
+import Link from "next/link";
 
 export const ShowtimePage = () => {
     const router = useRouter();
@@ -21,13 +22,19 @@ export const ShowtimePage = () => {
     let init = true;
 
     useEffect(() => {
+        if (state.cinema && state.cinema.store_code) {
+            const payload = {
+                // Masukkan _id dari state.cinema ke dalam cinemaid
+                cinemaid: state.cinema.store_code,
+                showdate: moment(date).format('YYYY/MM/DD'),
+            };
+    
+            // Kemudian kirim payload ke API
             fetchShowTime({
-                body: {
-                    "showdate": moment(date).format('YYYY/MM/DD'),
-                }
-            })
-    }, [date]);
-
+                body: payload,
+            });
+        }
+    }, [date, state.cinema]); 
 
     const movieList = () => {
         let list = (showTime?.moviecinemascreen ?? []);
@@ -73,14 +80,18 @@ export const ShowtimePage = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {showTimeLoading && (<tr>
-                                            <td className="order-number">Loading...</td>
-                                        </tr>)}
-                                        {
+                                        {showTimeLoading && (
+                                            <tr>
+                                                <td className="order-number">Loading...</td>
+                                                <td className="order-number"></td>
+                                                <td className="order-number"></td>
+                                            </tr>
+                                        )}
+                                        {!showTimeLoading && movieList()?.length > 0 ? (
                                             movieList()?.map((dt: any, i: any) => {
                                                 return (
                                                     <tr key={'order-' + i}>
-                                                        <td className="order-number"><a href="#"><b>{dt?.title}</b></a></td>
+                                                        <td className="order-number"><Link href={`movies/${dt?.scheduledfilmid}`}><b>{dt?.title}</b></Link></td>
                                                         <td className="order-date"><span>{dt?.cinemaname}{'\n'}{dt?.screenname}</span></td>
                                                         <td className="order-status">
                                                             {
@@ -95,11 +106,17 @@ export const ShowtimePage = () => {
                                                                             }}
                                                                             key={'time-' + i + time?.sessionid}
                                                                         >
-                                                                            <div className="w-[200px]">
-                                                                                <div className={"tag cursor-pointer my-4 mb-0 h-14 text-[1.4rem]" + (time?.sessionid == selectedShowTime?.sessionid ? ' btn-dim' : '')} onClick={() => { setSelectedShowTime(time); setSelectedTicketType(null) }}>
+                                                                            <div
+                                                                                className="w-[200px]"
+                                                                            >
+                                                                                <div className={`tag cursor-pointer my-4 mb-0 text-[1.4rem] ${time?.sessionid == selectedShowTime?.sessionid ? 'btn-dim' : ''}`} onClick={() => { setSelectedShowTime(time); setSelectedTicketType(null) }}
+                                                                                style={{
+                                                                                    marginRight: '200px'
+                                                                                }}>
                                                                                     {time?.showtime}
                                                                                 </div>
                                                                             </div>
+
                                                                             <TicketTypeSection
                                                                                 data={time}
                                                                                 movie={dt}
@@ -113,20 +130,16 @@ export const ShowtimePage = () => {
                                                                 })
                                                             }
                                                         </td>
-                                                        {/* <td className="order-total">
-                                                            {
-                                                                dt?.sessionlist?.map((time: any, j: any) => {
-                                                                    return (
-
-                                                                        <TicketTypeSection data={time} />
-                                                                    )
-                                                                })
-                                                            }
-                                                        </td> */}
                                                     </tr>
                                                 )
                                             })
-                                        }
+                                        ) : !showTimeLoading ?  (
+                                            <tr>
+                                                <td className="order-number">No Movies in Here</td>
+                                                <td className="order-number"></td>
+                                                <td className="order-number"></td>
+                                            </tr>
+                                        ) : null}
                                     </tbody>
                                 </table>
                             </div>
