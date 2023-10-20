@@ -24,6 +24,70 @@ export const useLogin = () => {
     };
 };
 
+export const useForgotPassword = () => {
+    const { postData, data, loading, message, status, error, isError } = usePostData();
+
+    return {
+        postForgot: ({ header, option, queryParams, body }: IPostData) =>
+            postData({
+                urlPath: "api/v1/customer/forgot-whatsapp",
+                header: header,
+                option: option,
+                queryParams: queryParams,
+                body: body,
+            }),
+        forgot: data,
+        forgotLoading: loading,
+        forgotMessage: message,
+        forgotStatus: status,
+        forgotError: error,
+        forgotIsError: isError,
+    };
+};
+
+export const useVerifyForgot = () => {
+    const { postData, data, loading, message, status, error, isError } = usePostData();
+
+    return {
+        postVerifyForgot: ({ header, option, queryParams, body }: IPostData) =>
+            postData({
+                urlPath: "api/v1/customer/otp-pass",
+                header: header,
+                option: option,
+                queryParams: queryParams,
+                body: body,
+            }),
+        verifyForgot: data,
+        verifyForgotLoading: loading,
+        verifyForgotMessage: message,
+        verifyForgotStatus: status,
+        verifyForgotError: error,
+        verifyForgotIsError: isError,
+    };
+};
+
+export const useNewPassword = () => {
+    const { postData, data, loading, message, status, error, isError } = usePostData();
+
+    return {
+        postNewPassword: ({ header, option, queryParams, body }: IPostData) =>
+            postData({
+                urlPath: "api/v1/customer/new-password/" + body?.token,
+                header: header,
+                option: option,
+                queryParams: queryParams,
+                body: {
+                    password: body?.password
+                },
+            }),
+        newPassword: data,
+        newPasswordLoading: loading,
+        newPasswordMessage: message,
+        newPasswordStatus: status,
+        newPasswordError: error,
+        newPasswordIsError: isError,
+    };
+};
 
 export const useRegister = () => {
     const { postData, data, loading, message, status, error, isError } = usePostData();

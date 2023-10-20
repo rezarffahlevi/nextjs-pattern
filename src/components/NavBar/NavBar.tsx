@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useAppContext } from "@/app/provider";
 import Image from "@/components/Loader";
 import { useListCinema } from "@/services/useCinemaService";
-import { useLogin, useRegister, useSentOtp, useVerifyOtp } from "@/services/useUserService";
+import { useForgotPassword, useLogin, useNewPassword, useRegister, useSentOtp, useVerifyForgot, useVerifyOtp } from "@/services/useUserService";
 import moment from "moment";
 import { Button, HStack, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, PinInput, PinInputField, useToast } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
@@ -362,6 +362,8 @@ const SectionLogin = ({ open, toggleOpenLogin }: any) => {
   const { state, dispatch } = useAppContext();
   const [tabLogin, setTabLogin] = useState(true);
   const [openOtp, setOpenOtp] = useState(false);
+  const [openNewPassword, setOpenNewPassword] = useState(false);
+  const [forgotPassword, setForgotPassword] = useState(false);
   const [formdata, setFormdata] = useState<any>({
     email: null,
     password: null,
@@ -375,6 +377,9 @@ const SectionLogin = ({ open, toggleOpenLogin }: any) => {
   const { postRegister, register, registerMessage, registerLoading, registerError, registerIsError } = useRegister()
   const { postSentOtp, sentOtp, sentOtpMessage, sentOtpLoading, sentOtpError, sentOtpIsError } = useSentOtp()
   const { postVerifyOtp, verifyOtp, verifyOtpMessage, verifyOtpLoading, verifyOtpError, verifyOtpIsError } = useVerifyOtp()
+  const { postForgot, forgot, forgotMessage, forgotLoading, forgotError, forgotIsError } = useForgotPassword()
+  const { postVerifyForgot, verifyForgot, verifyForgotMessage, verifyForgotLoading, verifyForgotError, verifyForgotIsError } = useVerifyForgot()
+  const { postNewPassword, newPassword, newPasswordMessage, newPasswordLoading, newPasswordError, newPasswordIsError } = useNewPassword()
 
   const toast = useToast()
   const router = useRouter();
@@ -430,6 +435,22 @@ const SectionLogin = ({ open, toggleOpenLogin }: any) => {
     }
   }, [register, registerError]);
 
+  useEffect(() => {
+    if (forgot) {
+      localStorage.setItem('token', forgot?.token);
+      toggleOpenLogin();
+      setOpenOtp(true);
+    }
+
+    if (forgotIsError) {
+      toast({
+        title: forgotMessage,
+        status: 'error',
+        isClosable: true,
+      })
+    }
+  }, [forgot, forgotMessage, forgotError, forgotIsError]);
+
 
   useEffect(() => {
     if (sentOtp) {
@@ -470,6 +491,49 @@ const SectionLogin = ({ open, toggleOpenLogin }: any) => {
   }, [verifyOtp, verifyOtpIsError, verifyOtpMessage]);
 
 
+  useEffect(() => {
+    if (verifyForgot) {
+      setOpenOtp(false);
+      toast({
+        title: verifyForgotMessage,
+        status: 'success',
+        isClosable: true,
+      });
+      setFormdata((prev: any) => { return { ...prev, password: '' } })
+      setOpenNewPassword(true);
+    }
+
+    if (verifyForgotIsError) {
+      toast({
+        title: verifyForgotMessage,
+        status: 'error',
+        isClosable: true,
+      })
+    }
+  }, [verifyForgot, verifyForgotIsError, verifyForgotMessage]);
+
+  useEffect(() => {
+    if (newPassword) {
+      setOpenNewPassword(false);
+      toast({
+        title: 'Your password have been created successfully!' ?? newPasswordMessage,
+        status: 'success',
+        isClosable: true,
+      });
+
+      localStorage.removeItem('token');
+      dispatch({ user: null, token: null });
+    }
+
+    if (newPasswordIsError) {
+      toast({
+        title: newPasswordMessage,
+        status: 'error',
+        isClosable: true,
+      })
+    }
+  }, [newPassword, newPasswordIsError, newPasswordMessage]);
+
   return (
     <div className={`dropdown login-dropdown off-canvas${open ? ' opened' : ''}`}>
       <a id="login-icon" className="login-toggle" data-toggle="login-modal" onClick={() => {
@@ -488,18 +552,33 @@ const SectionLogin = ({ open, toggleOpenLogin }: any) => {
         <div className="login-popup">
           <div className="form-box">
             <div className="tab tab-nav-underline tab-nav-boxed">
-              <ul className="nav nav-tabs nav-fill mb-4">
-                <li className="nav-item">
-                  <a className={`nav-link lh-1 ls-normal${tabLogin ? ' active' : ''}`} href="#signin" onClick={() => setTabLogin(true)}>Login</a>
-                </li>
-                <li className="nav-item">
-                  <a className={`nav-link lh-1 ls-normal${tabLogin ? '' : ' active'}`} href="#register" onClick={() => setTabLogin(false)}>Register</a>
-                </li>
-              </ul>
+              {forgotPassword ? (
+                <ul className="nav nav-tabs nav-fill mb-4">
+                  <li className="nav-item">
+                    <a className={`nav-link lh-1 ls-normal active`} onClick={() => setForgotPassword(true)}>Forgot Password</a>
+                  </li>
+                </ul>) : (
+                <ul className="nav nav-tabs nav-fill mb-4">
+                  <li className="nav-item">
+                    <a className={`nav-link lh-1 ls-normal${tabLogin ? ' active' : ''}`} href="#signin" onClick={() => setTabLogin(true)}>Login</a>
+                  </li>
+                  <li className="nav-item">
+                    <a className={`nav-link lh-1 ls-normal${tabLogin ? '' : ' active'}`} href="#register" onClick={() => setTabLogin(false)}>Register</a>
+                  </li>
+                </ul>)}
               <div className="tab-content">
                 <div className={`tab-pane${tabLogin ? ' active in' : ''}`} id="signin">
                   <form action="#" onSubmit={(e) => {
                     e.preventDefault();
+                    if (forgotPassword) {
+                      postForgot({
+                        body: {
+                          phone: formdata?.phone
+                        }
+                      })
+                      return;
+                    }
+
                     postLogin({
                       body: {
                         "email": formdata.email,
@@ -507,7 +586,7 @@ const SectionLogin = ({ open, toggleOpenLogin }: any) => {
                       }
                     });
                   }}>
-                    <div className="form-group">
+                    {!forgotPassword && (<div className="form-group">
                       <input type="email"
                         id="singin-email"
                         name="singin-email"
@@ -528,21 +607,31 @@ const SectionLogin = ({ open, toggleOpenLogin }: any) => {
                           setFormdata((prev: any) => { return { ...prev, password: val } })
                         }}
                         required />
-                    </div>
-                    {/* <div className="form-footer">
-                      <div className="form-checkbox">
+                    </div>)}
+                    {forgotPassword && (
+                      <div className="form-group">
+                        <input type="text"
+                          onChange={(e) => {
+                            let val = e.target.value;
+                            setFormdata((prev: any) => { return { ...prev, phone: val } })
+                          }}
+                          placeholder="Phone" required />
+                      </div>
+                    )}
+                    <div className="form-footer">
+                      {/* <div className="form-checkbox">
                         <input type="checkbox" id="signin-remember"
                           name="signin-remember" />
                         <label htmlFor="signin-remember">Remember
                           me</label>
-                      </div>
-                      <a href="#" className="lost-link">Lost your password?</a>
-                    </div> */}
+                      </div> */}
+                      <a href="#" onClick={() => setForgotPassword((prev) => !prev)} className="lost-link">{forgotPassword ? 'Already have account' : 'Forgot password?'} </a>
+                    </div>
                     <button
                       className="btn btn-dark btn-block"
                       type="submit"
                       style={{ backgroundColor: '#54524d' }}
-                      disabled={loginLoading}>Login</button>
+                      disabled={loginLoading || forgotLoading}>{loginLoading || forgotLoading ? 'Loading...' : (forgotPassword ? 'Submit' : 'Login')}</button>
                   </form>
                   {/* <div className="form-choice text-center">
                     <label>or Login With</label>
@@ -659,6 +748,15 @@ const SectionLogin = ({ open, toggleOpenLogin }: any) => {
           <ModalBody pb={6}>
             <HStack>
               <PinInput onComplete={(val) => {
+                if (forgotPassword) {
+                  postVerifyForgot({
+                    body: {
+                      token: localStorage.getItem('token'),
+                      otp: val
+                    }
+                  });
+                  return;
+                }
                 postVerifyOtp({
                   body: {
                     token: state?.token,
@@ -681,6 +779,46 @@ const SectionLogin = ({ open, toggleOpenLogin }: any) => {
               Save
             </Button>
           </ModalFooter> */}
+        </ModalContent>
+      </Modal>
+
+      <Modal closeOnOverlayClick={false} isOpen={openNewPassword} onClose={() => {
+        setOpenNewPassword(false)
+      }}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Masukkan Password Baru</ModalHeader>
+          <ModalCloseButton bgColor={'white'} onClick={() => {
+            localStorage.removeItem('token');
+            dispatch({ user: null, token: null });
+          }} />
+          <ModalBody pb={6}>
+            <div className="form-group">
+              <input type="password"
+                onChange={(e) => {
+                  let val = e.target.value;
+                  setFormdata((prev: any) => { return { ...prev, password: val } })
+                }}
+                value={formdata?.password ?? ''}
+                placeholder="Password"
+              />
+            </div>
+          </ModalBody>
+
+          <ModalFooter>
+            <button className="btn btn-dim py-4" disabled={newPasswordLoading}
+              onClick={() => {
+                postNewPassword({
+                  body: {
+                    token: localStorage.getItem('token'),
+                    password: formdata?.password
+                  }
+                })
+              }}
+            >
+              {newPasswordLoading ? 'Loading...' : 'Save'}
+            </button>
+          </ModalFooter>
         </ModalContent>
       </Modal>
     </div>
