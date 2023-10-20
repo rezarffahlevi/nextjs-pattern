@@ -198,9 +198,16 @@ const ProfilePage = () => {
                                                         />
                                                     </td>
                                                 </tr>)}
-                                                {orderDetail?.xendit?.status == 'PAID' && (<tr>
-                                                    <td className="product-name">Order Number: <b>{orderDetail?.order_id}</b></td>
-                                                </tr>)}
+                                                {orderDetail?.xendit?.status == 'PAID' && (
+                                                    <tr>
+                                                        <td colSpan={2}>
+                                                            <br/>
+                                                            <span className="">
+                                                                Order Number: <b>{orderDetail?.order_id}</b>
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                )}
                                                 <tr>
                                                     <td className="product-name">
                                                         <span className="font-bold">{orderSession?.FilmTitle}</span> <span><i className="p-icon-times"></i>
