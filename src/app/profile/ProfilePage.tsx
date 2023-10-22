@@ -182,7 +182,7 @@ const ProfilePage = () => {
                                             </thead>
                                             <tbody>
                                                 {orderDetail?.xendit?.status == 'PAID' && (<tr>
-                                                    <td>
+                                                    <td colSpan={2}>
                                                         <Canvas
                                                             text={state.orderMicrosite?.data?.add_concession_item?.OrderId ?? '123'}
                                                             options={{
